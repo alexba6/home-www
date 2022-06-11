@@ -1,0 +1,175 @@
+@import '../Styles/var'
+
+// Template
+.templateContainer
+  display: grid
+  grid-template-areas: "header header" "sidebar content"
+  grid-auto-rows: 65px calc(100vh - 65px)
+  grid-auto-columns: 290px auto
+  height: 100vh
+  overflow: hidden
+  @media only screen and (max-width: $mobile-screen-width)
+    grid-template-areas: "header header" "content content"
+    transition: ease .05s
+
+
+// Template Header
+.templateHeader
+  grid-area: header
+  background-color: var(--ct-bg-topbar)
+  box-shadow: var(--ct-box-shadow)
+  display: flex
+  justify-content: space-between
+  align-items: center
+
+
+.templateHeaderMenuBtnFrame
+  display: none
+  margin: 0 10px
+  button
+    border: none
+    background-color: transparent
+    cursor: pointer
+    svg
+      margin-top: 8px
+      path
+        fill: var(--ct-menu-item)
+        transition: fill ease-in-out .05s
+  &:hover
+    svg > path
+      fill: var(--ct-menu-item-hover)
+
+  @media only screen and (max-width: $mobile-screen-width)
+    display: inline-block
+
+
+.templateHeaderHomeFrame
+  margin: 0 25px
+  a
+    text-decoration: none
+    color: var(--ct-body-color)
+    display: flex
+    h1
+      margin-left: 5px
+
+// Template Content
+.templateContent
+  grid-area: content
+  padding: 25px
+  overflow-y: scroll
+  @media only screen and (max-width: $mobile-screen-width)
+    padding: 15px 10px
+// Template Sidebar
+.templateSidebar
+  z-index: 1
+  grid-area: sidebar
+  margin: 25px
+  background-color: transparent
+  @media only screen and (max-width: $mobile-screen-width)
+    position: absolute
+    display: flex
+    margin: 0
+    top: 0
+    left: 0
+    right: 0
+    &[displayMenu=hide]
+      transform: translateX(-100%)
+
+.templateSidebarFrame
+  background-color: var(--ct-card-bg)
+  box-shadow: var(--ct-box-shadow)
+  border-radius: 2px
+  height: 100%
+  nav
+    ul
+      list-style-type: none
+  @media only screen and (max-width: $mobile-screen-width)
+    border-radius: 0
+    height: 100vh
+    width: 220px
+
+.templateSidebarOpacityFrame
+  display: none
+  flex-grow: 1
+  height: 100vh
+  background-color: rgba(0,0,0,.4)
+  @media only screen and (max-width: $mobile-screen-width)
+    display: inline-block
+
+// Template Sidebar Category
+.templateSidebarCategory
+  padding: 20px 20px 10px 20px
+  h3
+    font-size: 14px
+    text-transform: uppercase
+    color: var(--ct-menu-item)
+    letter-spacing: 1px
+
+// Template Sidebar Link
+.templateSidebarLink
+  a
+    text-decoration: none
+    color: var(--ct-menu-item)
+
+.templateSidebarLinkFrame
+  display: flex
+  align-items: center
+  justify-content: start
+  color: var(--ct-menu-item)
+  padding: 9px 20px
+  margin: 2px 0
+  transition: background-color, color ease-in-out .05s
+  &[active=active]
+    color: var(--ct-menu-item-active)
+    svg > path
+      fill: var(--ct-menu-item-active)
+  &:hover
+    color: var(--ct-menu-item-hover)
+    background-color: rgba(220, 220, 220, 0.1)
+    svg > path
+      fill: var(--ct-menu-item-hover)
+  span
+    cursor: pointer
+    font-size: 16px
+
+.templateSidebarLinkIconFrame
+  width: 35px
+  position: relative
+  svg
+    position: absolute
+    top: 50%
+    left: 0
+    transform: translateY(-50%)
+    height: 25px
+    width: 25px
+    path
+      transition: fill ease-in-out .2s
+      fill: var(--ct-menu-item)
+
+.templateSidebarLinkBadgeFrame
+  margin-left: auto
+
+// Template Sidebar Dropdown Link
+.templateSidebarDropdownLinkContainer
+  width: 100%
+  cursor: pointer
+
+.templateSidebarDropdownLinkChevronFrame
+  margin-left: auto
+  display: flex
+  justify-content: center
+  align-items: center
+  svg
+    height: 25px
+    width: 25px
+    transition: transform ease-in-out .05s
+    path
+      transition: fill ease-in-out .2s
+      fill: var(--ct-menu-item)
+  &[display=display]
+    svg
+      transform: rotate(90deg)
+
+.templateSidebarDropdownLinkChildren
+  overflow: hidden
+  transition: height ease-in-out .2s

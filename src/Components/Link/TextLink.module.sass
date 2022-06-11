@@ -1,0 +1,32 @@
+// TextLink
+
+.textLink
+  position: relative
+  transition: ease-in-out .3s
+  cursor: pointer
+  &::before
+    content: ''
+    position: absolute
+    bottom: 0
+    height: 1px
+    background-color: var(--ct-primary)
+    transition: ease-in-out .3s
+    animation-duration: .1s
+    animation-name: underline
+  &:hover
+    color: var(--ct-primary)
+  &:hover::before
+    left: 0
+    animation-direction: normal
+    width: 100%
+  &:not(:hover)::before
+    right: 0
+    animation-direction: reverse
+    width: 0
+
+@keyframes underline
+  from
+    width: 0
+  to
+    width: 100%
+

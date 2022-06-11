@@ -1,0 +1,19 @@
+// Table
+.tableContainer
+  width: 100%
+  table
+    width: 100%
+    border-collapse: collapse
+    text-align: center
+    thead
+      border-bottom: 1.5px solid var(--ct-table-border-color)
+    th, td
+      padding: 10px 15px
+    tr:nth-child(even)
+      background-color: var(--ct-table-striped-bg)
+    tr
+      th:first-child, td:first-child
+        text-align: left
+    tbody
+      tr:hover
+        background-color: var(--ct-table-hover-bg)

@@ -1,10 +1,8 @@
-// import { DashboardIcon } from '../Icons/Sidebar/Dashboard'
-import { UserIcon } from '../Icons/Sidebar/User'
 import { ReactNode } from 'react'
 import { HomeIcon } from '../Icons/Sidebar/Home'
-// import { DeviceIcon } from '../Icons/Sidebar/Device'
-// import { NotificationIcon } from '../Icons/Sidebar/Notification'
-import { SettingsIcon } from '../Icons/Sidebar/Settings'
+import {DashboardIcon} from "../Icons/Sidebar/Dashboard";
+import {NotificationIcon} from "../Icons/Sidebar/Notification";
+import {DeviceIcon} from "../Icons/Sidebar/Device";
 
 export type RoutePath = {
 	name: string,
@@ -29,7 +27,7 @@ export const RoutesPath: {[key: string]: RoutePath} = {
 	dashboard: {
 		name: 'Dashboard',
 		target: '/',
-		// icon: <DashboardIcon/>
+		icon: <DashboardIcon/>
 	},
 	home: {
 		name: 'Maison',
@@ -39,12 +37,12 @@ export const RoutesPath: {[key: string]: RoutePath} = {
 	devices: {
 		name: 'Appareils',
 		target: '/devices',
-		// icon: <DeviceIcon/>
+		icon: <DeviceIcon/>
 	},
 	notifications: {
 		name: 'Notifications',
 		target: '/notifications',
-		// icon: <NotificationIcon/>
+		icon: <NotificationIcon/>
 	},
 	settingsHome: {
 		name: 'Maisons',

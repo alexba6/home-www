@@ -10,6 +10,7 @@ import { SettingsIcon } from '../Icons/Sidebar/Settings'
 
 import styles from './Template.module.sass'
 import { UserIcon } from '../Icons/Sidebar/User'
+import {SidebarIcon} from "../Icons/Sidebar";
 
 type TemplateProps = {
 	children: ReactNode
@@ -139,7 +140,7 @@ const TemplateHeader: FunctionComponent<TemplateHeaderProps> = (props) => {
 			</div>
 			<div className={styles.templateHeaderMenuBtnFrame}>
 				<button onClick={props.onOpenSidebar}>
-					{/*<SidebarIcon/>*/}
+					<SidebarIcon/>
 				</button>
 			</div>
 		</div>

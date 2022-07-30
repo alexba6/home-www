@@ -16,6 +16,6 @@ declare module 'react' {
 		size?: any,
 		displayMenu?: any,
 		active?: any,
-		display?: any
+		display?: any,
 	}
 }

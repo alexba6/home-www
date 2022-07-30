@@ -1,17 +1,14 @@
-import { FunctionComponent, useState } from 'react'
+import {FunctionComponent, useRef} from 'react'
 
-// import { FormInput } from '../Components/Input/FormInput'
 import { Button } from '../Components/Button/Button'
-import { TextLink } from '../Components/Link/TextLink'
 
-import { GoogleIcon } from '../Icons/Form/Google'
-import { FacebookIcon } from '../Icons/Form/Facebook'
-import { CardForm, CardFormOrSeparator } from '../Components/Card/CardForm'
+import { CardForm } from '../Components/Card/CardForm'
 import { HomeLogo } from '../Icons/HomeLogo'
+import {Input} from "../Components/Input/Input";
 
 export const ResetPasswordPage: FunctionComponent = () => {
-	const [password, setPassword] = useState('')
-	const [passwordC, setPasswordC] = useState('')
+	const passwordRef = useRef<HTMLInputElement>(null)
+	const passwordCRef = useRef<HTMLInputElement>(null)
 
 	return (
 			<CardForm>
@@ -29,16 +26,15 @@ export const ResetPasswordPage: FunctionComponent = () => {
 					</div>
 				</div>
 				<div>
-					{/*<FormInput*/}
-					{/*	label='Mot de passe'*/}
-					{/*	type='password'*/}
-					{/*	value={password}*/}
-					{/*	setValue={setPassword}/>*/}
-					{/*<FormInput*/}
-					{/*	label='Confirmez le mot de passe'*/}
-					{/*	type='password'*/}
-					{/*	value={passwordC}*/}
-					{/*	setValue={setPasswordC}/>*/}
+					<Input
+						placeholder='Mot de passe'
+						type='password'
+						ref={passwordRef}
+					/>
+					<Input
+						placeholder='Confirmez le mot de passe'
+						type='password'
+						ref={passwordCRef}/>
 				</div>
 				<p>
 					Entrez votre le nouveau mon de passe pour le compte <strong>alexis@alex24.fr</strong>.

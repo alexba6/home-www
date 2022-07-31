@@ -1,4 +1,4 @@
-import { FunctionComponent, MouseEvent, ReactNode } from 'react'
+import {FunctionComponent, MouseEvent, ReactNode} from 'react'
 
 import styles from './TextLink.module.sass'
 
@@ -9,7 +9,7 @@ type FormLinkProps = {
 
 export const TextLink: FunctionComponent<FormLinkProps> = (props) => {
 
-	const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
+	const handleClick = (event: MouseEvent<any>) => {
 		event.preventDefault()
 		event.stopPropagation()
 		props.onClick()

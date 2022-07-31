@@ -19,8 +19,8 @@ export type User = {
     id: string
     email: string
     username: string
-    firstname: string
-    lastname: string
+    firstname?: string
+    lastname?: string
     emailVerified: boolean
     createdAt: Date
     lang: string
@@ -52,16 +52,13 @@ export const userStore = createSlice<UserStoreState, any>({
     reducers: {},
     extraReducers: builder => {
         // Get user info
-        builder.addCase(userActions.getInfo.pending, (state, props) => ({
+        builder.addCase(userActions.getInfo.pending, () => ({
           status: UserStoreStatus.PENDING
         }))
         builder.addCase(userActions.getInfo.fulfilled, (state, props) => ({
             status: UserStoreStatus.READY,
             id: props.payload.user.id,
-            user: {
-                ...props.payload.user,
-                createdAt: new Date(props.payload.user.createdAt)
-            }
+            user: props.payload.user
         }))
         builder.addCase(userActions.getInfo.rejected, (state, props) => ({
             ...state,

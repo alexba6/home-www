@@ -1,4 +1,4 @@
-import {FunctionComponent, useRef} from 'react'
+import {FunctionComponent, useRef, useState} from 'react'
 
 import { Button } from '../Components/Button/Button'
 
@@ -7,8 +7,8 @@ import { HomeLogo } from '../Icons/HomeLogo'
 import {Input} from "../Components/Input/Input";
 
 export const ResetPasswordPage: FunctionComponent = () => {
-	const passwordRef = useRef<HTMLInputElement>(null)
-	const passwordCRef = useRef<HTMLInputElement>(null)
+	const [password, setPassword] = useState('')
+	const [passwordC, setPasswordC] = useState('')
 
 	return (
 			<CardForm>
@@ -29,12 +29,14 @@ export const ResetPasswordPage: FunctionComponent = () => {
 					<Input
 						placeholder='Mot de passe'
 						type='password'
-						ref={passwordRef}
+						value={password}
+						setValue={setPassword}
 					/>
 					<Input
 						placeholder='Confirmez le mot de passe'
 						type='password'
-						ref={passwordCRef}/>
+						value={passwordC}
+						setValue={setPasswordC}/>
 				</div>
 				<p>
 					Entrez votre le nouveau mon de passe pour le compte <strong>alexis@alex24.fr</strong>.

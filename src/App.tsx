@@ -1,6 +1,6 @@
 import {Fragment, FunctionComponent, useContext, useMemo} from 'react'
 import { Provider } from 'react-redux'
-import {BrowserRouter, Route, Routes, useNavigate} from 'react-router-dom'
+import {BrowserRouter, Route, useHistory} from 'react-router-dom'
 
 import { RoutesPath } from './Config/Routes'
 import { store } from './Store'
@@ -20,54 +20,53 @@ import { ResetPasswordPage } from './Pages/ResetPasswordPage'
 import { SettingsThemePage } from './Pages/Settings/SettingsThemePage'
 import { AccountSecurityPage } from './Pages/Account/AccountSecurity'
 import { AccountAuthPage } from './Pages/Account/AccountAuth'
+import {AccountProfilePage} from "./Pages/Account/AccountProfil";
 
 const ProtectedRoutes: FunctionComponent = () => {
     const authenticationContext = useContext(ContextAuthentication)
-    const navigate = useNavigate()
+    const history = useHistory()
 
     const authenticationKey = useMemo(() => authenticationContext.authenticationKey, [authenticationContext])
 
     if (authenticationKey === null) {
-        navigate(RoutesPath.login.target)
+        history.push(RoutesPath.login.target)
     }
 
     if (authenticationKey) {
         return (
             <Fragment>
+                <Route path={RoutesPath.accountProfile.target}>
+                    <AccountProfilePage authenticationKey={authenticationKey}/>
+                </Route>
             </Fragment>
         )
     }
     return (
-        <p>Loading...</p>
+        <p></p>
     )
 }
 
 const RouteApp: FunctionComponent = () => {
-    return <Routes>
-        {/*<ProtectedRoutes/>*/}
+    return <BrowserRouter>
+        <ProtectedRoutes/>
+        <Route exact path={RoutesPath.login.target} component={LoginPage}/>
+        <Route exact path={RoutesPath.forgetPassword.target} component={ForgetPasswordPage}/>
+        <Route exact path={RoutesPath.resetPassword.target} component={ResetPasswordPage}/>
 
-        <Route path={RoutesPath.login.target} element={<LoginPage/>}/>
-        <Route path={RoutesPath.forgetPassword.target} element={<ForgetPasswordPage/>}/>
-        <Route path={RoutesPath.resetPassword.target} element={<ResetPasswordPage/>}/>
+        <Route exact path={RoutesPath.dashboard.target} component={DashboardPage}/>
 
-        <Route path={RoutesPath.dashboard.target} element={<DashboardPage/>}/>
+        <Route exact path={RoutesPath.accountSecurity.target} component={AccountSecurityPage}/>
+        <Route exact path={RoutesPath.accountAuth.target} component={AccountAuthPage}/>
 
-        {/*<Route path={RoutesPath.accountProfile.target} element={<AccountProfilePage/>}/>*/}
-        <Route path={RoutesPath.accountSecurity.target} element={<AccountSecurityPage/>}/>
-        <Route path={RoutesPath.accountAuth.target} element={<AccountAuthPage/>}/>
-
-        <Route path={RoutesPath.settingsTheme.target} element={<SettingsThemePage/>}/>
-
-    </Routes>
+        <Route exact path={RoutesPath.settingsTheme.target} component={SettingsThemePage}/>
+    </BrowserRouter>
 }
 
 export const App: FunctionComponent = () => {
     return <ThemeWrapper>
         <Provider store={store}>
             <AuthenticationProvider>
-                <BrowserRouter>
-                    <RouteApp/>
-                </BrowserRouter>
+                <RouteApp/>
             </AuthenticationProvider>
         </Provider>
     </ThemeWrapper>

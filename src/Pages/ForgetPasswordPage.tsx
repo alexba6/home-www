@@ -1,4 +1,4 @@
-import {FunctionComponent, useRef} from 'react'
+import {FunctionComponent, useRef, useState} from 'react'
 
 import { Button } from '../Components/Button/Button'
 
@@ -7,7 +7,7 @@ import { HomeLogo } from '../Icons/HomeLogo'
 import {Input} from "../Components/Input/Input";
 
 export const ForgetPasswordPage: FunctionComponent = () => {
-	const loginRef = useRef<HTMLInputElement>(null)
+	const [login, setLogin] = useState('')
 
 	return (
 			<CardForm>
@@ -27,7 +27,8 @@ export const ForgetPasswordPage: FunctionComponent = () => {
 				<div>
 					<Input
 						placeholder="Email ou nom d'utilisateur"
-						ref={loginRef}/>
+						value={login}
+						setValue={setLogin}/>
 				</div>
 				<p>
 					Entrez votre email ou nom d'utilisateur afin de recevoir les instructions pour récuperer votre compte <strong>Home</strong>.

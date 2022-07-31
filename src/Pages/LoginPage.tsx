@@ -1,4 +1,4 @@
-import {FunctionComponent, useContext, useRef} from 'react'
+import {FunctionComponent, useContext, useRef, useState} from 'react'
 
 import { Button } from '../Components/Button/Button'
 import { TextLink } from '../Components/Link/TextLink'
@@ -9,34 +9,31 @@ import { CardForm, CardFormOrSeparator } from '../Components/Card/CardForm'
 import { HomeLogo } from '../Icons/HomeLogo'
 import {Input} from "../Components/Input/Input";
 import {ContextAuthentication} from "../Context/ContextAuthentication";
-import {useNavigate} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import {RoutesPath} from "../Config/Routes";
 
 export const LoginPage: FunctionComponent = () => {
-	const loginRef = useRef<HTMLInputElement>(null)
-	const passwordsRef = useRef<HTMLInputElement>(null)
+	const [login, setLogin] = useState('')
+	const [password, setPassword] = useState('')
 
-	const navigate = useNavigate()
+	const history = useHistory()
 
 	const authenticationContext = useContext(ContextAuthentication)
 
 	const onLogin = async () => {
-		if (loginRef.current && passwordsRef.current) {
-			const res = await fetch('/api/auth/login', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-					login: loginRef.current.value,
-					password: passwordsRef.current.value
-				})
+		const res = await fetch('/api/auth/login', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				login, password
 			})
-			if (res.status === 200) {
-				const json = await res.json()
-				authenticationContext.set(json.authKey)
-				navigate(RoutesPath.dashboard.target)
-			}
+		})
+		if (res.status === 200) {
+			const json = await res.json()
+			authenticationContext.set(json.authKey)
+			history.push(RoutesPath.dashboard.target)
 		}
 	}
 
@@ -57,11 +54,13 @@ export const LoginPage: FunctionComponent = () => {
 		<div>
 			<Input
 				placeholder="Email ou nom d'utilisateur"
-				ref={loginRef}/>
+				value={login}
+				setValue={setLogin}/>
 			<Input
 				placeholder='Mot de passe'
 				type='password'
-				ref={passwordsRef}/>
+				value={password}
+				setValue={setPassword}/>
 		</div>
 		<div className='flex flex-align-center flex-justify-end'>
 			<TextLink onClick={() => {}}>

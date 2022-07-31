@@ -1,35 +1,24 @@
-import {forwardRef, MutableRefObject, Ref, useMemo, useRef, useState} from "react";
+import {forwardRef, FunctionComponent, MutableRefObject, Ref, useEffect, useMemo, useRef, useState} from "react";
 
 import styles from './Input.module.sass'
 
 type InputProps = {
     placeholder: string
+    value: string
+    setValue: (value: string) => void
     type?: string
     error?: string
 }
 
-const assignRefs = <T extends unknown>(...refs: Ref<T | null>[]) => (node: T | null) => {
-    refs.forEach((r: Ref<T | null>) => {
-        if (typeof r ==='function') {
-            r(node);
-        } else if (r) {
-            (r as MutableRefObject<T | null>).current = node;
-        }
-    })
-}
-
-export const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
-    const [focus, setFocus] = useState('')
+export const Input: FunctionComponent<InputProps> = (props) => {
+    const [focus, setFocus] = useState(false)
     const localRef = useRef<HTMLInputElement>(null)
 
     const error = useMemo(() => props.error ? 'error' : '', [props.error])
 
-    const top = useMemo(() => {
-        const isTop = focus === 'focus' || Number(localRef.current?.value.length) > 0
-        return isTop ? 'top' : ''
-    }, [focus, localRef])
+    const top = useMemo(() => focus || props.value.length > 0, [focus, localRef, props])
 
-    const handleFocus = (focused: boolean) => () => setFocus(focused ? 'focus' : '')
+    const handleFocus = (focused: boolean) => () => setFocus(focused)
 
     const handleClickLabel = () => {
         if (localRef.current) {
@@ -38,16 +27,23 @@ export const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     }
 
     return <div className={styles.formInputContainer}>
-        <div className={styles.formInputFrame} focus={focus} error={error}>
+        <div className={styles.formInputFrame} focus={focus ? 'focus' : ''} error={error}>
             <input
-                ref={assignRefs(ref, localRef)}
                 onFocus={handleFocus(true)}
                 onBlur={handleFocus(false)}
                 type={props.type}
+                value={props.value}
+                onChange={e => props.setValue(e.target.value)}
+                ref={localRef}
             />
-            <label className={styles.formInputLabel} focus={focus} labelPosition={top} error={error} onClick={handleClickLabel}>
+            <label
+                className={styles.formInputLabel}
+                focus={focus ? 'focus' : ''}
+                label_position={top ? 'top' : ''}
+                error={error}
+                onClick={handleClickLabel}>
                 {props.placeholder}
             </label>
         </div>
     </div>
-})
+}

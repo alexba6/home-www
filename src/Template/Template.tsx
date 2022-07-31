@@ -1,16 +1,15 @@
-import { FunctionComponent, MouseEvent, ReactNode, useEffect, useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { FunctionComponent, MouseEvent, ReactNode, useState } from 'react'
+import { useHistory, useLocation } from 'react-router-dom'
 
 import { RoutePath, RoutesPath } from '../Config/Routes'
 
 import { HomeLogo } from '../Icons/HomeLogo'
-// import { SidebarIcon } from '../Icons/Sidebar/Sidebar'
 import { ChevronIcon } from '../Icons/Sidebar/Chevron'
 import { SettingsIcon } from '../Icons/Sidebar/Settings'
-
-import styles from './Template.module.sass'
 import { UserIcon } from '../Icons/Sidebar/User'
 import {SidebarIcon} from "../Icons/Sidebar";
+
+import styles from './Template.module.sass'
 
 type TemplateProps = {
 	children: ReactNode
@@ -61,18 +60,18 @@ const TemplateSidebarCategory: FunctionComponent<TemplateSidebarCategoryProps> =
  */
 const TemplateSidebarLink: FunctionComponent<TemplateSidebarLinkProps> = (props) => {
 	const location = useLocation()
-	const navigate = useNavigate()
+	const history = useHistory()
 
 	const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
 		event.preventDefault()
 		event.stopPropagation()
-		navigate(props.routePath.target)
+		history.push(props.routePath.target)
 	}
 
 	return (
 		<li className={styles.templateSidebarLink}>
 			<a href={props.routePath.target} onClick={handleClick}>
-				<div className={styles.templateSidebarLinkFrame} active={location.pathname === props.routePath.target && 'active'}>
+				<div className={styles.templateSidebarLinkFrame} active={location.pathname === props.routePath.target ? 'active' : 'disable'}>
 					<div className={styles.templateSidebarLinkIconFrame}>
 						{props.routePath.icon}
 					</div>
@@ -101,7 +100,7 @@ export const TemplateSidebarDropdownLink: FunctionComponent<TemplateSidebarDropd
 	return (
 		<li>
 			<div className={styles.templateSidebarDropdownLinkContainer} onClick={handleClick}>
-				<div className={styles.templateSidebarLinkFrame} active={(!display && location.pathname.indexOf(props.target) !== -1) && 'active'}>
+				<div className={styles.templateSidebarLinkFrame} active={(!display && location.pathname.indexOf(props.target) !== -1) ? 'active' : 'disable'}>
 					<div className={styles.templateSidebarLinkIconFrame}>
 						{props.icon}
 					</div>
@@ -153,7 +152,7 @@ const TemplateHeader: FunctionComponent<TemplateHeaderProps> = (props) => {
  */
 const TemplateSidebar: FunctionComponent<TemplateSidebarProps> = (props) => {
 	return (
-		<div className={styles.templateSidebar} displayMenu={props.display ? 'show' : 'hide'}>
+		<div className={styles.templateSidebar} display_menu={props.display ? 'show' : 'hide'}>
 			<div className={styles.templateSidebarFrame}>
 				<nav>
 					<TemplateSidebarCategory name='Navigation'/>
@@ -190,7 +189,7 @@ export const Template: FunctionComponent<TemplateProps> = (props) => {
 	const [displaySidebar, setDisplaySidebar] = useState(false)
 
 	return (
-		<div className={styles.templateContainer} displayMenu={displaySidebar ? 'show' : 'hide'}>
+		<div className={styles.templateContainer} display_menu={displaySidebar ? 'show' : 'hide'}>
 			<TemplateHeader onOpenSidebar={() => setDisplaySidebar(s => !s)}/>
 			<TemplateSidebar display={displaySidebar} onClose={() => setDisplaySidebar(false)}/>
 			<div className={styles.templateContent}>

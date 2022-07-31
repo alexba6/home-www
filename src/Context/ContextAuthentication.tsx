@@ -11,6 +11,10 @@ export type AuthenticationKey = {
     key: string
 }
 
+export type AuthenticatedRouteProps = {
+    authenticationKey: AuthenticationKey
+}
+
 type AuthenticationContextProps = {
     authenticationKey: AuthenticationKey | null | undefined,
     clear: () => void,

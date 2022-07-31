@@ -1,7 +1,9 @@
-import {createSlice} from "@reduxjs/toolkit";
+import {createSlice, SerializedError} from "@reduxjs/toolkit";
+import {userActions} from "./UserActions";
 
 export enum UserStoreStatus {
     IDLE = 'IDLE',
+    PENDING = 'PENDING',
     UPDATING = 'UPDATING',
     REMOVING = 'REMOVING',
     ERROR = 'ERROR',
@@ -37,6 +39,9 @@ export type UserStoreState <S = UserStoreStatus> = {
 & (S extends UserStoreStatus.UPDATING ? {
     updatedUser: User
 } : { })
+& (S extends UserStoreStatus.ERROR ? {
+    error: SerializedError
+} : {})
 
 
 export const userStore = createSlice<UserStoreState, any>({
@@ -46,7 +51,23 @@ export const userStore = createSlice<UserStoreState, any>({
     },
     reducers: {},
     extraReducers: builder => {
-
+        // Get user info
+        builder.addCase(userActions.getInfo.pending, (state, props) => ({
+          status: UserStoreStatus.PENDING
+        }))
+        builder.addCase(userActions.getInfo.fulfilled, (state, props) => ({
+            status: UserStoreStatus.READY,
+            id: props.payload.user.id,
+            user: {
+                ...props.payload.user,
+                createdAt: new Date(props.payload.user.createdAt)
+            }
+        }))
+        builder.addCase(userActions.getInfo.rejected, (state, props) => ({
+            ...state,
+            status: UserStoreStatus.ERROR,
+            error: props.error
+        }))
     }
 })
 

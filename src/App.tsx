@@ -1,6 +1,7 @@
 import {Fragment, FunctionComponent, useContext, useMemo} from 'react'
 import { Provider } from 'react-redux'
 import {BrowserRouter, Route, useHistory} from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
 
 import { RoutesPath } from './Config/Routes'
 import { store } from './Store'
@@ -11,8 +12,9 @@ import { DashboardPage } from './Pages/DashboardPage'
 import './Styles/var.sass'
 import './Styles/index.module.sass'
 import './Styles/layout.sass'
+import 'react-toastify/dist/ReactToastify.css'
 
-import { ThemeWrapper } from './Context/ContextTheme'
+import {ThemeContext, ThemeWrapper} from './Context/ContextTheme'
 import {AuthenticationProvider, ContextAuthentication} from "./Context/ContextAuthentication"
 
 import { ForgetPasswordPage } from './Pages/ForgetPasswordPage'
@@ -35,8 +37,11 @@ const ProtectedRoutes: FunctionComponent = () => {
     if (authenticationKey) {
         return (
             <Fragment>
-                <Route path={RoutesPath.accountProfile.target}>
+                <Route path={RoutesPath.accountProfile.target} component={AccountProfilePage}>
                     <AccountProfilePage authenticationKey={authenticationKey}/>
+                </Route>
+                <Route exact path={RoutesPath.accountSecurity.target}>
+                    <AccountSecurityPage authenticationKey={authenticationKey}/>
                 </Route>
             </Fragment>
         )
@@ -47,6 +52,8 @@ const ProtectedRoutes: FunctionComponent = () => {
 }
 
 const RouteApp: FunctionComponent = () => {
+    const themeContext = useContext(ThemeContext)
+
     return <BrowserRouter>
         <ProtectedRoutes/>
         <Route exact path={RoutesPath.login.target} component={LoginPage}/>
@@ -55,10 +62,10 @@ const RouteApp: FunctionComponent = () => {
 
         <Route exact path={RoutesPath.dashboard.target} component={DashboardPage}/>
 
-        <Route exact path={RoutesPath.accountSecurity.target} component={AccountSecurityPage}/>
         <Route exact path={RoutesPath.accountAuth.target} component={AccountAuthPage}/>
 
         <Route exact path={RoutesPath.settingsTheme.target} component={SettingsThemePage}/>
+        <ToastContainer position="bottom-right" autoClose={2000} theme={themeContext.theme}/>
     </BrowserRouter>
 }
 

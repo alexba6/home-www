@@ -15,12 +15,19 @@ export type UserNotificationSettings = {
     sendByMail: boolean
 }
 
+export type UserUpdateItems = {
+    email?: User['email'],
+    username?: User['username'],
+    firstName?: User['firstName'],
+    lastName?: User['lastName']
+}
+
 export type User = {
     id: string
     email: string
     username: string
-    firstname?: string
-    lastname?: string
+    firstName: string | null
+    lastName: string | null
     emailVerified: boolean
     createdAt: Date
     lang: string
@@ -37,7 +44,7 @@ export type UserStoreState <S = UserStoreStatus> = {
     user: User
 } : { user?: User } )
 & (S extends UserStoreStatus.UPDATING ? {
-    updatedUser: User
+    updatedUser: UserUpdateItems
 } : { })
 & (S extends UserStoreStatus.ERROR ? {
     error: SerializedError
@@ -61,6 +68,23 @@ export const userStore = createSlice<UserStoreState, any>({
             user: props.payload.user
         }))
         builder.addCase(userActions.getInfo.rejected, (state, props) => ({
+            ...state,
+            status: UserStoreStatus.ERROR,
+            error: props.error
+        }))
+
+        // Update user info
+        builder.addCase(userActions.updateInfo.pending, (state, props) => ({
+            ...state,
+            status: UserStoreStatus.UPDATING,
+            updatedUser: props.meta.arg.user
+        }))
+        builder.addCase(userActions.updateInfo.fulfilled, (state, props) => ({
+            status: UserStoreStatus.READY,
+            id: props.payload.user.id,
+            user: props.payload.user
+        }))
+        builder.addCase(userActions.updateInfo.rejected, (state, props) => ({
             ...state,
             status: UserStoreStatus.ERROR,
             error: props.error

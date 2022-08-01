@@ -1,10 +1,10 @@
 import {FunctionComponent, useEffect, Fragment, ReactNode, useMemo} from 'react'
 import {createPortal} from 'react-dom'
 
-import styles from './Modal.module.sass'
-import {ButtonCircle} from "../Button/ButtonCircle";
 import {ClickOutsideWrapper} from "../../Wrapper/ClikOutside";
 import {CloseIcon} from "../../Icons/Close";
+
+import styles from './Modal.module.sass'
 
 type ModalProviderProps = {
     display: boolean,
@@ -64,10 +64,10 @@ const ModalProvider: FunctionComponent<ModalProviderProps> = (props) => {
                     <div>
                         <h2>{props.name}</h2>
                     </div>
-                    <div>
-                        <ButtonCircle size={30} onClick={props.onClose} icon={<CloseIcon/>}>
-                            Close
-                        </ButtonCircle>
+                    <div className={styles.modalProviderCloseButtonFrame}>
+                        <button onClick={props.onClose}>
+                            <CloseIcon/>
+                        </button>
                     </div>
                 </div>
                 {props.children}

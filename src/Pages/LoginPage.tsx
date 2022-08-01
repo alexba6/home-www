@@ -1,4 +1,4 @@
-import {FunctionComponent, useContext, useRef, useState} from 'react'
+import {FunctionComponent, useContext} from 'react'
 
 import { Button } from '../Components/Button/Button'
 import { TextLink } from '../Components/Link/TextLink'
@@ -11,16 +11,20 @@ import {Input} from "../Components/Input/Input";
 import {ContextAuthentication} from "../Context/ContextAuthentication";
 import {useHistory} from "react-router-dom";
 import {RoutesPath} from "../Config/Routes";
+import {useFormValue} from "../Hooks/UseFormValue";
 
 export const LoginPage: FunctionComponent = () => {
-	const [login, setLogin] = useState('')
-	const [password, setPassword] = useState('')
-
 	const history = useHistory()
 
 	const authenticationContext = useContext(ContextAuthentication)
 
+	const form = useFormValue({
+		login: '',
+		password: ''
+	})
+
 	const onLogin = async () => {
+		const { login, password } = form.value
 		const res = await fetch('/api/auth/login', {
 			method: 'POST',
 			headers: {
@@ -54,13 +58,13 @@ export const LoginPage: FunctionComponent = () => {
 		<div>
 			<Input
 				placeholder="Email ou nom d'utilisateur"
-				value={login}
-				setValue={setLogin}/>
+				onValue={form.set.login}
+				value={form.value.login}/>
 			<Input
 				placeholder='Mot de passe'
 				type='password'
-				value={password}
-				setValue={setPassword}/>
+				onValue={form.set.password}
+				value={form.value.password}/>
 		</div>
 		<div className='flex flex-align-center flex-justify-end'>
 			<TextLink onClick={() => {}}>

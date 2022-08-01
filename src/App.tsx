@@ -9,6 +9,7 @@ import { store } from './Store'
 import { LoginPage } from './Pages/LoginPage'
 import { DashboardPage } from './Pages/DashboardPage'
 
+import 'moment/locale/fr'
 import './Styles/var.sass'
 import './Styles/index.module.sass'
 import './Styles/layout.sass'
@@ -23,6 +24,7 @@ import { SettingsThemePage } from './Pages/Settings/SettingsThemePage'
 import { AccountSecurityPage } from './Pages/Account/AccountSecurity'
 import { AccountAuthPage } from './Pages/Account/AccountAuth'
 import {AccountProfilePage} from "./Pages/Account/AccountProfil";
+import {Homepage} from "./Pages/HomePage";
 
 const ProtectedRoutes: FunctionComponent = () => {
     const authenticationContext = useContext(ContextAuthentication)
@@ -42,6 +44,9 @@ const ProtectedRoutes: FunctionComponent = () => {
                 </Route>
                 <Route exact path={RoutesPath.accountSecurity.target}>
                     <AccountSecurityPage authenticationKey={authenticationKey}/>
+                </Route>
+                <Route exact path={RoutesPath.home.target}>
+                    <Homepage authenticationKey={authenticationKey}/>
                 </Route>
             </Fragment>
         )

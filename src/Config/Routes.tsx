@@ -30,7 +30,7 @@ export const RoutesPath: {[key: string]: RoutePath} = {
 		icon: <DashboardIcon/>
 	},
 	home: {
-		name: 'Maison',
+		name: 'Maisons',
 		target: '/home',
 		icon: <HomeIcon/>
 	},

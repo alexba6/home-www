@@ -2,8 +2,18 @@ import { FunctionComponent, ReactNode } from 'react'
 
 import styles from './Button.module.sass'
 
+type Variant =
+	'primary'
+	| 'secondary'
+	| 'warning'
+	| 'danger'
+	| 'success'
+	| 'info'
+	| 'outline-secondary'
+
+
 type ButtonProps = {
-	variant?: string,
+	variant?: Variant,
 	onClick: () => void,
 	children: ReactNode
 }

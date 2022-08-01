@@ -5,7 +5,7 @@ import styles from './Input.module.sass'
 type InputProps = {
     placeholder: string
     value: string
-    setValue: (value: string) => void
+    onValue: (value: string) => void
     type?: string
     error?: string
 }
@@ -33,7 +33,7 @@ export const Input: FunctionComponent<InputProps> = (props) => {
                 onBlur={handleFocus(false)}
                 type={props.type}
                 value={props.value}
-                onChange={e => props.setValue(e.target.value)}
+                onChange={e => props.onValue(e.target.value)}
                 ref={localRef}
             />
             <label

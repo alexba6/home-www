@@ -1,4 +1,4 @@
-import {FunctionComponent, useState} from 'react'
+import {FunctionComponent} from 'react'
 import { Template } from '../../Template/Template'
 import { Card, CardHeader } from '../../Components/Card/Card'
 import { Button } from '../../Components/Button/Button'
@@ -6,14 +6,18 @@ import {Input} from "../../Components/Input/Input";
 import {AuthenticatedRouteProps} from "../../Context/ContextAuthentication";
 import {toast} from "react-toastify";
 import {getAuthorization} from "../../Tools/Authentication";
+import {useFormValue} from "../../Hooks/UseFormValue";
 
 const AccountSecurityPassword: FunctionComponent<AuthenticatedRouteProps> = (props) => {
-	const [oldPassword, setOldPassword] = useState('')
-	const [newPassword, setNewPassword] = useState('')
-	const [newPasswordC, setNewPasswordC] = useState('')
+	const form = useFormValue({
+		oldPassword: '',
+		newPassword: '',
+		newPasswordC: ''
+	})
 
 	const updatePassword = async () => {
 		const id = toast.loading('Modication du mot de passe')
+		const { oldPassword, newPassword, newPasswordC } = form.value
 		if (newPassword !== newPasswordC) {
 			toast.error('Les mots de passe ne sont pas identiques')
 		} else {
@@ -29,14 +33,13 @@ const AccountSecurityPassword: FunctionComponent<AuthenticatedRouteProps> = (pro
 			})
 			if (res.status === 200) {
 				toast.success('Mot de passe modifié')
-				setOldPassword('')
+				form.set.oldPassword('')
 			} else {
 				toast.error('Impossible de modifier le mot de passe')
 			}
 		}
 		toast.dismiss(id)
-		setNewPasswordC('')
-		setNewPassword('')
+		form.clear()
 	}
 
 	return <Card>
@@ -47,20 +50,18 @@ const AccountSecurityPassword: FunctionComponent<AuthenticatedRouteProps> = (pro
 			<Input
 				placeholder='Ancien mot de passe'
 				type='password'
-				value={oldPassword}
-				setValue={setOldPassword}
-			/>
+				value={form.value.oldPassword}
+				onValue={form.set.oldPassword}/>
 			<Input
 				placeholder='Nouveau mot de passe'
 				type='password'
-				value={newPassword}
-				setValue={setNewPassword}
-			/>
+				value={form.value.newPassword}
+				onValue={form.set.newPassword}/>
 			<Input
 				placeholder='Confirmez le mot de passe'
 				type='password'
-				value={newPasswordC}
-				setValue={setNewPasswordC}/>
+				value={form.value.newPasswordC}
+				onValue={form.set.newPasswordC}/>
 		</div>
 		<Button variant='primary' onClick={updatePassword}>
 			Valider

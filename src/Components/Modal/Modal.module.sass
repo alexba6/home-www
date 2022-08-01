@@ -2,19 +2,20 @@
 .modalProviderMask
   position: absolute
   background-color: transparent
+  z-index: 1
   &[active=active]
     top: 0
     right: 0
     bottom: 0
     left: 0
-    background-color: var(--modal-mask-bg)
+    background-color: var(--ct-modal-backdrop-bg)
 
 .modalProviderContainer
   position: absolute
   top: 50%
   left: 50%
   transform: translate(-50%, -50%)
-  background-color: var(--body-bg)
+  background-color: var(--ct-modal-content-bg)
   z-index: 1
   padding: 20px
   border-radius: 3px
@@ -28,6 +29,26 @@
   display: flex
   justify-content: space-between
   align-items: center
+
+.modalProviderCloseButtonFrame
+  button
+    height: 35px
+    width: 35px
+    position: relative
+    border-radius: 100%
+    border: none
+    background: transparent
+    cursor: pointer
+    transition: .1s background-color ease-in-out
+    &:hover
+      background-color: rgba(100,100,100,.15)
+    svg
+      position: absolute
+      top: 50%
+      left: 50%
+      transform: translate(-50%,-50%)
+      color: var(--ct-body-color)
+
 
 // Modal Body
 .modalBodyContainer

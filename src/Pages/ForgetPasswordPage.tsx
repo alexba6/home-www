@@ -5,12 +5,13 @@ import { Button } from '../Components/Button/Button'
 import { CardForm } from '../Components/Card/CardForm'
 import { HomeLogo } from '../Icons/HomeLogo'
 import {Input} from "../Components/Input/Input";
+import {useFormValue} from "../Hooks/UseFormValue";
 
 export const ForgetPasswordPage: FunctionComponent = () => {
 	const [login, setLogin] = useState('')
 
 	return (
-			<CardForm>
+			<CardForm>w
 				<div className='mv-2 flex flex-column flex-align-center'>
 					<div className='flex flex-justify-center flex-align-center'>
 						<div>
@@ -28,7 +29,7 @@ export const ForgetPasswordPage: FunctionComponent = () => {
 					<Input
 						placeholder="Email ou nom d'utilisateur"
 						value={login}
-						setValue={setLogin}/>
+						onValue={setLogin}/>
 				</div>
 				<p>
 					Entrez votre email ou nom d'utilisateur afin de recevoir les instructions pour récuperer votre compte <strong>Home</strong>.

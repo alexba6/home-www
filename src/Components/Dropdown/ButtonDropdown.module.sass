@@ -1,0 +1,38 @@
+// Button Dropdown Item
+.buttonDropdownItemContainer
+  width: 100%
+  button
+    width: 100%
+    min-width: 150px
+    border: none
+    padding: 5px 20px 5px 10px
+    cursor: pointer
+    background: transparent
+    transition: .05s background-color ease-in-out
+    &:hover
+      background-color: rgba(115, 115, 115, 0.15)
+
+.buttonDropdownItemInner
+  display: flex
+  align-items: center
+  svg
+    font-size: 25px
+    color: var(--text-secondary-color)
+  span
+    font-size: 16px
+    margin-left: 10px
+    white-space: nowrap
+    color: var(--text-primary-color)
+
+// Button Dropdown Group
+.buttonDropDownGroupContainer
+  position: relative
+
+.buttonDropDownGroup
+  position: absolute
+  left: 0
+  top: 0
+  padding: 10px 0
+  box-shadow: 0 2px 2px 0 rgb(60 64 67 / 30%), 0 1px 3px 1px rgb(60 64 67 / 15%)
+  border-radius: 3px
+  background-color: var(--box-bg)

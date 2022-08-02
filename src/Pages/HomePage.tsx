@@ -6,24 +6,24 @@ import {Template} from "../Template/Template"
 import {Button} from "../Components/Button/Button";
 import {AddIcon} from "../Icons/Add";
 import {homeSelectAll, homeSelectStore} from "../Store/Home/HomeSelector";
-import {HomeStore, HomeStoreStatus} from "../Store/Home/HomeReducer";
+import {Home, HomeStore} from "../Store/Home/HomeReducer";
 import {homeActions} from "../Store/Home/HomeActions";
 import {Table} from "../Components/Table/Table";
-import {Card, CardHeader} from "../Components/Card/Card";
-import {HomeRow} from "../Components/Home/HomeRow";
+import {HomeGrid} from "../Components/Home/HomeGrid";
 import { Modal } from '../Components/Modal/Modal'
-import {ModalControl, useModalControl} from "../Hooks/UseModalControl";
+import { useModalControl} from "../Hooks/UseModalControl";
 import {Input} from "../Components/Input/Input";
 import {toast} from "react-toastify";
-import {getAuthorization} from "../Tools/Authentication";
 import {unwrapResult} from "@reduxjs/toolkit";
+import {useHistory} from "react-router-dom";
+import {RoutesPath} from "../Config/Routes";
 
-type AddHomeModalContentProps = {
+type HomeAddModalContentProps = {
     onAdd: (name: string) => void
     onClose: () => void
 }
 
-const AddHomeModalContent: FunctionComponent<AddHomeModalContentProps> = (props) => {
+const HomeAddModalContent: FunctionComponent<HomeAddModalContentProps> = (props) => {
     const [name, setName] = useState('')
 
     const handleAdd = () => {
@@ -46,23 +46,27 @@ const AddHomeModalContent: FunctionComponent<AddHomeModalContentProps> = (props)
      </Fragment>
 }
 
-export const Homepage: FunctionComponent<AuthenticatedRouteProps> = (props) => {
+export const HomePage: FunctionComponent<AuthenticatedRouteProps> = (props) => {
     const { authenticationKey } = props
 
     const dispatch = useDispatch<any>()
     const addHomeModal = useModalControl()
+    const history = useHistory()
 
     const homes = useSelector(homeSelectAll)
-    const homeStore = useSelector(homeSelectStore)
 
     useEffect(() => {
-        if (homeStore.status === HomeStoreStatus.IDLE) {
-            dispatch(homeActions.getAll({
-                authenticationKey
-            }))
-        }
-    }, [homeStore, dispatch])
+        dispatch(homeActions.getAll({
+            authenticationKey
+        }))
+    }, [dispatch])
 
+    const handleOpenHome = (homeStore: HomeStore) => {
+        history.push({
+            pathname: RoutesPath.homeDetails.target,
+            search: `?homeId=${homeStore.home.id}`
+        })
+    }
 
     const handleAddHome = (name: string) => {
         const id = toast.loading('Ajout de la maison')
@@ -80,37 +84,18 @@ export const Homepage: FunctionComponent<AuthenticatedRouteProps> = (props) => {
 
     return <Template>
         <Modal.Provider display={addHomeModal.display} onClose={addHomeModal.close} name='Ajouter une maison' disabledOutsideClick>
-            <AddHomeModalContent onAdd={handleAddHome} onClose={addHomeModal.close}/>
+            <HomeAddModalContent onAdd={handleAddHome} onClose={addHomeModal.close}/>
         </Modal.Provider>
-        <Card>
-            <CardHeader>
-                <h3>Maisons</h3>
-            </CardHeader>
-            <div className='flex flex-align-center flex-justify-end'>
-                <div>
-                    <Button onClick={addHomeModal.show} variant='primary'>
-                        <AddIcon/>
-                    </Button>
-                </div>
+        <div className='flex flex-align-center flex-justify-space-between'>
+            <div>
+                <h2>Maisons</h2>
             </div>
             <div>
-                <Table>
-                    <thead>
-                    <tr>
-                        <th>Nom</th>
-                        <th>Nombre d'appareils</th>
-                        <th>Ajouté le</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {homes.map((home: HomeStore, key: number) => <HomeRow
-                        key={key}
-                        home={home}
-                        onOpen={() => console.log('open', home.home.id)}
-                    />)}
-                    </tbody>
-                </Table>
+                <Button onClick={addHomeModal.show} variant='primary'>
+                    <AddIcon/>
+                </Button>
             </div>
-        </Card>
+        </div>
+        <HomeGrid homes={homes} onOpen={handleOpenHome}/>
     </Template>
 }

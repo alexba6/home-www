@@ -33,38 +33,35 @@ export type HomeStore<S = HomeStatus> = {
 } : {})
 
 export type HomeStoreSate<S = HomeStoreStatus> = {
-    status: S,
     homes: HomeStore[]
-} & ( S extends HomeStoreStatus.ERROR ? {
-    error: SerializedError
-} : {})
+}
 
 export const homeStore = createSlice<HomeStoreSate, any>({
     name: 'home',
     initialState: {
-        status: HomeStoreStatus.IDLE,
         homes: []
     },
     reducers: {},
     extraReducers: builder => {
         // Get all homes
-        builder.addCase(homeActions.getAll.pending, state => ({
-            ...state,
-            status: HomeStoreStatus.PENDING,
-        }))
         builder.addCase(homeActions.getAll.fulfilled, (state, props) => ({
             status: HomeStoreStatus.READY,
             homes: props.payload.homes.map(({home, devicesId}) => ({
-                id: home.id,
                 status: HomeStatus.READY,
                 home,
                 devicesId
             }))
         }))
-        builder.addCase(homeActions.getAll.rejected, (state, props) => ({
+
+        // Get one home
+        builder.addCase(homeActions.getOne.fulfilled, (state, props) => ({
             ...state,
-            status: HomeStoreStatus.ERROR,
-            error: props.error
+            status: HomeStoreStatus.READY,
+            homes: [...state.homes.filter(home => home.home.id !== props.payload.home.id), {
+                status: HomeStatus.READY,
+                home: props.payload.home,
+                devicesId: props.payload.devicesId
+            }]
         }))
 
         // Add home

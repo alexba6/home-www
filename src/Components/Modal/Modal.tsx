@@ -57,22 +57,24 @@ const ModalProvider: FunctionComponent<ModalProviderProps> = (props) => {
     }
 
     return createPortal(<Fragment>
-        <div className={styles.modalProviderMask} active={active}/>
-        <ClickOutsideWrapper onClickOutside={onClickOutside}>
-            <div className={styles.modalProviderContainer} active={active}>
-                <div className={styles.modalProviderHeader}>
-                    <div>
-                        <h2>{props.name}</h2>
+        {props.display && <div>
+            <div className={styles.modalProviderMask} active={active}/>
+            <ClickOutsideWrapper onClickOutside={onClickOutside}>
+                <div className={styles.modalProviderContainer} active={active}>
+                    <div className={styles.modalProviderHeader}>
+                        <div>
+                            <h2>{props.name}</h2>
+                        </div>
+                        <div className={styles.modalProviderCloseButtonFrame}>
+                            <button onClick={props.onClose}>
+                                <CloseIcon/>
+                            </button>
+                        </div>
                     </div>
-                    <div className={styles.modalProviderCloseButtonFrame}>
-                        <button onClick={props.onClose}>
-                            <CloseIcon/>
-                        </button>
-                    </div>
+                    {props.children}
                 </div>
-                {props.children}
-            </div>
-        </ClickOutsideWrapper>
+            </ClickOutsideWrapper>
+        </div>}
     </Fragment>, root)
 }
 

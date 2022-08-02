@@ -24,7 +24,8 @@ import { SettingsThemePage } from './Pages/Settings/SettingsThemePage'
 import { AccountSecurityPage } from './Pages/Account/AccountSecurity'
 import { AccountAuthPage } from './Pages/Account/AccountAuth'
 import {AccountProfilePage} from "./Pages/Account/AccountProfil";
-import {Homepage} from "./Pages/HomePage";
+import {HomePage} from "./Pages/HomePage";
+import {HomeDetailsPage} from "./Pages/HomeDetailsPage";
 
 const ProtectedRoutes: FunctionComponent = () => {
     const authenticationContext = useContext(ContextAuthentication)
@@ -46,7 +47,10 @@ const ProtectedRoutes: FunctionComponent = () => {
                     <AccountSecurityPage authenticationKey={authenticationKey}/>
                 </Route>
                 <Route exact path={RoutesPath.home.target}>
-                    <Homepage authenticationKey={authenticationKey}/>
+                    <HomePage authenticationKey={authenticationKey}/>
+                </Route>
+                <Route exact path={RoutesPath.homeDetails.target}>
+                    <HomeDetailsPage authenticationKey={authenticationKey}/>
                 </Route>
             </Fragment>
         )

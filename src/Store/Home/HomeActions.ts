@@ -7,6 +7,11 @@ type GetALlProps = {
     authenticationKey: AuthenticationKey
 }
 
+type GetOneProps = {
+    authenticationKey: AuthenticationKey
+    homeId: Home['id']
+}
+
 type AddProps = {
     authenticationKey: AuthenticationKey
     home: {
@@ -21,6 +26,11 @@ type GetAll = {
     }[]
 }
 
+type GetOne = {
+    home: Home
+    devicesId: string[]
+}
+
 type Add = {
     home: Home
 }
@@ -28,6 +38,21 @@ type Add = {
 const getAll = createAsyncThunk<GetAll, GetALlProps>(
     'home#getAll', async (props) => {
         const res = await fetch('/api/home', {
+            method: 'GET',
+            headers: {
+                authorization: getAuthorization(props.authenticationKey)
+            }
+        })
+        if (res.status !== 200) {
+            throw new Error('Cannot get homes')
+        }
+        return await res.json()
+    }
+)
+
+const getOne = createAsyncThunk<GetOne, GetOneProps>(
+    'home#getOne', async (props) => {
+        const res = await fetch(`/api/home/${props.homeId}`, {
             method: 'GET',
             headers: {
                 authorization: getAuthorization(props.authenticationKey)
@@ -60,5 +85,6 @@ const add = createAsyncThunk<Add, AddProps>(
 
 export const homeActions = {
     getAll,
-    add
+    add,
+    getOne
 }

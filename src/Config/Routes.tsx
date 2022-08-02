@@ -34,6 +34,10 @@ export const RoutesPath: {[key: string]: RoutePath} = {
 		target: '/home',
 		icon: <HomeIcon/>
 	},
+	homeDetails: {
+		name: 'Home details',
+		target: '/home/details'
+	},
 	devices: {
 		name: 'Appareils',
 		target: '/devices',

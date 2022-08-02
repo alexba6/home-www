@@ -1,83 +1,82 @@
 import { ReactNode } from 'react'
 import { HomeIcon } from '../Icons/Sidebar/Home'
-import {DashboardIcon} from "../Icons/Sidebar/Dashboard";
-import {NotificationIcon} from "../Icons/Sidebar/Notification";
-import {DeviceIcon} from "../Icons/Sidebar/Device";
+import { DashboardIcon } from '../Icons/Sidebar/Dashboard'
+import { NotificationIcon } from '../Icons/Sidebar/Notification'
+import { DeviceIcon } from '../Icons/Sidebar/Device'
 
 export type RoutePath = {
-	name: string,
-	icon?: ReactNode,
+	name: string
+	icon?: ReactNode
 	target: string
 }
 
-
-export const RoutesPath: {[key: string]: RoutePath} = {
+export const RoutesPath: { [key: string]: RoutePath } = {
 	login: {
 		name: 'Login',
-		target: '/login'
+		target: '/login',
 	},
 	forgetPassword: {
 		name: 'Forget Password',
-		target: '/forget-password'
+		target: '/forget-password',
 	},
 	resetPassword: {
 		name: 'Reset Password',
-		target: '/reset-password'
+		target: '/reset-password',
 	},
 	dashboard: {
 		name: 'Dashboard',
 		target: '/',
-		icon: <DashboardIcon/>
+		icon: <DashboardIcon />,
 	},
 	home: {
 		name: 'Maisons',
 		target: '/home',
-		icon: <HomeIcon/>
+		icon: <HomeIcon />,
 	},
 	homeDetails: {
 		name: 'Home details',
-		target: '/home/details'
+		target: '/home/details',
 	},
 	devices: {
 		name: 'Appareils',
 		target: '/devices',
-		icon: <DeviceIcon/>
+		icon: <DeviceIcon />,
 	},
 	notifications: {
 		name: 'Notifications',
 		target: '/notifications',
-		icon: <NotificationIcon/>
+		icon: <NotificationIcon />,
 	},
 	settingsHome: {
 		name: 'Maisons',
-		target: '/settings/home'
+		target: '/settings/home',
 	},
 	settingsTheme: {
 		name: 'Thème',
-		target: '/settings/theme'
+		target: '/settings/theme',
 	},
 	settingsDevices: {
 		name: 'Appareils',
-		target: '/settings/devices'
+		target: '/settings/devices',
 	},
 	settingsDashboard: {
 		name: 'Dashboard',
-		target: '/settings/dashboard'
+		target: '/settings/dashboard',
 	},
 	accountProfile: {
 		name: 'Profil',
-		target: '/account/profile'
+		target: '/account/profile',
 	},
 	accountSecurity: {
 		name: 'Sécurité',
-		target: '/account/security'
+		target: '/account/security',
 	},
 	accountAuth: {
 		name: 'Sessions',
-		target: '/account/auth'
+		target: '/account/auth',
 	},
 	accountLogout: {
 		name: 'Déconnexion',
-		target: '/account/logout'
-	}
+		target: '/account/logout',
+	},
 }

@@ -3,7 +3,7 @@ import { FunctionComponent, createContext, useState, useEffect, ReactNode } from
 export type Theme = 'light' | 'dark'
 
 type ThemeContextProps = {
-	theme: Theme,
+	theme: Theme
 	toggleTheme: (theme?: Theme) => void
 }
 
@@ -13,7 +13,7 @@ type ThemeWrapperProps = {
 
 export const ThemeContext = createContext<ThemeContextProps>({
 	theme: 'light',
-	toggleTheme: () => {}
+	toggleTheme: () => {},
 })
 
 export const ThemeWrapper: FunctionComponent<ThemeWrapperProps> = (props) => {
@@ -26,20 +26,19 @@ export const ThemeWrapper: FunctionComponent<ThemeWrapperProps> = (props) => {
 		}
 	}, [])
 
-	const toggleTheme = (forceTheme?: Theme) => setTheme(oldTheme => {
-		const newTheme = (forceTheme === 'light' || forceTheme === 'dark') ? forceTheme : (oldTheme === 'light' ? 'dark' : 'light')
-		localStorage.setItem('theme', newTheme)
-		document.querySelector('html')?.setAttribute('theme', newTheme)
-		return newTheme
-	})
+	const toggleTheme = (forceTheme?: Theme) =>
+		setTheme((oldTheme) => {
+			const newTheme =
+				forceTheme === 'light' || forceTheme === 'dark' ? forceTheme : oldTheme === 'light' ? 'dark' : 'light'
+			localStorage.setItem('theme', newTheme)
+			document.querySelector('html')?.setAttribute('theme', newTheme)
+			return newTheme
+		})
 
 	const themeValue: ThemeContextProps = {
-		theme, toggleTheme
+		theme,
+		toggleTheme,
 	}
 
-	return (
-		<ThemeContext.Provider value={themeValue}>
-			{props.children}
-		</ThemeContext.Provider>
-	)
+	return <ThemeContext.Provider value={themeValue}>{props.children}</ThemeContext.Provider>
 }

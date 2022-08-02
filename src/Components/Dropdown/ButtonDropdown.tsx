@@ -9,7 +9,7 @@ type ButtonDropDownProps = {
 }
 
 type ButtonDropDownGroupProps = {
-	show: boolean,
+	show: boolean
 	children: ReactNode
 }
 
@@ -23,9 +23,7 @@ const DropdownItem: FunctionComponent<ButtonDropDownProps> = (props) => {
 		<div className={styles.buttonDropdownItemContainer}>
 			<button onClick={props.onClick}>
 				<div className={styles.buttonDropdownItemInner}>
-					<div>
-						{props.icon}
-					</div>
+					<div>{props.icon}</div>
 					<div>
 						<span>{props.name}</span>
 					</div>
@@ -43,17 +41,12 @@ const DropdownItem: FunctionComponent<ButtonDropDownProps> = (props) => {
 const DropdownGroup: FunctionComponent<ButtonDropDownGroupProps> = (props) => {
 	return (
 		<div className={styles.buttonDropDownGroupContainer}>
-			{props.show && (
-				<div className={styles.buttonDropDownGroup}>
-					{props.children}
-				</div>
-			)}
+			{props.show && <div className={styles.buttonDropDownGroup}>{props.children}</div>}
 		</div>
 	)
 }
 
-
 export const Dropdown = {
 	Group: DropdownGroup,
-	Item: DropdownItem
+	Item: DropdownItem,
 }

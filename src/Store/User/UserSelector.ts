@@ -1,5 +1,5 @@
-import {RootState} from "../index";
-import { User } from "./UserReducer";
+import { RootState } from '../index'
+import { User } from './UserReducer'
 
 /**
  * @param store

@@ -4,7 +4,6 @@ import { ThemeContext } from '../../Context/ContextTheme'
 import { Card, CardHeader } from '../../Components/Card/Card'
 import { Button } from '../../Components/Button/Button'
 
-
 export const SettingsThemePage: FunctionComponent = () => {
 	const themeContext = useContext(ThemeContext)
 
@@ -15,7 +14,7 @@ export const SettingsThemePage: FunctionComponent = () => {
 					<h3>Thème</h3>
 					<p>Changez le theme de l'application.</p>
 				</CardHeader>
-				<Button variant='primary' onClick={themeContext.toggleTheme}>
+				<Button variant="primary" onClick={themeContext.toggleTheme}>
 					Passez au thème {themeContext.theme === 'light' ? 'sombre' : 'clair'}
 				</Button>
 			</Card>

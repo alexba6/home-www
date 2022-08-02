@@ -9,13 +9,10 @@ type CardFormProps = {
 export const CardForm: FunctionComponent<CardFormProps> = (props) => {
 	return (
 		<div className={styles.cardFormWrapper}>
-			<div className={styles.cardFormContainer}>
-				{props.children}
-			</div>
+			<div className={styles.cardFormContainer}>{props.children}</div>
 		</div>
 	)
 }
-
 
 export const CardFormOrSeparator: FunctionComponent = () => {
 	return (

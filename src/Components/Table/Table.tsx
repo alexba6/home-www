@@ -9,9 +9,7 @@ type TableProps = {
 export const Table: FunctionComponent<TableProps> = (props) => {
 	return (
 		<div className={styles.tableContainer}>
-			<table>
-				{props.children}
-			</table>
-	</div>
+			<table>{props.children}</table>
+		</div>
 	)
 }

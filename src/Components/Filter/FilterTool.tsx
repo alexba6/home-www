@@ -1,7 +1,5 @@
-import {FunctionComponent} from "react";
-
+import { FunctionComponent } from 'react'
 
 export const FilterTool: FunctionComponent = () => {
-    return <div>
-    </div>
+	return <div></div>
 }

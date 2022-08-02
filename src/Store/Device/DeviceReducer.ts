@@ -1,0 +1,8 @@
+export enum DeviceStatus {
+	IDLE = 'IDLE',
+	PENDING = 'PENDING',
+	UPDATING = 'UPDATING',
+	REMOVING = 'REMOVING',
+	ERROR = 'ERROR',
+	READY = 'READY',
+}

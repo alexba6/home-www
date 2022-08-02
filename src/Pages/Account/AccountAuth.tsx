@@ -14,18 +14,22 @@ export const AccountAuthPage: FunctionComponent = () => {
 				</CardHeader>
 				<Table>
 					<thead>
-					<tr>
-						<th>Quand</th>
-						<th>Ip</th>
-						<th>Actions</th>
-					</tr>
+						<tr>
+							<th>Quand</th>
+							<th>Ip</th>
+							<th>Actions</th>
+						</tr>
 					</thead>
 					<tbody>
-					{Array(10).fill('').map((n, key) => <tr key={key}>
-						<td>Il y a 16 minutes</td>
-						<td>75.128.32.290</td>
-						<td>-</td>
-					</tr>)}
+						{Array(10)
+							.fill('')
+							.map((n, key) => (
+								<tr key={key}>
+									<td>Il y a 16 minutes</td>
+									<td>75.128.32.290</td>
+									<td>-</td>
+								</tr>
+							))}
 					</tbody>
 				</Table>
 			</Card>

@@ -9,8 +9,9 @@ import { homeSelectOne } from '../Store/Home/HomeSelector'
 import { Home } from '../Store/Home/HomeReducer'
 import { Button } from '../Components/Button/Button'
 import { OptionsIcon } from '../Icons/Options'
-import { FilterIcon } from '../Icons/FilterIcon'
-import { TextLink } from '../Components/Link/TextLink'
+import {deviceActions} from "../Store/Device/DeviceActions";
+import {deviceSelectFromHome} from "../Store/Device/DeviceSelector";
+import {DeviceGrid} from "../Components/Device/DeviceGrid";
 
 export const HomeDetailsPage: FunctionComponent<AuthenticatedRouteProps> = (props) => {
 	const { authenticationKey } = props
@@ -22,6 +23,7 @@ export const HomeDetailsPage: FunctionComponent<AuthenticatedRouteProps> = (prop
 	const history = useHistory()
 
 	const home = useSelector(homeSelectOne(homeId))
+	const devicesStore = useSelector(deviceSelectFromHome(homeId))
 
 	useEffect(() => {
 		const urlSearch = new URLSearchParams(location.search)
@@ -34,12 +36,16 @@ export const HomeDetailsPage: FunctionComponent<AuthenticatedRouteProps> = (prop
 					homeId: searchHomeId,
 				})
 			)
+			dispatch(
+				deviceActions.getAll({
+					authenticationKey,
+					homeId: searchHomeId
+				})
+			)
 		} else {
 			history.push(RoutesPath.home.target)
 		}
 	}, [])
-
-	console.log(home)
 
 	return (
 		<Template>
@@ -53,6 +59,7 @@ export const HomeDetailsPage: FunctionComponent<AuthenticatedRouteProps> = (prop
 					</Button>
 				</div>
 			</div>
+			<DeviceGrid devicesStore={devicesStore}/>
 		</Template>
 	)
 }

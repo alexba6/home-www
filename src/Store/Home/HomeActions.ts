@@ -2,6 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit'
 import { AuthenticationKey } from '../../Context/ContextAuthentication'
 import { Home } from './HomeReducer'
 import { getAuthorization } from '../../Tools/Authentication'
+import {Device} from "../Device/DeviceReducer";
 
 type GetALlProps = {
 	authenticationKey: AuthenticationKey
@@ -22,13 +23,13 @@ type AddProps = {
 type GetAll = {
 	homes: {
 		home: Home
-		devicesId: string[]
+		devicesId: Device['id'][]
 	}[]
 }
 
 type GetOne = {
 	home: Home
-	devicesId: string[]
+	devicesId: Device['id'][]
 }
 
 type Add = {

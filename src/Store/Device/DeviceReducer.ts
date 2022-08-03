@@ -1,5 +1,6 @@
 import {createSlice, SerializedError } from "@reduxjs/toolkit"
 import {deviceActions} from "./DeviceActions";
+import {Home} from "../Home/HomeReducer";
 
 export enum DeviceStatus {
 	UPDATING = 'UPDATING',
@@ -21,6 +22,7 @@ export type Device = {
 export type DeviceStore<S = DeviceStatus> = {
 	status: S
 	device: Device
+	homeId: Home['id']
 } & (S extends DeviceStatus.ERROR ? {
 	error: SerializedError
 } : {})

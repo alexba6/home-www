@@ -26,7 +26,7 @@ const DeviceItem: FunctionComponent<DeviceItemProps> = (props) => {
 
     return <div className={styles.deviceItemContainer} onClick={onOpen}>
         <div>
-            {device.type === 'pool' && <PoolItemWidget/>}
+            {device.type === 'pool' && <PoolItemWidget />}
         </div>
         <div className={styles.deviceItemNameFrame}>
             <strong>{device.name}</strong>

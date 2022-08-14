@@ -10,6 +10,10 @@ type CardHeaderProps = {
 	children: ReactNode
 }
 
+type CardContentProps = {
+	children: ReactNode
+}
+
 export const Card: FunctionComponent<CardProps> = (props) => {
 	return (
 		<div className={styles.cardContainer}>
@@ -20,4 +24,9 @@ export const Card: FunctionComponent<CardProps> = (props) => {
 
 export const CardHeader: FunctionComponent<CardHeaderProps> = (props) => {
 	return <div className={styles.cardHeaderContainer}>{props.children}</div>
+}
+
+
+export const CardContent: FunctionComponent<CardContentProps> = (props) => {
+	return <div className={styles.cardHeaderContent}>{props.children}</div>
 }

@@ -1,10 +1,20 @@
-import { Device } from "../Store/Device/DeviceReducer"
+import {Device, DeviceStatus, DeviceStore} from "../Store/Device/DeviceReducer"
 import {createContext, FunctionComponent, ReactNode, useEffect, useState} from "react";
 import {useHistory, useLocation} from "react-router-dom";
 
+export enum ApplicationContextStatus {
+    IDLE = 'IDLE',
+    READY = 'READY',
+    EMPTY = 'EMPTY'
+}
+
+export type ApplicationProps = {
+    deviceStore: DeviceStore
+}
 
 type ApplicationContextProps = {
-    deviceId: Device['id'] | null | undefined
+    deviceId: Device['id']
+    status: ApplicationContextStatus,
     set: (deviceId: Device['id'] | null) => void
 }
 
@@ -15,23 +25,28 @@ type ApplicationContextProviderProps = {
 const SESSION_DEVICE_ID_KEY = 'deviceId'
 
 export const ContextApplication = createContext<ApplicationContextProps>({
-    deviceId: undefined,
+    deviceId: '',
+    status: ApplicationContextStatus.IDLE,
     set: (deviceId: Device['id'] | null) => {}
 })
 
 export const ApplicationContextProvider: FunctionComponent<ApplicationContextProviderProps> = (props) => {
-    const [deviceId, setDeviceId] = useState<ApplicationContextProps['deviceId']>(undefined)
+    const [deviceId, setDeviceId] = useState<Device['id']>('')
+    const [status, setStatus] = useState<ApplicationContextStatus>(ApplicationContextStatus.IDLE)
 
     const location = useLocation()
     const history = useHistory()
 
     const set = (deviceId: Device['id'] | null) => {
-        setDeviceId(deviceId)
         if (deviceId) {
-            sessionStorage.setItem(SESSION_DEVICE_ID_KEY, deviceId)
+            setDeviceId(deviceId)
+            setStatus(ApplicationContextStatus.READY)
+            localStorage.setItem(SESSION_DEVICE_ID_KEY, deviceId)
         }
         else {
-            sessionStorage.removeItem(SESSION_DEVICE_ID_KEY)
+            setDeviceId('')
+            setStatus(ApplicationContextStatus.EMPTY)
+            localStorage.removeItem(SESSION_DEVICE_ID_KEY)
         }
     }
 
@@ -46,16 +61,17 @@ export const ApplicationContextProvider: FunctionComponent<ApplicationContextPro
             })
         }
         else {
-            const sessionDeviceId = sessionStorage.getItem(SESSION_DEVICE_ID_KEY)
+            const sessionDeviceId = localStorage.getItem(SESSION_DEVICE_ID_KEY)
             if (sessionDeviceId) {
                 setDeviceId(sessionDeviceId)
+                setStatus(ApplicationContextStatus.READY)
             } else {
-                setDeviceId(null)
+                setStatus(ApplicationContextStatus.EMPTY)
             }
         }
     }, [location, deviceId, setDeviceId])
 
-    return <ContextApplication.Provider value={{ deviceId, set }}>
+    return <ContextApplication.Provider value={{ deviceId, set, status }}>
         {props.children}
     </ContextApplication.Provider>
 }

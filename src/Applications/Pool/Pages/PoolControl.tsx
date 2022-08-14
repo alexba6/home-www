@@ -40,14 +40,11 @@ export const PoolControlPage: FunctionComponent<ApplicationProps> = (props) => {
     }
 
     return <Template nav={PoolNav}>
-        <h2>
-            Contrôle
-            {modeStore && <Chip sx={{ marginLeft: 1 }} size='small' color={modeStore?.state ? 'success' : 'error'} label={modeStore?.mode}/>}
-        </h2>
+        <h2>Contrôle</h2>
         <br/>
         <Card>
             <CardHeader>
-                <h2>Actions</h2>
+                <h2>Actions{modeStore && <Chip sx={{ marginLeft: 1 }} size='small' color={modeStore?.state ? 'success' : 'error'} label={modeStore?.mode}/>}</h2>
             </CardHeader>
             <CardContent>
                 <ButtonGroup variant='contained' size='large' aria-label='outlined primary button group'>

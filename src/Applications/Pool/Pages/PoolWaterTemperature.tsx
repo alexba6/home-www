@@ -7,6 +7,6 @@ export const PoolWaterTemperaturePage: FunctionComponent<ApplicationProps> = (pr
     const { device } = props.deviceStore
 
     return <Template nav={PoolNav}>
-        <h2>{device.name}</h2>
+        <h2>Température de l'eau</h2>
     </Template>
 }

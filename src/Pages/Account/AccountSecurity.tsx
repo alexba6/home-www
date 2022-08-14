@@ -1,14 +1,16 @@
-import { FunctionComponent } from 'react'
+import {FunctionComponent, useContext} from 'react'
 import { Template } from '../../Template/Template'
 import { Card, CardHeader } from '../../Components/Card/Card'
 import { Button } from '../../Components/Button/Button'
 import { Input } from '../../Components/Input/Input'
-import { AuthenticatedRouteProps } from '../../Context/ContextAuthentication'
+import { ContextAuthentication} from '../../Context/ContextAuthentication'
 import { toast } from 'react-toastify'
 import { getAuthorization } from '../../Tools/Authentication'
 import { useFormValue } from '../../Hooks/UseFormValue'
 
-const AccountSecurityPassword: FunctionComponent<AuthenticatedRouteProps> = (props) => {
+const AccountSecurityPassword: FunctionComponent = () => {
+	const authContext = useContext(ContextAuthentication)
+
 	const form = useFormValue({
 		oldPassword: '',
 		newPassword: '',
@@ -24,7 +26,7 @@ const AccountSecurityPassword: FunctionComponent<AuthenticatedRouteProps> = (pro
 			const res = await fetch('/api/user/password', {
 				method: 'PUT',
 				headers: {
-					authorization: getAuthorization(props.authenticationKey),
+					authorization: getAuthorization(authContext.authenticationKey),
 					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify({
@@ -88,10 +90,10 @@ const AccountSecurity2Fa: FunctionComponent = () => {
 	)
 }
 
-export const AccountSecurityPage: FunctionComponent<AuthenticatedRouteProps> = (props) => {
+export const AccountSecurityPage: FunctionComponent = () => {
 	return (
 		<Template>
-			<AccountSecurityPassword authenticationKey={props.authenticationKey} />
+			<AccountSecurityPassword />
 			<br />
 			<AccountSecurity2Fa />
 		</Template>

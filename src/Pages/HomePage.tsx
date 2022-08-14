@@ -1,7 +1,7 @@
-import { Fragment, FunctionComponent, useEffect, useState } from 'react'
+import {Fragment, FunctionComponent, useContext, useEffect, useState} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { AuthenticatedRouteProps } from '../Context/ContextAuthentication'
+import { ContextAuthentication} from '../Context/ContextAuthentication'
 import { Template } from '../Template/Template'
 import { Button } from '../Components/Button/Button'
 import { AddIcon } from '../Icons/Add'
@@ -36,19 +36,23 @@ const HomeAddModalContent: FunctionComponent<HomeAddModalContentProps> = (props)
 				<Input placeholder="Nom" value={name} onValue={setName} />
 			</Modal.Body>
 			<Modal.Footer>
-				<Button onClick={props.onClose} variant="danger">
-					Fermer
-				</Button>
-				<Button onClick={handleAdd} variant="primary">
-					Ajouter
-				</Button>
+				<div>
+					<Button onClick={props.onClose} variant="danger">
+						Fermer
+					</Button>
+				</div>
+				<div>
+					<Button onClick={handleAdd} variant="primary">
+						Ajouter
+					</Button>
+				</div>
 			</Modal.Footer>
 		</Fragment>
 	)
 }
 
-export const HomePage: FunctionComponent<AuthenticatedRouteProps> = (props) => {
-	const { authenticationKey } = props
+export const HomePage: FunctionComponent = () => {
+	const authContext = useContext(ContextAuthentication)
 
 	const dispatch = useDispatch<any>()
 	const addHomeModal = useModalControl()
@@ -59,7 +63,7 @@ export const HomePage: FunctionComponent<AuthenticatedRouteProps> = (props) => {
 	useEffect(() => {
 		dispatch(
 			homeActions.getAll({
-				authenticationKey,
+				authenticationKey: authContext.authenticationKey,
 			})
 		)
 	}, [dispatch])
@@ -77,7 +81,7 @@ export const HomePage: FunctionComponent<AuthenticatedRouteProps> = (props) => {
 			unwrapResult(
 				dispatch(
 					homeActions.add({
-						authenticationKey,
+						authenticationKey: authContext.authenticationKey,
 						home: { name },
 					})
 				)

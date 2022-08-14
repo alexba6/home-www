@@ -3,6 +3,7 @@ import { HomeIcon } from '../Icons/Sidebar/Home'
 import { DashboardIcon } from '../Icons/Sidebar/Dashboard'
 import { NotificationIcon } from '../Icons/Sidebar/Notification'
 import { DeviceIcon } from '../Icons/Sidebar/Device'
+import {UndoIcon} from "../Icons/Sidebar/Undo";
 
 export type RoutePath = {
 	name: string
@@ -79,4 +80,9 @@ export const RoutesPath: { [key: string]: RoutePath } = {
 		name: 'Déconnexion',
 		target: '/account/logout',
 	},
+	undo: {
+		name: 'Retour',
+		target: '/',
+		icon: <UndoIcon/>
+	}
 }

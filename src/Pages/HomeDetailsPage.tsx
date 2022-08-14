@@ -1,5 +1,5 @@
-import { AuthenticatedRouteProps } from '../Context/ContextAuthentication'
-import { FunctionComponent, useEffect, useState } from 'react'
+import { ContextAuthentication} from '../Context/ContextAuthentication'
+import {FunctionComponent, useContext, useEffect, useState} from 'react'
 import { Template } from '../Template/Template'
 import { useHistory, useLocation } from 'react-router-dom'
 import { RoutesPath } from '../Config/Routes'
@@ -13,8 +13,8 @@ import {deviceActions} from "../Store/Device/DeviceActions";
 import {deviceSelectFromHome} from "../Store/Device/DeviceSelector";
 import {DeviceGrid} from "../Components/Device/DeviceGrid";
 
-export const HomeDetailsPage: FunctionComponent<AuthenticatedRouteProps> = (props) => {
-	const { authenticationKey } = props
+export const HomeDetailsPage: FunctionComponent = () => {
+	const authContext = useContext(ContextAuthentication)
 
 	const [homeId, setHomeId] = useState<undefined | Home['id']>(undefined)
 
@@ -32,13 +32,13 @@ export const HomeDetailsPage: FunctionComponent<AuthenticatedRouteProps> = (prop
 			setHomeId(searchHomeId)
 			dispatch(
 				homeActions.getOne({
-					authenticationKey,
+					authenticationKey: authContext.authenticationKey,
 					homeId: searchHomeId,
 				})
 			)
 			dispatch(
 				deviceActions.getAll({
-					authenticationKey,
+					authenticationKey: authContext.authenticationKey,
 					homeId: searchHomeId
 				})
 			)

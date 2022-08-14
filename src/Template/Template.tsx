@@ -13,6 +13,7 @@ import styles from './Template.module.sass'
 
 type TemplateProps = {
 	children: ReactNode
+	nav?: FunctionComponent
 }
 
 type TemplateSidebarLinkProps = {
@@ -27,6 +28,7 @@ type TemplateSidebarCategoryProps = {
 type TemplateSidebarProps = {
 	display: boolean
 	onClose: () => void
+	children: ReactNode
 }
 
 type TemplateHeaderProps = {
@@ -45,7 +47,7 @@ type TemplateSidebarDropdownLinkProps = {
  * @param props
  * @constructor
  */
-const TemplateSidebarCategory: FunctionComponent<TemplateSidebarCategoryProps> = (props) => {
+export const TemplateSidebarCategory: FunctionComponent<TemplateSidebarCategoryProps> = (props) => {
 	return (
 		<div className={styles.templateSidebarCategory}>
 			<h3>{props.name}</h3>
@@ -57,7 +59,7 @@ const TemplateSidebarCategory: FunctionComponent<TemplateSidebarCategoryProps> =
  * @param props
  * @constructor
  */
-const TemplateSidebarLink: FunctionComponent<TemplateSidebarLinkProps> = (props) => {
+export const TemplateSidebarLink: FunctionComponent<TemplateSidebarLinkProps> = (props) => {
 	const location = useLocation()
 	const history = useHistory()
 
@@ -154,31 +156,35 @@ const TemplateSidebar: FunctionComponent<TemplateSidebarProps> = (props) => {
 	return (
 		<div className={styles.templateSidebar} display_menu={props.display ? 'show' : 'hide'}>
 			<div className={styles.templateSidebarFrame}>
-				<nav>
-					<TemplateSidebarCategory name="Navigation" />
-					<ul>
-						<TemplateSidebarLink routePath={RoutesPath.dashboard} />
-						<TemplateSidebarLink routePath={RoutesPath.home} />
-						<TemplateSidebarLink routePath={RoutesPath.devices} />
-						<TemplateSidebarLink routePath={RoutesPath.notifications} />
-						<TemplateSidebarDropdownLink name="Compte" target="account" icon={<UserIcon />} itemsCount={4}>
-							<TemplateSidebarLink routePath={RoutesPath.accountProfile} />
-							<TemplateSidebarLink routePath={RoutesPath.accountSecurity} />
-							<TemplateSidebarLink routePath={RoutesPath.accountAuth} />
-							<TemplateSidebarLink routePath={RoutesPath.accountLogout} />
-						</TemplateSidebarDropdownLink>
-						<TemplateSidebarDropdownLink name="Paramètres" target="settings" icon={<SettingsIcon />} itemsCount={4}>
-							<TemplateSidebarLink routePath={RoutesPath.settingsDashboard} />
-							<TemplateSidebarLink routePath={RoutesPath.settingsHome} />
-							<TemplateSidebarLink routePath={RoutesPath.settingsDevices} />
-							<TemplateSidebarLink routePath={RoutesPath.settingsTheme} />
-						</TemplateSidebarDropdownLink>
-					</ul>
-				</nav>
+				{props.children}
 			</div>
 			<div className={styles.templateSidebarOpacityFrame} onClick={props.onClose} />
 		</div>
 	)
+}
+
+const DefaultNav: FunctionComponent = () => {
+	return <nav>
+		<TemplateSidebarCategory name='Navigation' />
+		<ul>
+			<TemplateSidebarLink routePath={RoutesPath.dashboard} />
+			<TemplateSidebarLink routePath={RoutesPath.home} />
+			<TemplateSidebarLink routePath={RoutesPath.devices} />
+			<TemplateSidebarLink routePath={RoutesPath.notifications} />
+			<TemplateSidebarDropdownLink name="Compte" target="account" icon={<UserIcon />} itemsCount={4}>
+				<TemplateSidebarLink routePath={RoutesPath.accountProfile} />
+				<TemplateSidebarLink routePath={RoutesPath.accountSecurity} />
+				<TemplateSidebarLink routePath={RoutesPath.accountAuth} />
+				<TemplateSidebarLink routePath={RoutesPath.accountLogout} />
+			</TemplateSidebarDropdownLink>
+			<TemplateSidebarDropdownLink name="Paramètres" target="settings" icon={<SettingsIcon />} itemsCount={4}>
+				<TemplateSidebarLink routePath={RoutesPath.settingsDashboard} />
+				<TemplateSidebarLink routePath={RoutesPath.settingsHome} />
+				<TemplateSidebarLink routePath={RoutesPath.settingsDevices} />
+				<TemplateSidebarLink routePath={RoutesPath.settingsTheme} />
+			</TemplateSidebarDropdownLink>
+		</ul>
+	</nav>
 }
 
 /**
@@ -187,11 +193,13 @@ const TemplateSidebar: FunctionComponent<TemplateSidebarProps> = (props) => {
  */
 export const Template: FunctionComponent<TemplateProps> = (props) => {
 	const [displaySidebar, setDisplaySidebar] = useState(false)
-
+	const Nav = props.nav
 	return (
 		<div className={styles.templateContainer} display_menu={displaySidebar ? 'show' : 'hide'}>
 			<TemplateHeader onOpenSidebar={() => setDisplaySidebar((s) => !s)} />
-			<TemplateSidebar display={displaySidebar} onClose={() => setDisplaySidebar(false)} />
+			<TemplateSidebar display={displaySidebar} onClose={() => setDisplaySidebar(false)}>
+				{Nav ? <Nav/> : <DefaultNav/>}
+			</TemplateSidebar>
 			<div className={styles.templateContent}>{props.children}</div>
 		</div>
 	)

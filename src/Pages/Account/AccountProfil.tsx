@@ -1,8 +1,7 @@
-import { FunctionComponent, useEffect } from 'react'
+import {FunctionComponent, useContext, useEffect} from 'react'
 import { toast } from 'react-toastify'
 import { unwrapResult } from '@reduxjs/toolkit'
 
-import { AuthenticatedRouteProps } from '../../Context/ContextAuthentication'
 import { Template } from '../../Template/Template'
 import { useDispatch, useSelector } from 'react-redux'
 import { userActions } from '../../Store/User/UserActions'
@@ -11,9 +10,10 @@ import { Input } from '../../Components/Input/Input'
 import { userSelectInfo } from '../../Store/User/UserSelector'
 import { Button } from '../../Components/Button/Button'
 import { useFormValue } from '../../Hooks/UseFormValue'
+import {ContextAuthentication} from "../../Context/ContextAuthentication";
 
-export const AccountProfilePage: FunctionComponent<AuthenticatedRouteProps> = (props) => {
-	const { authenticationKey } = props
+export const AccountProfilePage: FunctionComponent = () => {
+	const authContext = useContext(ContextAuthentication)
 
 	const form = useFormValue({
 		email: '',
@@ -30,7 +30,7 @@ export const AccountProfilePage: FunctionComponent<AuthenticatedRouteProps> = (p
 		if (!userInfo) {
 			dispatch(
 				userActions.getInfo({
-					authenticationKey,
+					authenticationKey: authContext.authenticationKey,
 				})
 			)
 		}
@@ -42,7 +42,7 @@ export const AccountProfilePage: FunctionComponent<AuthenticatedRouteProps> = (p
 			unwrapResult(
 				await dispatch(
 					userActions.updateInfo({
-						authenticationKey,
+						authenticationKey: authContext.authenticationKey,
 						user: form.value,
 					})
 				)

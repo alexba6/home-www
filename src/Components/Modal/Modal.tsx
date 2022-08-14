@@ -27,7 +27,9 @@ const ModalBody: FunctionComponent<ModalBodyProps> = (props) => {
 }
 
 const ModalFooter: FunctionComponent<ModalFooterProps> = (props) => {
-	return <div className={styles.modalFooterContainer}>{props.children}</div>
+	return <div className={styles.modalFooterContainer}>
+		{props.children}
+	</div>
 }
 
 const ModalProvider: FunctionComponent<ModalProviderProps> = (props) => {

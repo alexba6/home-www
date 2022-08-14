@@ -31,6 +31,7 @@ import { AccountProfilePage } from './Pages/Account/AccountProfil'
 import { HomePage } from './Pages/HomePage'
 import { HomeDetailsPage } from './Pages/HomeDetailsPage'
 import {PoolApp} from "./Applications/Pool/App";
+import {ApplicationContextProvider} from "./Context/ContextApplication";
 
 const ToastContainerTheme: FunctionComponent = () => {
 	const themeContext = useContext(ThemeContext)
@@ -43,26 +44,28 @@ export const App: FunctionComponent = () => {
 		<ThemeWrapper>
 			<Provider store={store}>
 				<AuthenticationProvider>
-					<BrowserRouter>
-						<Route exact path={RoutesPath.login.target} component={LoginPage} />
-						<Route exact path={RoutesPath.forgetPassword.target} component={ForgetPasswordPage} />
-						<Route exact path={RoutesPath.resetPassword.target} component={ResetPasswordPage} />
+						<BrowserRouter>
+							<ApplicationContextProvider>
+								<Route exact path={RoutesPath.login.target} component={LoginPage} />
+								<Route exact path={RoutesPath.forgetPassword.target} component={ForgetPasswordPage} />
+								<Route exact path={RoutesPath.resetPassword.target} component={ResetPasswordPage} />
 
-						<Route exact path={RoutesPath.dashboard.target} component={DashboardPage} />
+								<Route exact path={RoutesPath.dashboard.target} component={DashboardPage} />
 
-						<Route exact path={RoutesPath.accountAuth.target} component={AccountAuthPage} />
+								<Route exact path={RoutesPath.accountAuth.target} component={AccountAuthPage} />
 
-						<Route exact path={RoutesPath.settingsTheme.target} component={SettingsThemePage} />
+								<Route exact path={RoutesPath.settingsTheme.target} component={SettingsThemePage} />
 
-						<AuthenticatedRoutesWrapper>
-							<Route path={RoutesPath.accountProfile.target} component={AccountProfilePage}/>
-							<Route exact path={RoutesPath.accountSecurity.target} component={AccountSecurityPage}/>
-							<Route exact path={RoutesPath.home.target} component={HomePage}/>
-							<Route exact path={RoutesPath.homeDetails.target} component={HomeDetailsPage}/>
-							<PoolApp/>
-						</AuthenticatedRoutesWrapper>
-						<ToastContainerTheme/>
-					</BrowserRouter>
+								<AuthenticatedRoutesWrapper>
+									<Route path={RoutesPath.accountProfile.target} component={AccountProfilePage}/>
+									<Route exact path={RoutesPath.accountSecurity.target} component={AccountSecurityPage}/>
+									<Route exact path={RoutesPath.home.target} component={HomePage}/>
+									<Route exact path={RoutesPath.homeDetails.target} component={HomeDetailsPage}/>
+									<PoolApp/>
+								</AuthenticatedRoutesWrapper>
+								<ToastContainerTheme/>
+							</ApplicationContextProvider>
+						</BrowserRouter>
 				</AuthenticationProvider>
 			</Provider>
 		</ThemeWrapper>

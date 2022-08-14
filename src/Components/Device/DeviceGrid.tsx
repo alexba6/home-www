@@ -1,9 +1,10 @@
-import {FunctionComponent} from "react";
+import {FunctionComponent, useContext} from "react";
 import {DeviceStore} from "../../Store/Device/DeviceReducer";
 
 import styles from './DeviceGrid.module.sass'
 import {PoolItemWidget} from "../../Applications/Pool/ItemWidget";
 import {useHistory} from "react-router-dom";
+import {ContextApplication} from "../../Context/ContextApplication";
 
 type DeviceGridProps = {
     devicesStore: DeviceStore[]
@@ -16,12 +17,11 @@ type DeviceItemProps = {
 const DeviceItem: FunctionComponent<DeviceItemProps> = (props) => {
     const { device } = props.deviceStore
     const history = useHistory()
+    const applicationContext = useContext(ContextApplication)
 
     const onOpen = () => {
-        history.push({
-            pathname: `/device/${device.type}`,
-            search: `?deviceId=${device.id}`
-        })
+        applicationContext.set(device.id)
+        history.push(`/device/${device.type}`)
     }
 
     return <div className={styles.deviceItemContainer} onClick={onOpen}>

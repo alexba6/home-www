@@ -1,5 +1,5 @@
 import {createContext, Fragment, FunctionComponent, ReactNode, useContext, useEffect, useMemo, useState} from 'react'
-import {Route, useHistory} from "react-router-dom";
+import { useHistory} from "react-router-dom";
 import {RoutesPath} from "../Config/Routes";
 
 export enum AuthenticationStatus {

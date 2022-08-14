@@ -1,15 +1,17 @@
 import {Fragment, FunctionComponent, useContext, useEffect} from "react";
-import {Route, useHistory, useLocation} from "react-router-dom";
-import {PoolDashboardPage} from "./Pages/PoolDashboad";
-import {PoolRoutesPath} from "./Routes";
-import {PoolControlPage} from "./Pages/PoolControl";
-import {ContextApplication} from "../../Context/ContextApplication";
+import {Route} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {deviceSelectById} from "../../Store/Device/DeviceSelector";
-import {DeviceStatus} from "../../Store/Device/DeviceReducer";
+
+import {ApplicationContextStatus, ContextApplication} from "../../Context/ContextApplication";
 import {ContextAuthentication} from "../../Context/ContextAuthentication";
+import {deviceSelectById} from "../../Store/Device/DeviceSelector";
 import {deviceActions} from "../../Store/Device/DeviceActions";
+import {PoolRoutesPath} from "./Routes";
+
+import {PoolDashboardPage} from "./Pages/PoolDashboad";
+import {PoolControlPage} from "./Pages/PoolControl";
 import {PoolWaterTemperaturePage} from "./Pages/PoolWaterTemperature";
+import {PoolOutsideTemperaturePage} from "./Pages/PoolOutsideTemperature";
 
 
 export const PoolApp: FunctionComponent = () => {
@@ -20,7 +22,7 @@ export const PoolApp: FunctionComponent = () => {
     const dispatch = useDispatch<any>()
 
     useEffect(() => {
-        if (!device) {
+        if (!device && appContext.status === ApplicationContextStatus.READY) {
             dispatch(deviceActions.getOne({
                 deviceId: appContext.deviceId,
                 authenticationKey: authenticationContext.authenticationKey
@@ -29,7 +31,7 @@ export const PoolApp: FunctionComponent = () => {
     })
 
     return <Fragment>
-        { device && <Fragment>
+        { (device && device.device.type === 'pool') && <Fragment>
             <Route exact path={PoolRoutesPath.dashboard.target}>
                 <PoolDashboardPage deviceStore={device}/>
             </Route>
@@ -38,6 +40,9 @@ export const PoolApp: FunctionComponent = () => {
             </Route>
             <Route exact path={PoolRoutesPath.waterTemperature.target}>
                 <PoolWaterTemperaturePage deviceStore={device}/>
+            </Route>
+            <Route exact path={PoolRoutesPath.outsideTemperature.target}>
+                <PoolOutsideTemperaturePage deviceStore={device}/>
             </Route>
         </Fragment>}
     </Fragment>

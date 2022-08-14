@@ -15,7 +15,7 @@ import './Styles/index.module.sass'
 import './Styles/layout.sass'
 import 'react-toastify/dist/ReactToastify.css'
 
-import { ThemeContext, ThemeWrapper } from './Context/ContextTheme'
+import { ContextTheme, ThemeWrapper } from './Context/ContextTheme'
 import {
 	AuthenticatedRoutesWrapper,
 	AuthenticationProvider,
@@ -34,7 +34,7 @@ import {PoolApp} from "./Applications/Pool/App";
 import {ApplicationContextProvider} from "./Context/ContextApplication";
 
 const ToastContainerTheme: FunctionComponent = () => {
-	const themeContext = useContext(ThemeContext)
+	const themeContext = useContext(ContextTheme)
 
 	return <ToastContainer position="bottom-right" autoClose={2000} theme={themeContext.theme} />
 }

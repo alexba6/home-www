@@ -2,7 +2,7 @@ import {Template} from "../../../Template/Template";
 import {FunctionComponent, useContext, useEffect} from "react";
 import {PoolNav} from "../Routes";
 import {ApplicationProps} from "../../../Context/ContextApplication";
-import {Button, ButtonGroup, Chip} from "@mui/material";
+import {Alert, Button, ButtonGroup, Chip} from "@mui/material";
 import {Card, CardContent, CardHeader} from "../../../Components/Card/Card";
 import {useDispatch, useSelector} from "react-redux";
 import {poolModeSelector} from "../Store/Mode/ModeSelector";
@@ -44,10 +44,14 @@ export const PoolControlPage: FunctionComponent<ApplicationProps> = (props) => {
         <br/>
         <Card>
             <CardHeader>
-                <h2>Actions{modeStore && <Chip sx={{ marginLeft: 1 }} size='small' color={modeStore?.state ? 'success' : 'error'} label={modeStore?.mode}/>}</h2>
+                <h2>Actions</h2>
             </CardHeader>
+            <Alert icon={false} severity='info'>
+                <strong>{modeStore?.mode}</strong> - {modeStore?.state ? 'marche' : 'arrêt'}
+            </Alert>
+            <br/>
             <CardContent>
-                <ButtonGroup variant='contained' size='large' aria-label='outlined primary button group'>
+                <ButtonGroup fullWidth={true} variant='contained' size='large' aria-label='outlined primary button group'>
                     <Button onClick={changeMode(PoolMode.ON)} disabled={disable(PoolMode.ON)}>ON</Button>
                     <Button onClick={changeMode(PoolMode.OFF)} disabled={disable(PoolMode.OFF)}>OFF</Button>
                     <Button onClick={changeMode(PoolMode.AUTO)} disabled={disable(PoolMode.AUTO)}>AUTO</Button>

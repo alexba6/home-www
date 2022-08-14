@@ -1,11 +1,11 @@
 import { FunctionComponent, useContext } from 'react'
 import { Template } from '../../Template/Template'
-import { ThemeContext } from '../../Context/ContextTheme'
+import { ContextTheme } from '../../Context/ContextTheme'
 import { Card, CardHeader } from '../../Components/Card/Card'
 import { Button } from '../../Components/Button/Button'
 
 export const SettingsThemePage: FunctionComponent = () => {
-	const themeContext = useContext(ThemeContext)
+	const themeContext = useContext(ContextTheme)
 
 	return (
 		<Template>

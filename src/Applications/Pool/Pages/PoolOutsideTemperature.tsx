@@ -3,18 +3,18 @@ import {Template} from "../../../Template/Template";
 import {PoolNav} from "../Routes";
 import {ApplicationProps} from "../../../Context/ContextApplication";
 import {SensorCard} from "../../../Components/Sensor/SensorCard";
-import {WaterTemperatureIcon} from "../../../Icons/Sidebar/WaterTemperature";
+import {TemperatureIcon} from "../../../Icons/Sidebar/Temperature";
 
 
-export const PoolWaterTemperaturePage: FunctionComponent<ApplicationProps> = (props) => {
+export const PoolOutsideTemperaturePage: FunctionComponent<ApplicationProps> = (props) => {
     return <Template nav={PoolNav}>
         <SensorCard
             deviceId={props.deviceStore.device.id}
-            title="Temperature de l'eau"
-            sensorName='water_temp'
+            title='Temperature extérieure'
+            sensorName='outside_temp'
             unit='°C'
             chartYName='Temperature'
-            recentIcon={<WaterTemperatureIcon/>}
+            recentIcon={<TemperatureIcon/>}
         />
     </Template>
 }

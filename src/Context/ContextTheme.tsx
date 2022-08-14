@@ -11,7 +11,7 @@ type ThemeWrapperProps = {
 	children: ReactNode
 }
 
-export const ThemeContext = createContext<ThemeContextProps>({
+export const ContextTheme = createContext<ThemeContextProps>({
 	theme: 'light',
 	toggleTheme: () => {},
 })
@@ -40,5 +40,5 @@ export const ThemeWrapper: FunctionComponent<ThemeWrapperProps> = (props) => {
 		toggleTheme,
 	}
 
-	return <ThemeContext.Provider value={themeValue}>{props.children}</ThemeContext.Provider>
+	return <ContextTheme.Provider value={themeValue}>{props.children}</ContextTheme.Provider>
 }

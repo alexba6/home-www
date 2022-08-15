@@ -12,6 +12,7 @@ import {PoolDashboardPage} from "./Pages/PoolDashboad";
 import {PoolControlPage} from "./Pages/PoolControl";
 import {PoolWaterTemperaturePage} from "./Pages/PoolWaterTemperature";
 import {PoolOutsideTemperaturePage} from "./Pages/PoolOutsideTemperature";
+import {PoolSlotPage} from "./Pages/PoolSlot";
 
 
 export const PoolApp: FunctionComponent = () => {
@@ -43,6 +44,9 @@ export const PoolApp: FunctionComponent = () => {
             </Route>
             <Route exact path={PoolRoutesPath.outsideTemperature.target}>
                 <PoolOutsideTemperaturePage deviceStore={device}/>
+            </Route>
+            <Route exact path={PoolRoutesPath.slot.target}>
+                <PoolSlotPage deviceStore={device}/>
             </Route>
         </Fragment>}
     </Fragment>

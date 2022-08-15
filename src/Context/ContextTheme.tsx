@@ -1,4 +1,5 @@
 import { FunctionComponent, createContext, useState, useEffect, ReactNode } from 'react'
+import {createTheme, ThemeProvider} from "@mui/material";
 
 export type Theme = 'light' | 'dark'
 
@@ -10,6 +11,30 @@ type ThemeContextProps = {
 type ThemeWrapperProps = {
 	children: ReactNode
 }
+
+const darkTheme = createTheme({
+	palette: {
+		mode: 'dark',
+	},
+})
+
+const lightTheme = createTheme({
+	palette: {
+		mode: 'light',
+		primary: {
+			light: '#757ce8',
+			main: '#3f50b5',
+			dark: '#002884',
+			contrastText: '#fff',
+		},
+		secondary: {
+			light: '#ff7961',
+			main: '#f44336',
+			dark: '#ba000d',
+			contrastText: '#000',
+		},
+	},
+})
 
 export const ContextTheme = createContext<ThemeContextProps>({
 	theme: 'light',
@@ -40,5 +65,9 @@ export const ThemeWrapper: FunctionComponent<ThemeWrapperProps> = (props) => {
 		toggleTheme,
 	}
 
-	return <ContextTheme.Provider value={themeValue}>{props.children}</ContextTheme.Provider>
+	return <ContextTheme.Provider value={themeValue}>
+		<ThemeProvider theme={theme === 'dark' ? darkTheme : lightTheme}>
+			{props.children}
+		</ThemeProvider>
+	</ContextTheme.Provider>
 }

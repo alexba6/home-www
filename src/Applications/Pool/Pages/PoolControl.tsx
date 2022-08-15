@@ -2,7 +2,7 @@ import {Template} from "../../../Template/Template";
 import {FunctionComponent, useContext, useEffect} from "react";
 import {PoolNav} from "../Routes";
 import {ApplicationProps} from "../../../Context/ContextApplication";
-import {Alert, CircularProgress} from "@mui/material";
+import {Alert} from "@mui/material";
 import {Card, CardHeader} from "../../../Components/Card/Card";
 import {useDispatch, useSelector} from "react-redux";
 import {ContextAuthentication} from "../../../Context/ContextAuthentication";

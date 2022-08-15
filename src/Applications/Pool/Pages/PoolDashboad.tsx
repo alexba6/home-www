@@ -6,7 +6,9 @@ import {ApplicationProps} from "../../../Context/ContextApplication";
 export const PoolDashboardPage: FunctionComponent<ApplicationProps> = (props) => {
     const { device } = props.deviceStore
 
+
+
     return <Template nav={PoolNav}>
-        <h2>{device.name}</h2>
+        <h2>Dashboard</h2>
     </Template>
 }

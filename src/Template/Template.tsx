@@ -35,6 +35,10 @@ type TemplateHeaderProps = {
 	onOpenSidebar: () => void
 }
 
+type TemplateTopBarProps = {
+	children: ReactNode
+}
+
 type TemplateSidebarDropdownLinkProps = {
 	children: ReactNode
 	name: string
@@ -187,6 +191,12 @@ const DefaultNav: FunctionComponent = () => {
 	</nav>
 }
 
+export const TemplateTopBar: FunctionComponent<TemplateTopBarProps> = (props) => {
+	return <div className={styles.templateTopBar}>
+		{props.children}
+	</div>
+}
+
 /**
  * @param props
  * @constructor
@@ -200,7 +210,9 @@ export const Template: FunctionComponent<TemplateProps> = (props) => {
 			<TemplateSidebar display={displaySidebar} onClose={() => setDisplaySidebar(false)}>
 				{Nav ? <Nav/> : <DefaultNav/>}
 			</TemplateSidebar>
-			<div className={styles.templateContent}>{props.children}</div>
+			<div className={styles.templateContent}>
+				{props.children}
+			</div>
 		</div>
 	)
 }

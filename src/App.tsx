@@ -2,6 +2,11 @@ import { FunctionComponent, useContext } from 'react'
 import { Provider } from 'react-redux'
 import { BrowserRouter, Route } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
+
 
 import { RoutesPath } from './Config/Routes'
 import { store } from './Store'
@@ -19,7 +24,6 @@ import { ContextTheme, ThemeWrapper } from './Context/ContextTheme'
 import {
 	AuthenticatedRoutesWrapper,
 	AuthenticationProvider,
-	ContextAuthentication
 } from './Context/ContextAuthentication'
 
 import { ForgetPasswordPage } from './Pages/ForgetPasswordPage'

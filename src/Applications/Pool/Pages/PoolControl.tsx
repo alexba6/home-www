@@ -2,61 +2,54 @@ import {Template} from "../../../Template/Template";
 import {FunctionComponent, useContext, useEffect} from "react";
 import {PoolNav} from "../Routes";
 import {ApplicationProps} from "../../../Context/ContextApplication";
-import {Alert, Button, ButtonGroup, Chip} from "@mui/material";
-import {Card, CardContent, CardHeader} from "../../../Components/Card/Card";
+import {Alert, CircularProgress} from "@mui/material";
+import {Card, CardHeader} from "../../../Components/Card/Card";
 import {useDispatch, useSelector} from "react-redux";
-import {poolModeSelector} from "../Store/Mode/ModeSelector";
-import {poolModeActions} from "../Store/Mode/ModeAction";
 import {ContextAuthentication} from "../../../Context/ContextAuthentication";
-import {PoolMode} from "../Store/Mode/ModeReducer";
+import {ActionBtnGroupButtons} from "../../../Components/ActionButtonGroup/ActionBtnGroupButtons";
+import {actionSelector} from "../../../Store/Action/ActionSelector";
+import {actionActions} from "../../../Store/Action/ActionAction";
+import {ActionStatus} from "../../../Store/Action/ActionReducer";
 
+const actionKey = 'pump'
 
 export const PoolControlPage: FunctionComponent<ApplicationProps> = (props) => {
     const { device } = props.deviceStore
     const authenticationContext = useContext(ContextAuthentication)
-    const modeStore = useSelector(poolModeSelector.getMode(device.id))
 
     const dispatch = useDispatch<any>()
 
+    const actionBtnGroup = useSelector(actionSelector.buttonGroup(device.id, actionKey))
+
     useEffect(() => {
-        if (!modeStore) {
-            dispatch(poolModeActions.get({
+        if (!actionBtnGroup) {
+            dispatch(actionActions.buttonGroupGet({
                 authenticationKey: authenticationContext.authenticationKey,
-                deviceId: device.id
+                deviceId: device.id,
+                actionKey,
             }))
         }
-    })
+    }, [actionBtnGroup])
 
-    const changeMode = (mode: PoolMode) => () => {
-        dispatch(poolModeActions.set({
-            authenticationKey: authenticationContext.authenticationKey,
-            deviceId: device.id,
-            mode
-        }))
-    }
-
-    const disable = (mode: PoolMode) => {
-        return mode === modeStore?.mode || modeStore?.mode === PoolMode.STARTING
-    }
 
     return <Template nav={PoolNav}>
         <h2>Contrôle</h2>
         <br/>
         <Card>
             <CardHeader>
-                <h2>Actions</h2>
+                <h2>Pompe action</h2>
             </CardHeader>
-            <Alert icon={false} severity='info'>
-                <strong>{modeStore?.mode}</strong> - {modeStore?.state ? 'marche' : 'arrêt'}
-            </Alert>
+            {(actionBtnGroup && actionBtnGroup.status === ActionStatus.READY) && <Alert icon={false} severity='info'>
+                Mode <strong>{actionBtnGroup.action.enableGroup}</strong> - {actionBtnGroup.action.state ? 'marche' : 'arrêt'}
+            </Alert>}
+            {(actionBtnGroup && actionBtnGroup.status === ActionStatus.PENDING) && <Alert icon={false} severity='info'>
+                ...
+            </Alert>}
+            {(actionBtnGroup && actionBtnGroup.status === ActionStatus.ERROR) && <Alert icon={false} severity='error'>
+                Impossible d'avoir les informations
+            </Alert>}
             <br/>
-            <CardContent>
-                <ButtonGroup fullWidth={true} variant='contained' size='large' aria-label='outlined primary button group'>
-                    <Button onClick={changeMode(PoolMode.ON)} disabled={disable(PoolMode.ON)}>ON</Button>
-                    <Button onClick={changeMode(PoolMode.OFF)} disabled={disable(PoolMode.OFF)}>OFF</Button>
-                    <Button onClick={changeMode(PoolMode.AUTO)} disabled={disable(PoolMode.AUTO)}>AUTO</Button>
-                </ButtonGroup>
-            </CardContent>
+            <ActionBtnGroupButtons deviceId={device.id} groupNames={['ON', 'OFF', 'AUTO']} actionKey='pump'/>
         </Card>
     </Template>
 }

@@ -1,26 +1,18 @@
 import { Device } from "../Device/DeviceReducer"
-import {Sensor, SensorBuffer, SensorValue} from "./SensorReducer";
+import { SensorBufferStore,  SensorValuesStore} from "./SensorReducer";
 import {RootState} from "../index";
 
 
-const getSensor = (deviceId: Device['id'], sensorName: Sensor['name']) => (store: RootState): Sensor | undefined => {
-    const sensorStore = store.sensor.sensors.find(sensor => sensor.deviceId === deviceId)
-    if (sensorStore) {
-        return sensorStore.sensors.find(sensor => sensor.name == sensorName)
-    }
-    return undefined
+
+const getBuffer = (deviceId: Device['id'], name: string) => (store: RootState): SensorBufferStore | undefined => {
+    return store.sensor.buffer.find(buffer => buffer.deviceId === deviceId && buffer.name === name)
 }
 
-const getBuffer = (sensorId: Sensor['id'] | undefined) => (store: RootState): SensorBuffer[] | undefined => {
-    return store.sensor.buffer.find(buffer => buffer.sensorId === sensorId)?.buffers
-}
-
-const getValues = (sensorId: Sensor['id'] | undefined) => (store: RootState): SensorValue[] | undefined => {
-    return store.sensor.values.find(value => value.sensorId === sensorId)?.values
+const getValues = (deviceId: Device['id'], name: string) => (store: RootState): SensorValuesStore | undefined => {
+    return store.sensor.values.find(values => values.deviceId === deviceId && values.name === name)
 }
 
 export const sensorSelector = {
-    getSensor,
     getBuffer,
     getValues
 }

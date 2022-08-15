@@ -2,14 +2,11 @@ import { createSlice } from "@reduxjs/toolkit"
 import { Device } from "../Device/DeviceReducer"
 import {sensorActions} from "./SensorActions";
 
-export enum Unit {
-    TEMPERATURE = 'TEMPERATURE',
-}
-
-export type Sensor = {
-    id: string
-    unit: Unit
-    name: string
+export enum SensorStatus {
+    IDLE = 'IDLE',
+    READY = 'READY',
+    PENDING = 'PENDING',
+    ERROR = 'ERROR'
 }
 
 export type SensorValue = {
@@ -21,23 +18,22 @@ export type SensorValue = {
 
 export type SensorBuffer = [Date, number]
 
-export type SensorValuesStore = {
-    values: SensorValue[]
-    sensorId: Sensor['id']
-}
-
-export type SensorBufferStore = {
-    buffers: SensorBuffer[]
-    sensorId: Sensor['id']
-}
-
-export type SensorStore = {
+export type SensorUniqueKeys = {
     deviceId: Device['id']
-    sensors: Sensor[]
+    name: string
+}
+
+export type SensorValuesStore = SensorUniqueKeys & {
+    values: SensorValue[]
+    status: SensorStatus
+}
+
+export type SensorBufferStore = SensorUniqueKeys & {
+    buffers: SensorBuffer[]
+    status: SensorStatus
 }
 
 export type SensorStoreState = {
-    sensors: SensorStore[]
     buffer: SensorBufferStore[]
     values: SensorValuesStore[]
 }
@@ -45,36 +41,66 @@ export type SensorStoreState = {
 export const sensorStore = createSlice<SensorStoreState, any>({
     name: 'sensor',
     initialState: {
-        sensors: [],
         buffer: [],
         values: []
     },
     reducers: {},
     extraReducers: builder => {
-        // Get available sensors
-        builder.addCase(sensorActions.getAvailable.fulfilled, (state, props) => {
-            const deviceId = props.meta.arg.deviceId
-            state.sensors = [...state.sensors.filter(sensor => sensor.deviceId !== deviceId), {
+        // Get buffer
+        builder.addCase(sensorActions.getBuffer.pending, (state, props) => {
+            const { deviceId, name } = props.meta.arg
+            state.buffer = [...state.buffer.filter(buffer => buffer.deviceId !== deviceId && buffer.name !== name), {
+                buffers: [],
+                status: SensorStatus.PENDING,
                 deviceId,
-                sensors: props.payload.sensors
+                name
             }]
         })
-
-        // Get buffer
         builder.addCase(sensorActions.getBuffer.fulfilled, (state, props) => {
-            const sensorId = props.meta.arg.sensorId
-            state.buffer = [...state.buffer.filter(buffer => buffer.sensorId !== sensorId), {
-                sensorId,
-                buffers: props.payload.values
+            const { deviceId, name } = props.meta.arg
+            state.buffer = [...state.buffer.filter(buffer => buffer.deviceId !== deviceId && buffer.name !== name), {
+                buffers: props.payload.values,
+                status: SensorStatus.READY,
+                deviceId,
+                name
+            }]
+        })
+        builder.addCase(sensorActions.getBuffer.rejected, (state, props) => {
+            const { deviceId, name } = props.meta.arg
+            state.buffer = [...state.buffer.filter(buffer => buffer.deviceId !== deviceId && buffer.name !== name), {
+                buffers: [],
+                status: SensorStatus.ERROR,
+                deviceId,
+                name
             }]
         })
 
         // Get values
+        builder.addCase(sensorActions.getValues.pending, (state, props) => {
+            const { deviceId, name } = props.meta.arg
+            state.values = [...state.values.filter(value => value.deviceId !== deviceId && value.name !== name), {
+                values: [],
+                status: SensorStatus.PENDING,
+                deviceId,
+                name
+            }]
+        })
         builder.addCase(sensorActions.getValues.fulfilled, (state, props) => {
-            const sensorId = props.meta.arg.sensorId
-            state.values = [...state.values.filter(value => value.sensorId !== sensorId), {
-                sensorId,
-                values: props.payload.values
+            const { deviceId, name } = props.meta.arg
+            state.values = [...state.values.filter(value => value.deviceId !== deviceId && value.name !== name), {
+                values: props.payload.values,
+                status: SensorStatus.READY,
+                deviceId,
+                name
+            }]
+        })
+        builder.addCase(sensorActions.getValues.rejected, (state, props) => {
+            const { deviceId, name } = props.meta.arg
+            state.values = [...state.values.filter(value => value.deviceId !== deviceId && value.name !== name), {
+                values: [],
+                status: SensorStatus.ERROR,
+                deviceId,
+                name
             }]
         })
     }

@@ -2,21 +2,13 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AuthenticationKey } from "../../Context/ContextAuthentication"
 import { getAuthorization } from "../../Tools/Authentication";
 import { Device } from "../Device/DeviceReducer"
-import {Sensor, SensorBuffer, SensorValue} from "./SensorReducer";
+import { SensorBuffer, SensorValue} from "./SensorReducer";
 
-
-type GetAvailableProps = {
-    authenticationKey: AuthenticationKey
-    deviceId: Device['id']
-}
-
-type GetAvailable = {
-    sensors: Sensor[]
-}
 
 type GetBufferProps = {
     authenticationKey: AuthenticationKey
-    sensorId: Sensor['id']
+    deviceId: Device['id']
+    name: string
 }
 
 type GetBuffer = {
@@ -25,33 +17,18 @@ type GetBuffer = {
 
 type GetValuesProps = {
     authenticationKey: AuthenticationKey
-    sensorId: Sensor['id']
+    deviceId: Device['id']
+    name: string
 }
 
 type GetValues = {
     values: SensorValue[]
 }
 
-const getAvailable = createAsyncThunk<GetAvailable, GetAvailableProps>(
-    'sensor#getAvailable',
-    async (props) => {
-        const res = await fetch(`/api/sensor/available/${props.deviceId}`, {
-            method: 'GET',
-            headers: {
-                authorization: getAuthorization(props.authenticationKey)
-            }
-        })
-        if (res.status !== 200) {
-            throw new Error('Cannot get available sensors')
-        }
-        return await res.json()
-    }
-)
-
 const getBuffer = createAsyncThunk<GetBuffer, GetBufferProps>(
     'sensor#getBuffer',
     async (props) => {
-        const res = await fetch(`/api/sensor/buffer/${props.sensorId}`, {
+        const res = await fetch(`/api/sensor/buffer/${props.deviceId}/${props.name}`, {
             method: 'GET',
             headers: {
                 authorization: getAuthorization(props.authenticationKey)
@@ -67,7 +44,7 @@ const getBuffer = createAsyncThunk<GetBuffer, GetBufferProps>(
 const getValues = createAsyncThunk<GetValues, GetValuesProps>(
     'sensor#getValue',
     async (props) => {
-        const res = await fetch(`/api/sensor/values/${props.sensorId}`, {
+        const res = await fetch(`/api/sensor/values/${props.deviceId}/${props.name}`, {
             method: 'GET',
             headers: {
                 authorization: getAuthorization(props.authenticationKey)
@@ -81,7 +58,6 @@ const getValues = createAsyncThunk<GetValues, GetValuesProps>(
 )
 
 export const sensorActions = {
-    getAvailable,
     getBuffer,
     getValues
 }

@@ -3,8 +3,8 @@ import { configureStore } from '@reduxjs/toolkit'
 import { userStore } from './User/UserReducer'
 import { homeStore } from './Home/HomeReducer'
 import { deviceStore } from "./Device/DeviceReducer";
-import {poolModeStore} from "../Applications/Pool/Store/Mode/ModeReducer";
 import {sensorStore} from "./Sensor/SensorReducer";
+import {actionStore} from "./Action/ActionReducer";
 
 export const store = configureStore({
 	reducer: {
@@ -13,8 +13,8 @@ export const store = configureStore({
 		device: deviceStore.reducer,
 
 		sensor: sensorStore.reducer,
+		action: actionStore.reducer,
 
-		poolMode: poolModeStore.reducer
 	},
 })
 

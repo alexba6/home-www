@@ -21,7 +21,7 @@ export const SensorBufferChart: FunctionComponent<SensorBufferChartProps> = (pro
             },
             xaxis: {
                 categories: props.buffers.map(buffer => new Date(buffer[0]).toLocaleTimeString()),
-                tickAmount: 10
+                tickAmount: 6
             },
             yaxis: {
                 decimalsInFloat: 4,

@@ -5,7 +5,6 @@ import moment from "moment";
 import {Device} from "../../Store/Device/DeviceReducer";
 import {ContextAuthentication} from "../../Context/ContextAuthentication";
 import {useDispatch, useSelector} from "react-redux";
-import {WaterTemperatureIcon} from "../../Icons/Sidebar/WaterTemperature";
 import {SensorHistoryValuesChart} from "./SensorHistoryValuesChart";
 import {sensorSelector} from "../../Store/Sensor/SensorSelector";
 import {SensorBufferChart} from "./SensorBufferChart";
@@ -28,29 +27,24 @@ export const SensorCard: FunctionComponent<SensorCardProps> = (props) => {
 
     const [tab, setTab] = useState(0)
 
-    const sensor = useSelector(sensorSelector.getSensor(props.deviceId, props.sensorName))
-    const sensorBuffer = useSelector(sensorSelector.getBuffer(sensor?.id))
-    const sensorValue = useSelector(sensorSelector.getValues(sensor?.id))
+    const sensorBuffer = useSelector(sensorSelector.getBuffer(props.deviceId, props.sensorName))
+    const sensorValue = useSelector(sensorSelector.getValues(props.deviceId, props.sensorName))
 
-    const lastValue: SensorBuffer | undefined = useMemo(() => sensorBuffer && sensorBuffer[sensorBuffer.length - 1], [sensorBuffer])
+    const lastValue: SensorBuffer | undefined = useMemo(() => sensorBuffer && sensorBuffer.buffers[sensorBuffer.buffers.length - 1], [sensorBuffer])
 
     useEffect(() => {
-        if (!sensor) {
-            dispatch(sensorActions.getAvailable({
-                authenticationKey: authenticationContext.authenticationKey,
-                deviceId: props.deviceId,
-            }))
-        }
-        if (!sensorBuffer && sensor) {
+        if (!sensorBuffer) {
             dispatch(sensorActions.getBuffer({
                 authenticationKey: authenticationContext.authenticationKey,
-                sensorId: sensor.id
+                deviceId: props.deviceId,
+                name: props.sensorName
             }))
         }
-        if (!sensorValue && sensor) {
+        if (!sensorValue) {
             dispatch(sensorActions.getValues({
                 authenticationKey: authenticationContext.authenticationKey,
-                sensorId: sensor.id
+                deviceId: props.deviceId,
+                name: props.sensorName
             }))
         }
     })
@@ -74,21 +68,21 @@ export const SensorCard: FunctionComponent<SensorCardProps> = (props) => {
         </Tabs>
         <br/>
         {tab == 0 && <Fragment>
-            {(sensorBuffer && sensorBuffer.length > 0) && <SensorBufferChart
-                buffers={sensorBuffer}
+            {(sensorBuffer && sensorBuffer.buffers.length > 0) && <SensorBufferChart
+                buffers={sensorBuffer.buffers}
                 name={props.chartYName}
                 units={props.unit}
             />}
-            {(sensorBuffer && sensorBuffer.length == 0) && <Alert severity='warning'>
+            {(sensorBuffer && sensorBuffer.buffers.length == 0) && <Alert severity='warning'>
                 Pas de données
             </Alert>}
         </Fragment>}
         {tab == 1 && <Fragment>
-            {(sensorValue && sensorValue.length > 0) && <SensorHistoryValuesChart
-                values={sensorValue}
+            {(sensorValue && sensorValue.values.length > 0) && <SensorHistoryValuesChart
+                values={sensorValue.values}
                 units={props.unit}
             />}
-            {(sensorValue && sensorValue.length == 0) && <Alert severity='warning'>
+            {(sensorValue && sensorValue.values.length == 0) && <Alert severity='warning'>
                 Pas de données
             </Alert>}
         </Fragment>}

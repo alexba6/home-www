@@ -5,6 +5,7 @@ import { homeStore } from './Home/HomeReducer'
 import { deviceStore } from "./Device/DeviceReducer";
 import {sensorStore} from "./Sensor/SensorReducer";
 import {actionStore} from "./Action/ActionReducer";
+import {poolSlotStore} from "../Applications/Pool/Store/Slot/SlotReducer";
 
 export const store = configureStore({
 	reducer: {
@@ -14,6 +15,8 @@ export const store = configureStore({
 
 		sensor: sensorStore.reducer,
 		action: actionStore.reducer,
+
+		poolSlot: poolSlotStore.reducer
 
 	},
 })

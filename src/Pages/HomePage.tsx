@@ -9,7 +9,7 @@ import { homeSelectAll } from '../Store/Home/HomeSelector'
 import { HomeStore } from '../Store/Home/HomeReducer'
 import { homeActions } from '../Store/Home/HomeActions'
 import { HomeGrid } from '../Components/Home/HomeGrid'
-import { Modal } from '../Components/Modal/Modal'
+import { ModalBody, ModalFooter, ModalProvider} from '../Components/Modal/Modal'
 import { useModalControl } from '../Hooks/UseModalControl'
 import { Input } from '../Components/Input/Input'
 import { toast } from 'react-toastify'
@@ -32,10 +32,10 @@ const HomeAddModalContent: FunctionComponent<HomeAddModalContentProps> = (props)
 
 	return (
 		<Fragment>
-			<Modal.Body>
+			<ModalBody>
 				<Input placeholder="Nom" value={name} onValue={setName} />
-			</Modal.Body>
-			<Modal.Footer>
+			</ModalBody>
+			<ModalFooter>
 				<div>
 					<Button onClick={props.onClose} variant="danger">
 						Fermer
@@ -46,7 +46,7 @@ const HomeAddModalContent: FunctionComponent<HomeAddModalContentProps> = (props)
 						Ajouter
 					</Button>
 				</div>
-			</Modal.Footer>
+			</ModalFooter>
 		</Fragment>
 	)
 }
@@ -96,14 +96,14 @@ export const HomePage: FunctionComponent = () => {
 
 	return (
 		<Template>
-			<Modal.Provider
+			<ModalProvider
 				display={addHomeModal.display}
 				onClose={addHomeModal.close}
 				name="Ajouter une maison"
 				disabledOutsideClick={true}
 			>
 				<HomeAddModalContent onAdd={handleAddHome} onClose={addHomeModal.close} />
-			</Modal.Provider>
+			</ModalProvider>
 			<div className="flex flex-align-center flex-justify-space-between">
 				<div>
 					<h2>Maisons</h2>

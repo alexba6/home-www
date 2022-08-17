@@ -1,4 +1,4 @@
 
 
 
-export const getSeconds = (time: [number, number, number]) => time.reverse().reduce((v: number, t: number, i: number) => v + t * 60**i, 0)
+export const getSeconds = (time: [number, number, number]) => time[0] * 3600 + time[1] * 60 + time[2]

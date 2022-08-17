@@ -38,7 +38,7 @@ type PoolSlotAccordingProps = {
 const SlotTime: FunctionComponent<SlotTimeProps> = (props) => {
     const { hours, minutes } = useMemo(() => {
         let seconds = 0
-        for (const { start, end, enable} of props.clocks) {
+        for (const {enable, start, end} of props.clocks) {
             if (enable) {
                 seconds += getSeconds(end) - getSeconds(start)
             }
@@ -50,11 +50,12 @@ const SlotTime: FunctionComponent<SlotTimeProps> = (props) => {
         }
     }, [props.clocks])
 
-    return <Typography color='info'>
-        <i>
+    return <Typography>
+            Temps {' '}<i>
             {hours > 0&& `${hours} heures`}
             {(hours > 0 && minutes > 0) && ' et '}
             {minutes > 0 && `${minutes} minutes`}
+            {minutes === 0 && hours === 0 && '0 minutes'}
         </i>
     </Typography>
 }
@@ -120,15 +121,9 @@ export const PoolSlotAccording: FunctionComponent<PoolSlotAccordingProps> = (pro
 
     return <Accordion expanded={expanded} onChange={onChange}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Stack direction='row' justifyContent='space-between' alignItems='center' width='100%'>
-                <div>
-                    <Typography color='primary'>
-                        <strong>{slot.temperature}°C</strong>
-                    </Typography>
-                </div>
-                <div>
-                </div>
-            </Stack>
+            <Typography color='primary'>
+                <strong>{slot.temperature}°C</strong>
+            </Typography>
         </AccordionSummary>
         <AccordionDetails>
             <Stack direction='row' justifyContent='space-between' alignItems='center' width='100%'>
@@ -136,6 +131,7 @@ export const PoolSlotAccording: FunctionComponent<PoolSlotAccordingProps> = (pro
                     <Typography>
                         Horloges <strong>{slot.temperature}°C</strong>
                     </Typography>
+                    {clocks && <SlotTime clocks={clocks}/>}
                 </div>
                 <div>
                     <Tooltip title='Ajouter une horloge'>

@@ -70,7 +70,7 @@ export const poolSlotStore = createSlice<PoolSlotStoreState, any>({
         // Slot post
         builder.addCase(poolSlotActions.slotPost.fulfilled, (state, props) => {
             const { deviceId } = props.meta.arg
-            const storeSlot = state.slots.find(slot => slot.deviceId !== deviceId)
+            const storeSlot = state.slots.find(slot => slot.deviceId === deviceId)
             const slot = props.payload.slot
             if (storeSlot && storeSlot.status === PoolSlotStatus.READY) {
                 state.slots = [...state.slots.filter(slot => slot.deviceId !== deviceId), {
@@ -90,7 +90,7 @@ export const poolSlotStore = createSlice<PoolSlotStoreState, any>({
         // Slot put
         builder.addCase(poolSlotActions.slotPut.fulfilled, (state, props) => {
             const { deviceId } = props.meta.arg
-            const storeSlot = state.slots.find(slot => slot.deviceId !== deviceId)
+            const storeSlot = state.slots.find(slot => slot.deviceId === deviceId)
             const updatedSlot = props.payload.slot
             if (storeSlot && storeSlot.status === PoolSlotStatus.READY) {
                 state.slots = [...state.slots.filter(slot => slot.deviceId !== deviceId), {
@@ -104,7 +104,7 @@ export const poolSlotStore = createSlice<PoolSlotStoreState, any>({
         // Slot delete
         builder.addCase(poolSlotActions.slotDelete.fulfilled, (state, props) => {
             const { deviceId, slotId } = props.meta.arg
-            const storeSlot = state.slots.find(slot => slot.deviceId !== deviceId)
+            const storeSlot = state.slots.find(slot => slot.deviceId === deviceId)
 
             if (storeSlot && storeSlot.status === PoolSlotStatus.READY) {
                 state.slots = [...state.slots.filter(slot => slot.deviceId !== deviceId), {
@@ -119,7 +119,7 @@ export const poolSlotStore = createSlice<PoolSlotStoreState, any>({
         // Clock get all
         builder.addCase(poolSlotActions.clockGetAll.fulfilled, (state, props) => {
             const { deviceId, slotId } = props.meta.arg
-            state.clocks = [...state.clocks.filter(clock => clock.deviceId !== deviceId && clock.slotId !== slotId), {
+            state.clocks = [...state.clocks.filter(clock => clock.deviceId !== deviceId || clock.slotId !== slotId), {
                 status: PoolSlotStatus.READY,
                 deviceId,
                 slotId,
@@ -130,17 +130,17 @@ export const poolSlotStore = createSlice<PoolSlotStoreState, any>({
         // Clock post
         builder.addCase(poolSlotActions.clockPost.fulfilled, (state, props) => {
             const { deviceId } = props.meta.arg
-            const storeClock = state.clocks.find(clock => clock.deviceId !== deviceId)
+            const storeClock = state.clocks.find(clock => clock.deviceId === deviceId)
             const addClock = props.payload.clock
             if (storeClock && storeClock.status === PoolSlotStatus.READY) {
-                state.clocks = [...state.clocks.filter(clock => clock.deviceId !== deviceId && clock.slotId !== addClock.slotId), {
+                state.clocks = [...state.clocks.filter(clock => clock.deviceId !== deviceId || clock.slotId !== addClock.slotId), {
                     status: PoolSlotStatus.READY,
                     deviceId,
                     slotId: addClock.slotId,
                     clocks: [...storeClock.clocks, addClock]
                 }]
             } else {
-                state.clocks = [...state.clocks.filter(clock => clock.deviceId !== deviceId && clock.slotId !== addClock.slotId), {
+                state.clocks = [...state.clocks.filter(clock => clock.deviceId !== deviceId || clock.slotId !== addClock.slotId), {
                     status: PoolSlotStatus.READY,
                     deviceId,
                     slotId: addClock.slotId,
@@ -152,10 +152,10 @@ export const poolSlotStore = createSlice<PoolSlotStoreState, any>({
         // Clock put
         builder.addCase(poolSlotActions.clockPut.fulfilled, (state, props) => {
             const { deviceId } = props.meta.arg
-            const storeClock = state.clocks.find(clock => clock.deviceId !== deviceId)
+            const storeClock = state.clocks.find(clock => clock.deviceId === deviceId)
             const updatedClock = props.payload.clock
             if (storeClock && storeClock.status === PoolSlotStatus.READY) {
-                state.clocks = [...state.clocks.filter(clock => clock.deviceId !== deviceId && clock.slotId !== updatedClock.slotId), {
+                state.clocks = [...state.clocks.filter(clock => clock.deviceId !== deviceId || clock.slotId !== updatedClock.slotId), {
                     status: PoolSlotStatus.READY,
                     deviceId,
                     slotId: updatedClock.slotId,
@@ -167,9 +167,9 @@ export const poolSlotStore = createSlice<PoolSlotStoreState, any>({
         // Clock delete
         builder.addCase(poolSlotActions.clockDelete.fulfilled, (state, props) => {
             const { deviceId, clockId } = props.meta.arg
-            const storeClock = state.clocks.find(clock => clock.deviceId !== deviceId)
+            const storeClock = state.clocks.find(clock => clock.deviceId === deviceId && clock.status === PoolSlotStatus.READY && clock.)
             if (storeClock && storeClock.status === PoolSlotStatus.READY) {
-                state.clocks = [...state.clocks.filter(clock => clock.deviceId !== deviceId && clock.slotId !== storeClock.slotId), {
+                state.clocks = [...state.clocks.filter(clock => clock.deviceId !== deviceId || clock.slotId !== storeClock.slotId), {
                     status: PoolSlotStatus.READY,
                     deviceId,
                     slotId: storeClock.slotId,

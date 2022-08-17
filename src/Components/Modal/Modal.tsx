@@ -22,17 +22,17 @@ type ModalFooterProps = {
 	children: ReactNode
 }
 
-const ModalBody: FunctionComponent<ModalBodyProps> = (props) => {
+export const ModalBody: FunctionComponent<ModalBodyProps> = (props) => {
 	return <div className={styles.modalBodyContainer}>{props.children}</div>
 }
 
-const ModalFooter: FunctionComponent<ModalFooterProps> = (props) => {
+export const ModalFooter: FunctionComponent<ModalFooterProps> = (props) => {
 	return <div className={styles.modalFooterContainer}>
 		{props.children}
 	</div>
 }
 
-const ModalProvider: FunctionComponent<ModalProviderProps> = (props) => {
+export const ModalProvider: FunctionComponent<ModalProviderProps> = (props) => {
 	const root = document.createElement('div')
 
 	const active = useMemo(() => (props.display ? 'active' : 'unable'), [props])
@@ -79,10 +79,4 @@ const ModalProvider: FunctionComponent<ModalProviderProps> = (props) => {
 		</Fragment>,
 		root
 	)
-}
-
-export const Modal = {
-	Provider: ModalProvider,
-	Body: ModalBody,
-	Footer: ModalFooter,
 }

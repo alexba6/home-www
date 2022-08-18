@@ -3,18 +3,18 @@ import { useDispatch, useSelector } from 'react-redux'
 import {TextField, Button, IconButton, Tooltip, Stack} from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 
-import { ContextAuthentication} from '../../Context/ContextAuthentication'
-import {Template, TemplateTopBar} from '../../Template/Template'
-import { homeSelectAll } from '../../Store/Home/HomeSelector'
-import { HomeStore } from '../../Store/Home/HomeReducer'
-import { homeActions } from '../../Store/Home/HomeActions'
-import { HomeGrid } from '../../Components/Home/HomeGrid'
-import { ModalBody, ModalFooter, ModalProvider} from '../../Components/Modal/Modal'
-import { useModalControl } from '../../Hooks/UseModalControl'
+import { ContextAuthentication} from '../Context/ContextAuthentication'
+import {Template, TemplateTopBar} from '../Template/Template'
+import { homeSelectAll } from '../Store/Home/HomeSelector'
+import { HomeStore } from '../Store/Home/HomeReducer'
+import { homeActions } from '../Store/Home/HomeActions'
+import { HomeGrid } from '../Components/Home/HomeGrid'
+import { ModalBody, ModalFooter, ModalProvider} from '../Components/Modal/Modal'
+import { useModalControl } from '../Hooks/UseModalControl'
 import { toast } from 'react-toastify'
 import { unwrapResult } from '@reduxjs/toolkit'
 import { useHistory } from 'react-router-dom'
-import { RoutesPath } from '../../Config/Routes'
+import { RoutesPath } from '../Config/Routes'
 
 type HomeAddModalContentProps = {
 	display: boolean
@@ -65,7 +65,7 @@ export const HomePage: FunctionComponent = () => {
 
 	const handleOpenHome = (homeStore: HomeStore) => {
 		history.push({
-			pathname: RoutesPath.homeDetails.target,
+			pathname: RoutesPath.device.target,
 			search: `?homeId=${homeStore.home.id}`,
 		})
 	}

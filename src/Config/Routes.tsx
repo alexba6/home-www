@@ -11,7 +11,7 @@ export type RoutePath = {
 	target: string
 }
 
-export const RoutesPath: { [key: string]: RoutePath } = {
+export const RoutesPath: Record<string, RoutePath>  = {
 	login: {
 		name: 'Login',
 		target: '/login',
@@ -34,13 +34,9 @@ export const RoutesPath: { [key: string]: RoutePath } = {
 		target: '/home',
 		icon: <HomeIcon />,
 	},
-	homeDetails: {
-		name: 'Home details',
-		target: '/home/details',
-	},
-	devices: {
+	device: {
 		name: 'Appareils',
-		target: '/devices',
+		target: '/device',
 		icon: <DeviceIcon />,
 	},
 	notifications: {

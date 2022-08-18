@@ -11,27 +11,27 @@ import {TemplateSidebarCategory, TemplateSidebarLink} from "../../Template/Templ
 
 export const PoolRoutesPath: { [key: string]: RoutePath } = {
     dashboard: {
-        target: '/device/pool',
+        target: '/app/pool',
         name: 'Dashboard',
         icon: <DashboardIcon />,
     },
     control: {
-        target: '/device/pool/control',
+        target: '/app/pool/control',
         name: 'Contrôle',
         icon: <ToggleSwitchIcon/>
     },
     waterTemperature: {
-        target: '/device/pool/water-temp',
+        target: '/app/pool/water-temp',
         name: 'Température de l\'eau',
         icon: <WaterTemperatureIcon/>
     },
     outsideTemperature: {
-        target: '/device/pool/outside-temp',
+        target: '/app/pool/outside-temp',
         name: 'Température extérieure',
         icon: <TemperatureIcon/>
     },
     slot: {
-        target: '/device/pool/slot',
+        target: '/app/pool/slot',
         name: 'Plage',
         icon: <ClockIcon/>
     }

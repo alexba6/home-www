@@ -173,7 +173,7 @@ const DefaultNav: FunctionComponent = () => {
 		<ul>
 			<TemplateSidebarLink routePath={RoutesPath.dashboard} />
 			<TemplateSidebarLink routePath={RoutesPath.home} />
-			<TemplateSidebarLink routePath={RoutesPath.devices} />
+			<TemplateSidebarLink routePath={RoutesPath.device} />
 			<TemplateSidebarLink routePath={RoutesPath.notifications} />
 			<TemplateSidebarDropdownLink name="Compte" target="account" icon={<UserIcon />} itemsCount={4}>
 				<TemplateSidebarLink routePath={RoutesPath.accountProfile} />

@@ -32,10 +32,11 @@ import { SettingsThemePage } from './Pages/Settings/SettingsThemePage'
 import { AccountSecurityPage } from './Pages/Account/AccountSecurity'
 import { AccountAuthPage } from './Pages/Account/AccountAuth'
 import { AccountProfilePage } from './Pages/Account/AccountProfil'
-import { HomePage } from './Pages/Home/HomePage'
-import { HomeDetailsPage } from './Pages/Home/HomeDetailsPage'
+import { HomePage } from './Pages/HomePage'
+import { DevicePage } from './Pages/DevicePage'
 import {PoolApp} from "./Applications/Pool/App";
 import {ApplicationContextProvider} from "./Context/ContextApplication";
+import {SettingsHomePage} from "./Pages/Settings/SettingsHomePage";
 
 const ToastContainerTheme: FunctionComponent = () => {
 	const themeContext = useContext(ContextTheme)
@@ -64,7 +65,8 @@ export const App: FunctionComponent = () => {
 									<Route path={RoutesPath.accountProfile.target} component={AccountProfilePage}/>
 									<Route exact path={RoutesPath.accountSecurity.target} component={AccountSecurityPage}/>
 									<Route exact path={RoutesPath.home.target} component={HomePage}/>
-									<Route exact path={RoutesPath.homeDetails.target} component={HomeDetailsPage}/>
+									<Route exact path={RoutesPath.device.target} component={DevicePage}/>
+									<Route exact path={RoutesPath.settingsHome.target} component={SettingsHomePage}/>
 									<PoolApp/>
 								</AuthenticatedRoutesWrapper>
 								<ToastContainerTheme/>

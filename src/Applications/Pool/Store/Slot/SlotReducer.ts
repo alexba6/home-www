@@ -121,8 +121,8 @@ export const poolSlotStore = createSlice<PoolSlotStoreState, any>({
             const { deviceId, slotId } = props.meta.arg
             state.clocks = [...state.clocks.filter(clock => clock.deviceId !== deviceId || clock.slotId !== slotId), {
                 status: PoolSlotStatus.READY,
-                deviceId,
                 slotId,
+                deviceId,
                 clocks: props.payload.clocks
             }]
         })
@@ -151,8 +151,8 @@ export const poolSlotStore = createSlice<PoolSlotStoreState, any>({
 
         // Clock put
         builder.addCase(poolSlotActions.clockPut.fulfilled, (state, props) => {
-            const { deviceId } = props.meta.arg
-            const storeClock = state.clocks.find(clock => clock.deviceId === deviceId)
+            const { deviceId, slotId } = props.meta.arg
+            const storeClock = state.clocks.find(clock => clock.deviceId === deviceId && clock.slotId === slotId)
             const updatedClock = props.payload.clock
             if (storeClock && storeClock.status === PoolSlotStatus.READY) {
                 state.clocks = [...state.clocks.filter(clock => clock.deviceId !== deviceId || clock.slotId !== updatedClock.slotId), {
@@ -166,8 +166,8 @@ export const poolSlotStore = createSlice<PoolSlotStoreState, any>({
 
         // Clock delete
         builder.addCase(poolSlotActions.clockDelete.fulfilled, (state, props) => {
-            const { deviceId, clockId } = props.meta.arg
-            const storeClock = state.clocks.find(clock => clock.deviceId === deviceId && clock.status === PoolSlotStatus.READY && clock.)
+            const { deviceId, clockId, slotId } = props.meta.arg
+            const storeClock = state.clocks.find(clock => clock.deviceId === deviceId && clock.slotId === slotId)
             if (storeClock && storeClock.status === PoolSlotStatus.READY) {
                 state.clocks = [...state.clocks.filter(clock => clock.deviceId !== deviceId || clock.slotId !== storeClock.slotId), {
                     status: PoolSlotStatus.READY,

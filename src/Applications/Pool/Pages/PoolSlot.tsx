@@ -1,9 +1,10 @@
 import {Template, TemplateTopBar} from "../../../Template/Template";
 import {FunctionComponent, useContext, useEffect, useRef, useState} from "react";
-import {PoolNav} from "../Routes";
-import {ApplicationProps} from "../../../Context/ContextApplication";
 import {Button, IconButton, Stack, TextField, Tooltip} from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
+
+import {PoolNav} from "../Routes";
+import {ApplicationProps} from "../../../Context/ContextApplication";
 import {PoolSlot} from "../Store/Slot/SlotReducer";
 import {PoolSlotAccording} from "../Compoents/Slots/SlotAccording";
 import {useDispatch, useSelector} from "react-redux";

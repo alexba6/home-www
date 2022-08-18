@@ -7,11 +7,11 @@ import { GoogleIcon } from '../Icons/Form/Google'
 import { FacebookIcon } from '../Icons/Form/Facebook'
 import { CardForm, CardFormOrSeparator } from '../Components/Card/CardForm'
 import { HomeLogo } from '../Icons/HomeLogo'
-import { Input } from '../Components/Input/Input'
 import { ContextAuthentication } from '../Context/ContextAuthentication'
 import { useHistory } from 'react-router-dom'
 import { RoutesPath } from '../Config/Routes'
 import { useFormValue } from '../Hooks/UseFormValue'
+import {TextField} from "@mui/material";
 
 export const LoginPage: FunctionComponent = () => {
 	const history = useHistory()
@@ -60,8 +60,8 @@ export const LoginPage: FunctionComponent = () => {
 				</div>
 			</div>
 			<div>
-				<Input placeholder="Email ou nom d'utilisateur" onValue={form.set.login} value={form.value.login} />
-				<Input placeholder="Mot de passe" type="password" onValue={form.set.password} value={form.value.password} />
+				<TextField label="Email ou nom d'utilisateur" onChange={form.set.login} value={form.value.login} />
+				<TextField label="Mot de passe" type="password" onChange={form.set.password} value={form.value.password} />
 			</div>
 			<div className="flex flex-align-center flex-justify-end">
 				<TextLink onClick={() => {}}>Mot de passe oublié ?</TextLink>

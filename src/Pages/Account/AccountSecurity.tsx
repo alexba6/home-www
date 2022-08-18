@@ -1,12 +1,11 @@
 import {FunctionComponent, useContext} from 'react'
 import { Template } from '../../Template/Template'
 import { Card, CardHeader } from '../../Components/Card/Card'
-import { Button } from '../../Components/Button/Button'
-import { Input } from '../../Components/Input/Input'
 import { ContextAuthentication} from '../../Context/ContextAuthentication'
 import { toast } from 'react-toastify'
 import { getAuthorization } from '../../Tools/Authentication'
 import { useFormValue } from '../../Hooks/UseFormValue'
+import {Button, Stack, TextField} from "@mui/material";
 
 const AccountSecurityPassword: FunctionComponent = () => {
 	const authContext = useContext(ContextAuthentication)
@@ -51,51 +50,48 @@ const AccountSecurityPassword: FunctionComponent = () => {
 				<h3>Changer le mot de passe</h3>
 			</CardHeader>
 			<div>
-				<Input
-					placeholder="Ancien mot de passe"
-					type="password"
+				<TextField
+					label="Ancien mot de passe"
 					value={form.value.oldPassword}
-					onValue={form.set.oldPassword}
-				/>
-				<Input
-					placeholder="Nouveau mot de passe"
-					type="password"
+					onChange={form.set.oldPassword}
+					type='password'
+					size='small'
+					variant='outlined'
+					margin='normal'
+					fullWidth/>
+				<TextField
+					label="Nouveau mot de passe"
 					value={form.value.newPassword}
-					onValue={form.set.newPassword}
-				/>
-				<Input
-					placeholder="Confirmez le mot de passe"
-					type="password"
+					onChange={form.set.newPassword}
+					type='password'
+					size='small'
+					variant='outlined'
+					margin='normal'
+					fullWidth/>
+				<TextField
+					label="Confirmer le mot de passe"
 					value={form.value.newPasswordC}
-					onValue={form.set.newPasswordC}
-				/>
+					onChange={form.set.newPasswordC}
+					type='password'
+					size='small'
+					variant='outlined'
+					margin='normal'
+					fullWidth/>
 			</div>
-			<Button variant="primary" onClick={updatePassword}>
-				Valider
-			</Button>
+			<Stack direction='row' justifyContent='end' alignItems='center'>
+				<Button onClick={updatePassword} color='primary'>
+					Valider
+				</Button>
+			</Stack>
 		</Card>
 	)
 }
 
-const AccountSecurity2Fa: FunctionComponent = () => {
-	return (
-		<Card>
-			<CardHeader>
-				<h3>2-Factor Authentication</h3>
-			</CardHeader>
-			<Button variant="primary" onClick={() => {}}>
-				Activer 2-Factor Authentication
-			</Button>
-		</Card>
-	)
-}
 
 export const AccountSecurityPage: FunctionComponent = () => {
 	return (
 		<Template>
 			<AccountSecurityPassword />
-			<br />
-			<AccountSecurity2Fa />
 		</Template>
 	)
 }

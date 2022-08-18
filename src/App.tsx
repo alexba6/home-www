@@ -32,8 +32,8 @@ import { SettingsThemePage } from './Pages/Settings/SettingsThemePage'
 import { AccountSecurityPage } from './Pages/Account/AccountSecurity'
 import { AccountAuthPage } from './Pages/Account/AccountAuth'
 import { AccountProfilePage } from './Pages/Account/AccountProfil'
-import { HomePage } from './Pages/HomePage'
-import { HomeDetailsPage } from './Pages/HomeDetailsPage'
+import { HomePage } from './Pages/Home/HomePage'
+import { HomeDetailsPage } from './Pages/Home/HomeDetailsPage'
 import {PoolApp} from "./Applications/Pool/App";
 import {ApplicationContextProvider} from "./Context/ContextApplication";
 

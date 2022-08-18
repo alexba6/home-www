@@ -65,6 +65,7 @@ type ClockPutProps = {
     authenticationKey: AuthenticationKey
     deviceId: Device['id']
     clockId: PoolClock['id']
+    slotId: PoolSlot['id']
     clock: Omit<PoolClock, 'id' | 'slotId'>
 }
 
@@ -76,6 +77,7 @@ type ClockDeleteProps = {
     authenticationKey: AuthenticationKey
     deviceId: Device['id']
     clockId: PoolClock['id']
+    slotId: PoolSlot['id']
 }
 
 const slotGetAll = createAsyncThunk<SlotGetAll, SlotGetAllProps>(

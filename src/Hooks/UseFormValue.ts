@@ -1,16 +1,12 @@
-import { useState } from 'react'
+import {ChangeEvent, useState} from 'react'
 
 type UseMultipleRef<K extends keyof any> = {
-	value: {
-		[key in K]: string
-	}
-	set: {
-		[value in K]: (value: string) => void
-	}
+	value: Record<K, string>
+	set: Record<K, (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | string) => void>
 	clear: () => {}
 }
 
-export const useFormValue = <I extends object>(initialValue: { [key in keyof I]: string }): UseMultipleRef<keyof I> => {
+export const useFormValue = <I extends object>(initialValue: Record<keyof I, string>): UseMultipleRef<keyof I> => {
 	const [state, setState] = useState<{ [key in keyof I]: string }>(initialValue)
 
 	const names = Object.keys(initialValue)
@@ -21,10 +17,10 @@ export const useFormValue = <I extends object>(initialValue: { [key in keyof I]:
 	const set = Object.fromEntries(
 		names.map((name: any) => [
 			name,
-			(value: string) => {
+			(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | string) => {
 				setState((current) => ({
 					...current,
-					[name]: value,
+					[name]: typeof event === 'string' ? event : event.target.value,
 				}))
 			},
 		])

@@ -6,11 +6,10 @@ import { Template } from '../../Template/Template'
 import { useDispatch, useSelector } from 'react-redux'
 import { userActions } from '../../Store/User/UserActions'
 import { Card, CardHeader } from '../../Components/Card/Card'
-import { Input } from '../../Components/Input/Input'
 import { userSelectInfo } from '../../Store/User/UserSelector'
-import { Button } from '../../Components/Button/Button'
 import { useFormValue } from '../../Hooks/UseFormValue'
 import {ContextAuthentication} from "../../Context/ContextAuthentication";
+import {Button, Stack, TextField} from "@mui/material";
 
 export const AccountProfilePage: FunctionComponent = () => {
 	const authContext = useContext(ContextAuthentication)
@@ -77,14 +76,43 @@ export const AccountProfilePage: FunctionComponent = () => {
 				</CardHeader>
 				{userInfo && (
 					<div>
-						<Input placeholder="No d'utilisateur" value={form.value.username} onValue={form.set.username} />
-						<Input placeholder="Email" value={form.value.email} onValue={form.set.email} />
-						<Input placeholder="Prénom" value={form.value.firstName} onValue={form.set.firstName} />
-						<Input placeholder="Nom" value={form.value.lastName} onValue={form.set.lastName} />
-						<br />
-						<Button onClick={updateProfile} variant="primary">
-							Enregistrer
-						</Button>
+						<TextField
+							label="No d'utilisateur"
+							value={form.value.username}
+							onChange={form.set.username}
+							size='small'
+							variant='outlined'
+							margin='normal'
+							fullWidth/>
+						<TextField
+							label="Email"
+							value={form.value.email}
+							onChange={form.set.email}
+							size='small'
+							variant='outlined'
+							margin='normal'
+							fullWidth />
+						<TextField
+							label="Prénom"
+							value={form.value.firstName}
+							onChange={form.set.firstName}
+							size='small'
+							variant='outlined'
+							margin='normal'
+							fullWidth/>
+						<TextField
+							label="Nom"
+							value={form.value.lastName}
+							onChange={form.set.lastName}
+							size='small'
+							variant='outlined'
+							margin='normal'
+							fullWidth/>
+						<Stack direction='row' justifyContent='end' alignItems='center'>
+							<Button onClick={updateProfile} color='primary'>
+								Enregistrer
+							</Button>
+						</Stack>
 					</div>
 				)}
 			</Card>

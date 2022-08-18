@@ -7,7 +7,6 @@ export const PoolDashboardPage: FunctionComponent<ApplicationProps> = (props) =>
     const { device } = props.deviceStore
 
 
-
     return <Template nav={PoolNav}>
         <h2>Dashboard</h2>
     </Template>

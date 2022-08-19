@@ -6,12 +6,14 @@ import { deviceStore } from "./Device/DeviceReducer";
 import {sensorStore} from "./Sensor/SensorReducer";
 import {actionStore} from "./Action/ActionReducer";
 import {poolSlotStore} from "../Applications/Pool/Store/Slot/SlotReducer";
+import {authKeyStore} from "./AuthKey/AuthKeyReducer";
 
 export const store = configureStore({
 	reducer: {
 		user: userStore.reducer,
 		home: homeStore.reducer,
 		device: deviceStore.reducer,
+		authKeys: authKeyStore.reducer,
 
 		sensor: sensorStore.reducer,
 		action: actionStore.reducer,

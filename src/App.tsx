@@ -37,6 +37,7 @@ import { DevicePage } from './Pages/DevicePage'
 import {PoolApp} from "./Applications/Pool/App";
 import {ApplicationContextProvider} from "./Context/ContextApplication";
 import {SettingsHomePage} from "./Pages/Settings/SettingsHomePage";
+import {LogoutPage} from "./Pages/LogoutPage";
 
 const ToastContainerTheme: FunctionComponent = () => {
 	const themeContext = useContext(ContextTheme)
@@ -67,6 +68,7 @@ export const App: FunctionComponent = () => {
 									<Route exact path={RoutesPath.home.target} component={HomePage}/>
 									<Route exact path={RoutesPath.device.target} component={DevicePage}/>
 									<Route exact path={RoutesPath.settingsHome.target} component={SettingsHomePage}/>
+									<Route path={RoutesPath.accountLogout.target} component={LogoutPage}/>
 									<PoolApp/>
 								</AuthenticatedRoutesWrapper>
 								<ToastContainerTheme/>

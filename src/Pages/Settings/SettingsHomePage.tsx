@@ -1,6 +1,7 @@
 import {FunctionComponent, useContext, useEffect, useMemo} from "react";
-import { Table, TableBody, TableCell, TableHead, TableRow} from "@mui/material";
+import {IconButton, Table, TableBody, TableCell, TableHead, TableRow, Tooltip} from "@mui/material";
 import StarIcon from '@mui/icons-material/Star';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import { ContextAuthentication } from "../../Context/ContextAuthentication";
 import {Template} from "../../Template/Template";
@@ -39,7 +40,7 @@ export const SettingsHomePage: FunctionComponent = () => {
                     <TableHead>
                         <TableRow>
                             <TableCell align='center'>Nom</TableCell>
-                            <TableCell align='center'>Action</TableCell>
+                            <TableCell align='center' width='100'></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -48,6 +49,14 @@ export const SettingsHomePage: FunctionComponent = () => {
                                 {home.home.name}
                                 {defaultHomeId === home.home.id && <StarIcon color='primary'/>}
                             </TableCell>
+                            <TableCell align='center'>
+                                <Tooltip title='actions'>
+                                    <IconButton>
+                                        <MoreVertIcon/>
+                                    </IconButton>
+                                </Tooltip>
+                            </TableCell>
+
                         </TableRow>)}
                     </TableBody>
                 </Table>}

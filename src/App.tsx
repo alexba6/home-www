@@ -30,7 +30,7 @@ import { ForgetPasswordPage } from './Pages/ForgetPasswordPage'
 import { ResetPasswordPage } from './Pages/ResetPasswordPage'
 import { SettingsThemePage } from './Pages/Settings/SettingsThemePage'
 import { AccountSecurityPage } from './Pages/Account/AccountSecurity'
-import { AccountAuthPage } from './Pages/Account/AccountAuth'
+import { AccountAuthKeyPage } from './Pages/Account/AccountAuthKey'
 import { AccountProfilePage } from './Pages/Account/AccountProfil'
 import { HomePage } from './Pages/HomePage'
 import { DevicePage } from './Pages/DevicePage'
@@ -58,17 +58,17 @@ export const App: FunctionComponent = () => {
 
 								<Route exact path={RoutesPath.dashboard.target} component={DashboardPage} />
 
-								<Route exact path={RoutesPath.accountAuth.target} component={AccountAuthPage} />
 
 								<Route exact path={RoutesPath.settingsTheme.target} component={SettingsThemePage} />
 
 								<AuthenticatedRoutesWrapper>
 									<Route path={RoutesPath.accountProfile.target} component={AccountProfilePage}/>
+									<Route exact path={RoutesPath.accountAuth.target} component={AccountAuthKeyPage} />
 									<Route exact path={RoutesPath.accountSecurity.target} component={AccountSecurityPage}/>
+									<Route path={RoutesPath.accountLogout.target} component={LogoutPage}/>
 									<Route exact path={RoutesPath.home.target} component={HomePage}/>
 									<Route exact path={RoutesPath.device.target} component={DevicePage}/>
 									<Route exact path={RoutesPath.settingsHome.target} component={SettingsHomePage}/>
-									<Route path={RoutesPath.accountLogout.target} component={LogoutPage}/>
 									<PoolApp/>
 								</AuthenticatedRoutesWrapper>
 								<ToastContainerTheme/>

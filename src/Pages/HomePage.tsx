@@ -33,7 +33,7 @@ const HomeAddModalContent: FunctionComponent<HomeAddModalContentProps> = (props)
 	}
 
 	return (
-		<ModalProvider disabledOutsideClick display={props.display} onClose={props.onClose} name='Ajouter une maison'>
+		<ModalProvider display={props.display} onClose={props.onClose} name='Ajouter une maison'>
 			<ModalBody>
 				<TextField inputRef={nameRef} type='text' label='Nom' size='small' variant='outlined' fullWidth/>
 			</ModalBody>

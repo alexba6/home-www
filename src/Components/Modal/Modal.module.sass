@@ -1,15 +1,4 @@
 // Modal Provider
-.modalProviderMask
-  position: absolute
-  background-color: transparent
-  z-index: 1
-  &[active=active]
-    top: 0
-    right: 0
-    bottom: 0
-    left: 0
-    background-color: var(--ct-modal-backdrop-bg)
-
 .modalProviderContainer
   position: absolute
   top: 50%
@@ -20,10 +9,6 @@
   padding: 20px
   border-radius: 3px
   min-width: 350px
-  &[active=active]
-    display: block
-  &[active=unable]
-    display: none
 
 .modalProviderHeader
   display: flex

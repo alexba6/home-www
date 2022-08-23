@@ -13,14 +13,23 @@ export enum PoolSlotStatus {
 export type PoolClock = {
     id: string
     slotId: string
-    start: [number, number, number]
-    end: [number, number, number]
+    start: [number, number]
+    end: [number, number]
     enable: boolean
 }
 
 export type PoolSlot = {
     id: string
     temperature: number
+}
+
+export type PoolCurrentSlotStore = {
+    deviceId: Device['id']
+    status: PoolSlotStatus.IDLE | PoolSlotStatus.PENDING | PoolSlotStatus.ERROR
+} | {
+    deviceId: Device['id']
+    status: PoolSlotStatus.READY
+    slotId: PoolSlot['id'] | null
 }
 
 
@@ -47,23 +56,63 @@ export type PoolClockStore = {
 export type PoolSlotStoreState = {
     slots: PoolSlotStore[]
     clocks: PoolClockStore[]
+    currentSlotId: PoolCurrentSlotStore[]
 }
 
 export const poolSlotStore = createSlice<PoolSlotStoreState, any>({
     name: 'poolSlot',
     initialState: {
         slots: [],
-        clocks: []
+        clocks: [],
+        currentSlotId: []
     },
     reducers: {},
     extraReducers: builder => {
+        // Current slot
+        builder.addCase(poolSlotActions.slotGetCurrent.pending, (state, props) => {
+            const { deviceId } = props.meta.arg
+            state.currentSlotId = [...state.currentSlotId.filter((currentSlotId: PoolCurrentSlotStore) => currentSlotId.deviceId !== deviceId), {
+                status: PoolSlotStatus.PENDING,
+                deviceId
+            }]
+        })
+        builder.addCase(poolSlotActions.slotGetCurrent.fulfilled, (state, props) => {
+            const { deviceId } = props.meta.arg
+            state.currentSlotId = [...state.currentSlotId.filter((currentSlotId: PoolCurrentSlotStore) => currentSlotId.deviceId !== deviceId), {
+                status: PoolSlotStatus.READY,
+                deviceId,
+                slotId: props.payload.slotId
+            }]
+        })
+        builder.addCase(poolSlotActions.slotGetCurrent.rejected, (state, props) => {
+            const { deviceId } = props.meta.arg
+            state.currentSlotId = [...state.currentSlotId.filter((currentSlotId: PoolCurrentSlotStore) => currentSlotId.deviceId !== deviceId), {
+                status: PoolSlotStatus.ERROR,
+                deviceId
+            }]
+        })
+
         // Slot get all
+        builder.addCase(poolSlotActions.slotGetAll.pending, (state, props) => {
+            const { deviceId } = props.meta.arg
+            state.slots = [...state.slots.filter(slot => slot.deviceId !== deviceId), {
+                status: PoolSlotStatus.PENDING,
+                deviceId,
+            }]
+        })
         builder.addCase(poolSlotActions.slotGetAll.fulfilled, (state, props) => {
             const { deviceId } = props.meta.arg
             state.slots = [...state.slots.filter(slot => slot.deviceId !== deviceId), {
                 status: PoolSlotStatus.READY,
                 deviceId,
                 slots: props.payload.slots
+            }]
+        })
+        builder.addCase(poolSlotActions.slotGetAll.rejected, (state, props) => {
+            const { deviceId } = props.meta.arg
+            state.slots = [...state.slots.filter(slot => slot.deviceId !== deviceId), {
+                status: PoolSlotStatus.ERROR,
+                deviceId,
             }]
         })
 
@@ -130,8 +179,8 @@ export const poolSlotStore = createSlice<PoolSlotStoreState, any>({
         // Clock post
         builder.addCase(poolSlotActions.clockPost.fulfilled, (state, props) => {
             const { deviceId } = props.meta.arg
-            const storeClock = state.clocks.find(clock => clock.deviceId === deviceId)
             const addClock = props.payload.clock
+            const storeClock = state.clocks.find(clock => clock.deviceId === deviceId && clock.slotId === addClock.slotId)
             if (storeClock && storeClock.status === PoolSlotStatus.READY) {
                 state.clocks = [...state.clocks.filter(clock => clock.deviceId !== deviceId || clock.slotId !== addClock.slotId), {
                     status: PoolSlotStatus.READY,

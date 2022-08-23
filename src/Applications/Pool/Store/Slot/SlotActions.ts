@@ -5,6 +5,15 @@ import {createAsyncThunk} from "@reduxjs/toolkit";
 import { getAuthorization } from "../../../../Tools/Authentication";
 
 
+type SlotGetCurrentProps = {
+    authenticationKey: AuthenticationKey
+    deviceId: Device['id']
+}
+
+type SlotGetCurrent = {
+    slotId: PoolSlot['id'] | null
+}
+
 type SlotGetAllProps = {
     authenticationKey: AuthenticationKey
     deviceId: Device['id']
@@ -80,6 +89,22 @@ type ClockDeleteProps = {
     slotId: PoolSlot['id']
 }
 
+const slotGetCurrent = createAsyncThunk<SlotGetCurrent, SlotGetCurrentProps>(
+    'poolSlot#slotGetCurrent',
+    async (props) => {
+        const res = await fetch(`/app-pool/slot/current?deviceId=${props.deviceId}`, {
+            method: 'GET',
+            headers: {
+                authorization: getAuthorization(props.authenticationKey)
+            }
+        })
+        if (res.status !== 200) {
+            throw new Error('Cannot get current slot')
+        }
+        return await res.json()
+    }
+)
+
 const slotGetAll = createAsyncThunk<SlotGetAll, SlotGetAllProps>(
     'poolSlot#slotGetAll',
     async (props) => {
@@ -136,7 +161,7 @@ const slotDelete = createAsyncThunk<void, SlotDeleteProps>(
     'poolSlot#slotDelete',
     async (props) => {
         const res = await fetch(`/app-pool/slot/${props.slotId}?deviceId=${props.deviceId}`, {
-            method: 'DLEETE',
+            method: 'DELETE',
             headers: {
                 authorization: getAuthorization(props.authenticationKey)
             }
@@ -167,7 +192,7 @@ const clockGetAll = createAsyncThunk<ClockGetAll, ClockGetAllProps>(
 const clockPost = createAsyncThunk<ClockPost, ClockPostProps>(
     'poolSlot#clockPost',
     async (props) => {
-        const res = await fetch(`/app-poo/clock?deviceId=${props.deviceId}`, {
+        const res = await fetch(`/app-pool/clock?deviceId=${props.deviceId}`, {
             method: 'POST',
             headers: {
                 authorization: getAuthorization(props.authenticationKey),
@@ -175,7 +200,7 @@ const clockPost = createAsyncThunk<ClockPost, ClockPostProps>(
             },
             body: JSON.stringify(props.clock)
         })
-        if (res.status !== 200) {
+        if (res.status !== 201) {
             throw new Error('Cannot add clock')
         }
         return await res.json()
@@ -205,7 +230,7 @@ const clockDelete = createAsyncThunk<void, ClockDeleteProps>(
     'poolSlot#clockDelete',
     async (props) => {
         const  res = await fetch(`/app-pool/clock/${props.clockId}?deviceId=${props.deviceId}`, {
-            method: 'DLEETE',
+            method: 'DELETE',
             headers: {
                 authorization: getAuthorization(props.authenticationKey)
             }
@@ -217,6 +242,7 @@ const clockDelete = createAsyncThunk<void, ClockDeleteProps>(
 )
 
 export const poolSlotActions = {
+    slotGetCurrent,
     slotGetAll,
     slotPost,
     slotPut,

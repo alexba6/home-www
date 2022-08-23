@@ -1,17 +1,15 @@
-import { FunctionComponent, useEffect, Fragment, ReactNode, useMemo } from 'react'
-import { createPortal } from 'react-dom'
+import { FunctionComponent,ReactNode } from 'react'
 
-import { ClickOutsideWrapper } from '../../Wrapper/ClikOutside'
 import { CloseIcon } from '../../Icons/Close'
 
 import styles from './Modal.module.sass'
+import {Modal} from "@mui/material";
 
 type ModalProviderProps = {
 	display: boolean
 	onClose: () => void
 	children: ReactNode
 	name: string
-	disabledOutsideClick?: boolean
 }
 
 type ModalBodyProps = {
@@ -33,50 +31,19 @@ export const ModalFooter: FunctionComponent<ModalFooterProps> = (props) => {
 }
 
 export const ModalProvider: FunctionComponent<ModalProviderProps> = (props) => {
-	const root = document.createElement('div')
-
-	const active = useMemo(() => (props.display ? 'active' : 'unable'), [props])
-
-	useEffect(() => {
-		const body = document.querySelector('body')
-		if (!body) {
-			return
-		}
-		body.appendChild(root)
-		return () => {
-			body.removeChild(root)
-		}
-	}, [root])
-
-	const onClickOutside = () => {
-		if (props.display && props.disabledOutsideClick !== true) {
-			props.onClose()
-		}
-	}
-
-	return createPortal(
-		<Fragment>
-			{props.display && (
+	return <Modal open={props.display} onClose={props.onClose}>
+		<div className={styles.modalProviderContainer} >
+			<div className={styles.modalProviderHeader}>
 				<div>
-					<div className={styles.modalProviderMask} active={active} />
-					<ClickOutsideWrapper onClickOutside={onClickOutside}>
-						<div className={styles.modalProviderContainer} active={active}>
-							<div className={styles.modalProviderHeader}>
-								<div>
-									<h2>{props.name}</h2>
-								</div>
-								<div className={styles.modalProviderCloseButtonFrame}>
-									<button onClick={props.onClose}>
-										<CloseIcon />
-									</button>
-								</div>
-							</div>
-							{props.children}
-						</div>
-					</ClickOutsideWrapper>
+					<h2>{props.name}</h2>
 				</div>
-			)}
-		</Fragment>,
-		root
-	)
+				<div className={styles.modalProviderCloseButtonFrame}>
+					<button onClick={props.onClose}>
+						<CloseIcon />
+					</button>
+				</div>
+			</div>
+			{props.children}
+		</div>
+	</Modal>
 }

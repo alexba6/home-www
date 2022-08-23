@@ -39,13 +39,13 @@ export const PoolControlPage: FunctionComponent<ApplicationProps> = (props) => {
             <CardHeader>
                 <h2>Pompe action</h2>
             </CardHeader>
-            {(actionBtnGroup && actionBtnGroup.status === ActionStatus.READY) && <Alert icon={false} severity='info'>
+            {(actionBtnGroup && actionBtnGroup.status === ActionStatus.READY) && <Alert severity='info'>
                 Mode <strong>{actionBtnGroup.action.enableGroup}</strong> - {actionBtnGroup.action.state ? 'marche' : 'arrêt'}
             </Alert>}
-            {(actionBtnGroup && actionBtnGroup.status === ActionStatus.PENDING) && <Alert icon={false} severity='info'>
+            {(actionBtnGroup && actionBtnGroup.status === ActionStatus.PENDING) && <Alert severity='info'>
                 ...
             </Alert>}
-            {(actionBtnGroup && actionBtnGroup.status === ActionStatus.ERROR) && <Alert icon={false} severity='error'>
+            {(actionBtnGroup && actionBtnGroup.status === ActionStatus.ERROR) && <Alert severity='error'>
                 Impossible d'avoir les informations
             </Alert>}
             <br/>

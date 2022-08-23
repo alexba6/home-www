@@ -1,45 +1,18 @@
 import {Template, TemplateTopBar} from "../../../Template/Template";
-import {FunctionComponent, useContext, useEffect, useRef, useState} from "react";
-import {Button, IconButton, Stack, TextField, Tooltip} from "@mui/material";
+import {FunctionComponent, useContext, useEffect, useState} from "react";
+import {Alert, IconButton, Stack, Tooltip} from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 
 import {PoolNav} from "../Routes";
 import {ApplicationProps} from "../../../Context/ContextApplication";
-import {PoolSlot} from "../Store/Slot/SlotReducer";
-import {PoolSlotAccording} from "../Compoents/Slots/SlotAccording";
+import {PoolSlot, PoolSlotStatus} from "../Store/Slot/SlotReducer";
+import {PoolSlotAccording} from "../Components/Slots/SlotAccording";
 import {useDispatch, useSelector} from "react-redux";
 import {poolSlotSelector} from "../Store/Slot/SlotSelector";
 import {poolSlotActions} from "../Store/Slot/SlotActions";
 import {ContextAuthentication} from "../../../Context/ContextAuthentication";
-import {ModalBody, ModalFooter, ModalProvider} from "../../../Components/Modal/Modal";
+import {PoolModalSlot} from "../Components/Slots/SlotModal";
 
-type ModalAddSlotProps = {
-    display: boolean
-    onClose: () => void
-    onAdd: (temperature: number) => void
-}
-
-const ModalAddSlot: FunctionComponent<ModalAddSlotProps> = (props) => {
-    const tempRef = useRef<HTMLInputElement>(null)
-
-    const handleAdd = () => {
-        if (tempRef.current) {
-            props.onAdd(Number(tempRef.current.value))
-            props.onClose()
-        }
-    }
-
-    return <ModalProvider disabledOutsideClick display={props.display} onClose={props.onClose} name='Ajouter une plage'>
-        <ModalBody>
-            <TextField inputRef={tempRef} type='number' label='Temperature' size='small' variant='outlined' fullWidth/>
-        </ModalBody>
-        <ModalFooter>
-            <Button onClick={handleAdd}>
-                Ajouter
-            </Button>
-        </ModalFooter>
-    </ModalProvider>
-}
 
 export const PoolSlotPage: FunctionComponent<ApplicationProps> = (props) => {
     const { device } = props.deviceStore
@@ -50,6 +23,8 @@ export const PoolSlotPage: FunctionComponent<ApplicationProps> = (props) => {
     const [displayAddModal, setDisplayAddModal] = useState(false)
 
 
+    const currentSlotStore = useSelector(poolSlotSelector.currentSlotStore(device.id))
+    const currentSlotId = useSelector(poolSlotSelector.currentSlotId(device.id))
     const storeSlot = useSelector(poolSlotSelector.slotStore(device.id))
     const slots = useSelector(poolSlotSelector.slots(device.id))
 
@@ -60,25 +35,36 @@ export const PoolSlotPage: FunctionComponent<ApplicationProps> = (props) => {
                 deviceId: device.id
             }))
         }
-    }, [])
+    }, [storeSlot, dispatch, poolSlotActions])
+
+    useEffect(() => {
+        if (slots && !currentSlotStore) {
+            dispatch(poolSlotActions.slotGetCurrent({
+                authenticationKey: authContext.authenticationKey,
+                deviceId: device.id
+            }))
+        }
+    }, [slots, currentSlotStore, dispatch, poolSlotActions])
 
     const handleChangeSlot = (key: string) => () => {
         setSlotKey(k => k !== key ? key : null)
     }
 
-    const onAddSlot = (temperature: number) => {
+    const onAddSlot = (slot: Omit<PoolSlot, 'id'>) => {
         dispatch(poolSlotActions.slotPost({
             authenticationKey: authContext.authenticationKey,
             deviceId: device.id,
-            slot: {
-                temperature
-            }
+            slot
         }))
     }
 
 
     return <Template nav={PoolNav}>
-        <ModalAddSlot display={displayAddModal} onClose={() => setDisplayAddModal(false)} onAdd={onAddSlot}/>
+        <PoolModalSlot
+            name='Ajouter une plage'
+            display={displayAddModal}
+            onClose={() => setDisplayAddModal(false)}
+            onSubmit={onAddSlot}/>
         <TemplateTopBar>
             <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ width: '100%' }}>
                 <div>
@@ -86,7 +72,10 @@ export const PoolSlotPage: FunctionComponent<ApplicationProps> = (props) => {
                 </div>
                 <div>
                     <Tooltip title='Ajouter'>
-                        <IconButton color='primary' onClick={() => setDisplayAddModal(true)}>
+                        <IconButton
+                            disabled={storeSlot?.status !== PoolSlotStatus.READY}
+                            color='primary'
+                            onClick={() => setDisplayAddModal(true)}>
                             <AddIcon/>
                         </IconButton>
                     </Tooltip>
@@ -94,10 +83,17 @@ export const PoolSlotPage: FunctionComponent<ApplicationProps> = (props) => {
             </Stack>
         </TemplateTopBar>
         {slots && slots.map((slot: PoolSlot, key: number) => <PoolSlotAccording
+            current={currentSlotId === slot.id}
             key={key}
             slot={slot}
             deviceId={device.id}
             expanded={slotKey === slot.id}
             onChange={handleChangeSlot(slot.id)}/>)}
+        {slots && slots.length === 0 && <Alert  severity='warning'>
+            Pas de plage
+        </Alert>}
+        {storeSlot?.status === PoolSlotStatus.ERROR && <Alert  severity='error'>
+            Impossible de récupérer les plages
+        </Alert>}
     </Template>
 }

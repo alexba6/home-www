@@ -3,7 +3,6 @@ import moment from "moment";
 import {IconButton, Table, TableBody, TableCell, TableHead, TableRow, Tooltip} from "@mui/material";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
-import {Template} from '../../Template/Template'
 import {Card, CardHeader} from '../../Components/Card/Card'
 import {ContextAuthentication} from "../../Context/ContextAuthentication";
 import {useDispatch, useSelector} from "react-redux";
@@ -12,7 +11,7 @@ import {AuthKey, AuthKeyStatus} from "../../Store/AuthKey/AuthKeyReducer";
 import {authKeyAction} from "../../Store/AuthKey/AuthKeyActions";
 
 
-export const AccountAuthKeyPage: FunctionComponent = () => {
+export const AccountAuthKeyTab: FunctionComponent = () => {
 	const authContext = useContext(ContextAuthentication)
 	const dispatch = useDispatch<any>()
 
@@ -24,7 +23,7 @@ export const AccountAuthKeyPage: FunctionComponent = () => {
 				authenticationKey: authContext.authenticationKey
 			}))
 		}
-	}, [])
+	})
 
 	const deleteAuthKey = (authKey: AuthKey) => {
 		dispatch(authKeyAction.deleteOne({
@@ -33,36 +32,32 @@ export const AccountAuthKeyPage: FunctionComponent = () => {
 		}))
 	}
 
-	return (
-		<Template>
-			<Card>
-				<CardHeader>
-					<h3>Authentification</h3>
-					<p>Ces sessions sont actuellement connectées à votre compte.</p>
-				</CardHeader>
-				<Table>
-					<TableHead>
-						<TableRow>
-							<TableCell align='center'>Date</TableCell>
-							<TableCell width={100}></TableCell>
-						</TableRow>
-					</TableHead>
-					<TableBody>
-						{authKey.authKeys.map((authKey: AuthKey, key: number) => <TableRow key={key}>
-							<TableCell align='center'>
-								{moment(authKey.createdAt).fromNow()}
-							</TableCell>
-							<TableCell align='center'>
-								<Tooltip title='Supprimer cette connexion'>
-									<IconButton onClick={() => deleteAuthKey(authKey)}>
-										<DeleteForeverIcon/>
-									</IconButton>
-								</Tooltip>
-							</TableCell>
-						</TableRow>)}
-					</TableBody>
-				</Table>
-			</Card>
-		</Template>
-	)
+	return <Card>
+		<CardHeader>
+			<h3>Authentification</h3>
+			<p>Ces sessions sont actuellement connectées à votre compte.</p>
+		</CardHeader>
+		<Table>
+			<TableHead>
+				<TableRow>
+					<TableCell align='center'>Date</TableCell>
+					<TableCell width={100}></TableCell>
+				</TableRow>
+			</TableHead>
+			<TableBody>
+				{authKey.authKeys.map((authKey: AuthKey, key: number) => <TableRow key={key}>
+					<TableCell align='center'>
+						{moment(authKey.createdAt).fromNow()}
+					</TableCell>
+					<TableCell align='center'>
+						<Tooltip title='Supprimer cette connexion'>
+							<IconButton onClick={() => deleteAuthKey(authKey)}>
+								<DeleteForeverIcon/>
+							</IconButton>
+						</Tooltip>
+					</TableCell>
+				</TableRow>)}
+			</TableBody>
+		</Table>
+	</Card>
 }

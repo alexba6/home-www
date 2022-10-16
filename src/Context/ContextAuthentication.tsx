@@ -1,6 +1,6 @@
 import {createContext, Fragment, FunctionComponent, ReactNode, useContext, useEffect, useMemo, useState} from 'react'
 import { useHistory} from "react-router-dom";
-import {RoutesPath} from "../Config/Routes";
+import {Routes} from "../Config/Routes";
 
 export enum AuthenticationStatus {
 	IDLE = 'IDLE',
@@ -113,7 +113,7 @@ export const AuthenticatedRoutesWrapper: FunctionComponent<AuthenticatedRoutesWr
 	const status = useMemo(() => authenticationContext.status, [authenticationContext])
 
 	if (status === AuthenticationStatus.DISCONNECTED) {
-		history.push(RoutesPath.login.target)
+		history.push(Routes.login.target)
 	}
 
 	return <Fragment>

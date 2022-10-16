@@ -1,0 +1,65 @@
+@import '../Styles/var'
+
+// Template Header
+.templateHeader
+  grid-area: header
+  background-color: var(--ct-bg-topbar)
+  box-shadow: var(--ct-box-shadow)
+  display: grid
+  grid-template-columns: 150px auto 100px
+  grid-template-areas: "icon search settings"
+  padding: 0 20px
+
+  @media only screen and (max-width: $mobile-screen-width)
+    display: flex
+    align-items: center
+    padding: 0 10px
+
+.templateHeaderIconFrame
+  grid-area: icon
+  display: flex
+  justify-content: start
+  align-items: center
+  a
+    text-decoration: none
+    color: var(--ct-body-color)
+    display: flex
+    h1
+      margin-left: 5px
+
+.templateHeaderSearchFrame
+  grid-area: search
+  display: flex
+  align-items: center
+  @media only screen and (max-width: $mobile-screen-width)
+    display: none
+
+.templateHeaderSettings
+  grid-area: settings
+  display: flex
+  justify-content: end
+  align-items: center
+  margin-left: auto
+
+.templateHeaderMenuBtnFrame
+  grid-area: btn
+  display: none
+  margin-right: 5px
+  button
+    border: none
+    background-color: transparent
+    cursor: pointer
+    svg
+      margin-top: 8px
+      path
+        fill: var(--ct-menu-item)
+        transition: fill ease-in-out .05s
+  &:hover
+    svg > path
+      fill: var(--ct-menu-item-hover)
+
+  @media only screen and (max-width: $mobile-screen-width)
+    display: inline-block
+
+
+

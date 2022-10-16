@@ -1,4 +1,10 @@
-import { forwardRef, FunctionComponent, MutableRefObject, Ref, useEffect, useMemo, useRef, useState } from 'react'
+import {
+	ChangeEvent,
+	FunctionComponent,
+	useMemo,
+	useRef,
+	useState
+} from 'react'
 
 import styles from './Input.module.sass'
 
@@ -34,7 +40,7 @@ export const Input: FunctionComponent<InputProps> = (props) => {
 					onBlur={handleFocus(false)}
 					type={props.type}
 					value={props.value}
-					onChange={(e) => props.onValue(e.target.value)}
+					onChange={(e: ChangeEvent<HTMLInputElement>) => props.onValue(e.target.value)}
 					ref={localRef}
 				/>
 				<label

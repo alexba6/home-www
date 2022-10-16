@@ -1,6 +1,4 @@
-import {Template} from "../../../Template/Template";
 import {FunctionComponent, useContext, useEffect} from "react";
-import {PoolNav} from "../Routes";
 import {ApplicationProps} from "../../../Context/ContextApplication";
 import {Alert} from "@mui/material";
 import {Card, CardHeader} from "../../../Components/Card/Card";
@@ -29,27 +27,23 @@ export const PoolControlPage: FunctionComponent<ApplicationProps> = (props) => {
                 actionKey,
             }))
         }
-    }, [actionBtnGroup])
+    }, [actionBtnGroup, authenticationContext, device.id, dispatch])
 
 
-    return <Template nav={PoolNav}>
-        <h2>Contrôle</h2>
+    return <Card>
+        <CardHeader>
+            <h2>Pompe action</h2>
+        </CardHeader>
+        {(actionBtnGroup && actionBtnGroup.status === ActionStatus.READY) && <Alert severity='info'>
+            Mode <strong>{actionBtnGroup.action.enableGroup}</strong> - {actionBtnGroup.action.state ? 'marche' : 'arrêt'}
+        </Alert>}
+        {(actionBtnGroup && actionBtnGroup.status === ActionStatus.PENDING) && <Alert severity='info'>
+            ...
+        </Alert>}
+        {(actionBtnGroup && actionBtnGroup.status === ActionStatus.ERROR) && <Alert severity='error'>
+            Impossible d'avoir les informations
+        </Alert>}
         <br/>
-        <Card>
-            <CardHeader>
-                <h2>Pompe action</h2>
-            </CardHeader>
-            {(actionBtnGroup && actionBtnGroup.status === ActionStatus.READY) && <Alert severity='info'>
-                Mode <strong>{actionBtnGroup.action.enableGroup}</strong> - {actionBtnGroup.action.state ? 'marche' : 'arrêt'}
-            </Alert>}
-            {(actionBtnGroup && actionBtnGroup.status === ActionStatus.PENDING) && <Alert severity='info'>
-                ...
-            </Alert>}
-            {(actionBtnGroup && actionBtnGroup.status === ActionStatus.ERROR) && <Alert severity='error'>
-                Impossible d'avoir les informations
-            </Alert>}
-            <br/>
-            <ActionBtnGroupButtons deviceId={device.id} groupNames={['ON', 'OFF', 'AUTO']} actionKey='pump'/>
-        </Card>
-    </Template>
+        <ActionBtnGroupButtons deviceId={device.id} groupNames={['ON', 'OFF', 'AUTO']} actionKey='pump'/>
+    </Card>
 }

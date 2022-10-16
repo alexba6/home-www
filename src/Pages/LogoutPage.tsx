@@ -3,9 +3,9 @@ import {Template} from "../Template/Template";
 import {CircularProgress} from "@mui/material";
 import {ContextAuthentication} from "../Context/ContextAuthentication";
 import {useHistory} from "react-router-dom";
-import {RoutesPath} from "../Config/Routes";
 import {getAuthorization} from "../Tools/Authentication";
 import {toast} from "react-toastify";
+import {Routes} from "../Config/Routes";
 
 
 export const LogoutPage: FunctionComponent = () => {
@@ -22,7 +22,7 @@ export const LogoutPage: FunctionComponent = () => {
                 }
             })
         } finally {
-            history.push(RoutesPath.login.target)
+            history.push(Routes.login.target)
             toast.success('Déconnecté')
         }
     }, [])

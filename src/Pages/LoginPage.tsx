@@ -8,9 +8,9 @@ import { CardForm, CardFormOrSeparator } from '../Components/Card/CardForm'
 import { HomeLogo } from '../Icons/HomeLogo'
 import { ContextAuthentication } from '../Context/ContextAuthentication'
 import { useHistory } from 'react-router-dom'
-import { RoutesPath } from '../Config/Routes'
 import { useFormValue } from '../Hooks/UseFormValue'
 import {CardHeader} from "../Components/Card/Card";
+import {Routes} from "../Config/Routes";
 
 export const LoginPage: FunctionComponent = () => {
 	const history = useHistory()
@@ -37,7 +37,7 @@ export const LoginPage: FunctionComponent = () => {
 		if (res.status === 200) {
 			const json = await res.json()
 			authenticationContext.set(json.authKey)
-			history.push(RoutesPath.dashboard.target)
+			history.push(Routes.dashboard.target)
 		}
 	}
 

@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { AuthenticationKey } from '../../Context/ContextAuthentication'
-import { Home } from './HomeReducer'
+import { HomeInfo } from './HomeReducer'
 import { getAuthorization } from '../../Tools/Authentication'
 import {Device} from "../Device/DeviceReducer";
 
@@ -10,30 +10,42 @@ type GetALlProps = {
 
 type GetOneProps = {
 	authenticationKey: AuthenticationKey
-	homeId: Home['id']
+	homeId: HomeInfo['id']
 }
 
 type AddProps = {
 	authenticationKey: AuthenticationKey
 	home: {
-		name: Home['name']
+		name: HomeInfo['name']
 	}
 }
 
 type GetAll = {
 	homes: {
-		home: Home
+		home: HomeInfo
 		devicesId: Device['id'][]
 	}[]
 }
 
 type GetOne = {
-	home: Home
+	home: HomeInfo
 	devicesId: Device['id'][]
 }
 
 type Add = {
-	home: Home
+	home: HomeInfo
+}
+
+type SearchProps = {
+	authenticationKey: AuthenticationKey
+	pattern: string
+}
+
+type Search = {
+	homes: {
+		home: HomeInfo
+		devicesId: Device['id'][]
+	}[]
 }
 
 const getAll = createAsyncThunk<GetAll, GetALlProps>('home#getAll', async (props) => {
@@ -77,8 +89,22 @@ const add = createAsyncThunk<Add, AddProps>('home#add', async (props) => {
 	return await res.json()
 })
 
+const search = createAsyncThunk<Search, SearchProps>('home#search', async (props) => {
+	const res = await fetch(`/api/home/search?pattern=${props.pattern}`, {
+		method: 'GET',
+		headers: {
+			authorization: getAuthorization(props.authenticationKey)
+		}
+	})
+	// if (res.status !== 200) {
+	// 	throw new Error('Cannot search homes')
+	// }
+	return await res.json()
+})
+
 export const homeActions = {
 	getAll,
 	add,
 	getOne,
+	search
 }

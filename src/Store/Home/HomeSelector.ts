@@ -1,21 +1,33 @@
-import { RootState, store } from '../index'
-import { Home, HomeStore, HomeStoreSate } from './HomeReducer'
+import { RootState } from '../index'
+import { HomeInfo, HomeStore, HomeStoreSate } from './HomeReducer'
 
 /**
  * @param store
  */
-export const homeSelectAll = (store: RootState): HomeStore[] => store.home.homes
+const getAll = (store: RootState): HomeStore[] => store.home.homes
 
 /**
  * @param store
  */
-export const homeSelectStore = (store: RootState): HomeStoreSate => store.home
+const getStore = (store: RootState): HomeStoreSate => store.home
+
+/**
+ * @param pattern
+ */
+const search = (pattern: string) => (store: RootState): HomeStore[] => store.home.homes.filter(home => home.home.name.toLowerCase().search(pattern.toLowerCase()) > -1)
 
 /**
  * @param homeId
  */
-export const homeSelectOne =
-	(homeId: Home['id'] | undefined) =>
+const getOne =
+	(homeId: HomeInfo['id'] | undefined) =>
 	(store: RootState): HomeStore | undefined => {
 		return store.home.homes.find((homeStore: HomeStore) => homeStore.home.id === homeId)
 	}
+
+export const homeSelector = {
+	getAll,
+	getStore,
+	search,
+	getOne
+}

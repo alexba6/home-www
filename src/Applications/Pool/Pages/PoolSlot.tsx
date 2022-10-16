@@ -1,9 +1,8 @@
-import {Template, TemplateTopBar} from "../../../Template/Template";
-import {FunctionComponent, useContext, useEffect, useState} from "react";
+import {FunctionComponent, useContext, useEffect, useState, Fragment} from "react";
+import { TemplateTopBar} from "../../../Template/Template";
 import {Alert, IconButton, Stack, Tooltip} from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 
-import {PoolNav} from "../Routes";
 import {ApplicationProps} from "../../../Context/ContextApplication";
 import {PoolSlot, PoolSlotStatus} from "../Store/Slot/SlotReducer";
 import {PoolSlotAccording} from "../Components/Slots/SlotAccording";
@@ -35,7 +34,7 @@ export const PoolSlotPage: FunctionComponent<ApplicationProps> = (props) => {
                 deviceId: device.id
             }))
         }
-    }, [storeSlot, dispatch, poolSlotActions])
+    }, [storeSlot, dispatch, authContext, device.id])
 
     useEffect(() => {
         if (slots && !currentSlotStore) {
@@ -44,7 +43,7 @@ export const PoolSlotPage: FunctionComponent<ApplicationProps> = (props) => {
                 deviceId: device.id
             }))
         }
-    }, [slots, currentSlotStore, dispatch, poolSlotActions])
+    }, [slots, currentSlotStore, dispatch, authContext, device.id])
 
     const handleChangeSlot = (key: string) => () => {
         setSlotKey(k => k !== key ? key : null)
@@ -59,7 +58,7 @@ export const PoolSlotPage: FunctionComponent<ApplicationProps> = (props) => {
     }
 
 
-    return <Template nav={PoolNav}>
+    return <Fragment>
         <PoolModalSlot
             name='Ajouter une plage'
             display={displayAddModal}
@@ -95,5 +94,5 @@ export const PoolSlotPage: FunctionComponent<ApplicationProps> = (props) => {
         {storeSlot?.status === PoolSlotStatus.ERROR && <Alert  severity='error'>
             Impossible de récupérer les plages
         </Alert>}
-    </Template>
+    </Fragment>
 }

@@ -1,17 +1,26 @@
-import { ReactNode } from 'react'
 import { HomeIcon } from '../Icons/Sidebar/Home'
 import { DashboardIcon } from '../Icons/Sidebar/Dashboard'
 import { NotificationIcon } from '../Icons/Sidebar/Notification'
 import { DeviceIcon } from '../Icons/Sidebar/Device'
-import {UndoIcon} from "../Icons/Sidebar/Undo";
+import PersonIcon from '@mui/icons-material/Person'
 
-export type RoutePath = {
-	name: string
-	icon?: ReactNode
-	target: string
-}
+import { RoutePath } from "./RouteType";
 
-export const RoutesPath: Record<string, RoutePath>  = {
+type RoutesNames =
+	'login' |
+	'forgetPassword' |
+	'resetPassword' |
+	'dashboard' |
+	'home' |
+	'device' |
+	'notifications' |
+	'settingsDevices' |
+	'settingsDashboard' |
+	'account' |
+	'logout'
+
+
+export const Routes: Record<RoutesNames, RoutePath>  = {
 	login: {
 		name: 'Login',
 		target: '/login',
@@ -44,13 +53,10 @@ export const RoutesPath: Record<string, RoutePath>  = {
 		target: '/notifications',
 		icon: <NotificationIcon />,
 	},
-	settingsHome: {
-		name: 'Maisons',
-		target: '/settings/home',
-	},
-	settingsTheme: {
-		name: 'Thème',
-		target: '/settings/theme',
+	account: {
+		name: 'Account',
+		target: '/account',
+		icon: <PersonIcon/>
 	},
 	settingsDevices: {
 		name: 'Appareils',
@@ -60,25 +66,8 @@ export const RoutesPath: Record<string, RoutePath>  = {
 		name: 'Dashboard',
 		target: '/settings/dashboard',
 	},
-	accountProfile: {
-		name: 'Profil',
-		target: '/account/profile',
-	},
-	accountSecurity: {
-		name: 'Sécurité',
-		target: '/account/security',
-	},
-	accountAuth: {
-		name: 'Sessions',
-		target: '/account/auth',
-	},
-	accountLogout: {
+	logout: {
 		name: 'Déconnexion',
-		target: '/account/logout',
-	},
-	undo: {
-		name: 'Retour',
-		target: '/',
-		icon: <UndoIcon/>
+		target: '/logout'
 	}
 }

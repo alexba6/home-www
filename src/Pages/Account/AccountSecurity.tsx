@@ -1,5 +1,4 @@
 import {FunctionComponent, useContext} from 'react'
-import { Template } from '../../Template/Template'
 import { Card, CardHeader } from '../../Components/Card/Card'
 import { ContextAuthentication} from '../../Context/ContextAuthentication'
 import { toast } from 'react-toastify'
@@ -7,7 +6,7 @@ import { getAuthorization } from '../../Tools/Authentication'
 import { useFormValue } from '../../Hooks/UseFormValue'
 import {Button, Stack, TextField} from "@mui/material";
 
-const AccountSecurityPassword: FunctionComponent = () => {
+export const AccountSecurityPasswordTab: FunctionComponent = () => {
 	const authContext = useContext(ContextAuthentication)
 
 	const form = useFormValue({
@@ -88,10 +87,3 @@ const AccountSecurityPassword: FunctionComponent = () => {
 }
 
 
-export const AccountSecurityPage: FunctionComponent = () => {
-	return (
-		<Template>
-			<AccountSecurityPassword />
-		</Template>
-	)
-}

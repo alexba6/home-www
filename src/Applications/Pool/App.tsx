@@ -1,18 +1,19 @@
-import {Fragment, FunctionComponent, useContext, useEffect} from "react";
-import {Route} from "react-router-dom";
+import { FunctionComponent, useContext, useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 
 import {ApplicationContextStatus, ContextApplication} from "../../Context/ContextApplication";
 import {ContextAuthentication} from "../../Context/ContextAuthentication";
 import {deviceSelectById} from "../../Store/Device/DeviceSelector";
 import {deviceActions} from "../../Store/Device/DeviceActions";
-import {PoolRoutesPath} from "./Routes";
 
 import {PoolDashboardPage} from "./Pages/PoolDashboad";
 import {PoolControlPage} from "./Pages/PoolControl";
 import {PoolWaterTemperaturePage} from "./Pages/PoolWaterTemperature";
 import {PoolOutsideTemperaturePage} from "./Pages/PoolOutsideTemperature";
 import {PoolSlotPage} from "./Pages/PoolSlot";
+import {TabNavigation} from "../../Components/Navigation/TabNavigation";
+import {Template} from "../../Template/Template";
+import {Typography} from "@mui/material";
 
 
 export const PoolApp: FunctionComponent = () => {
@@ -31,23 +32,38 @@ export const PoolApp: FunctionComponent = () => {
         }
     })
 
-    return <Fragment>
-        { (device && device.device.type === 'pool') && <Fragment>
-            <Route exact path={PoolRoutesPath.dashboard.target}>
-                <PoolDashboardPage deviceStore={device}/>
-            </Route>
-            <Route exact path={PoolRoutesPath.control.target}>
-                <PoolControlPage deviceStore={device}/>
-            </Route>
-            <Route exact path={PoolRoutesPath.waterTemperature.target}>
-                <PoolWaterTemperaturePage deviceStore={device}/>
-            </Route>
-            <Route exact path={PoolRoutesPath.outsideTemperature.target}>
-                <PoolOutsideTemperaturePage deviceStore={device}/>
-            </Route>
-            <Route exact path={PoolRoutesPath.slot.target}>
-                <PoolSlotPage deviceStore={device}/>
-            </Route>
-        </Fragment>}
-    </Fragment>
+    if (device && device.device.type === 'pool') {
+        return <Template>
+            <TabNavigation
+                default={0}
+                tabs={[
+                    {
+                        name: 'Dashboard',
+                        anchor: 'dashboard',
+                        component:  <PoolDashboardPage deviceStore={device}/>
+                    },
+                    {
+                        name: 'Contrôle',
+                        anchor: 'control',
+                        component:  <PoolControlPage deviceStore={device}/>
+                    },
+                    {
+                        name: 'Température de l\'eau',
+                        anchor: 'water-temp',
+                        component:  <PoolWaterTemperaturePage deviceStore={device}/>
+                    },
+                    {
+                        name: 'Température extérieure',
+                        anchor: 'outside-temp',
+                        component:  <PoolOutsideTemperaturePage deviceStore={device}/>
+                    },
+                    {
+                        name: 'Plage',
+                        anchor: 'slot',
+                        component:  <PoolSlotPage deviceStore={device}/>
+                    }
+                ]}/>
+        </Template>
+    }
+    return <></>
 }

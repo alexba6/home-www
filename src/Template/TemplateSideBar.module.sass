@@ -1,0 +1,111 @@
+@import '../Styles/var'
+
+// Template Sidebar
+.templateSidebar
+  grid-area: sidebar
+  z-index: 1
+  display: flex
+  padding: 20px 0
+  justify-content: center
+  align-items: center
+  background-color: transparent
+
+  @media only screen and (max-width: $mobile-screen-width)
+    position: absolute
+    display: flex
+    margin: 0
+    padding: 0
+    top: 0
+    left: 0
+    right: 0
+    &[display_menu=hide]
+      transform: translateX(-100%)
+
+.templateSidebarFrame
+  background-color: var(--ct-card-bg) !important
+  z-index: 2
+  width: 80px
+  box-shadow: var(--ct-box-shadow)
+  border-radius: 5px
+  height: 100%
+  overflow-y: scroll
+  &::-webkit-scrollbar
+    display: none
+  nav
+    padding: 5px 0
+    ul
+      list-style-type: none
+  @media only screen and (max-width: $mobile-screen-width)
+    border-radius: 0
+    height: 100vh
+    width: 220px
+
+.templateSidebarTitleFrame
+  padding: 15px 20px
+
+.templateSidebarOpacityFrame
+  display: none
+  flex-grow: 1
+  height: 100vh
+  background-color: rgba(0,0,0,.4)
+  @media only screen and (max-width: $mobile-screen-width)
+    display: inline-block
+
+
+
+// Template Sidebar Link
+.templateSidebarLink
+  a
+    text-decoration: none
+    color: var(--ct-menu-item)
+
+.templateSidebarLinkFrame
+  display: flex
+  align-items: center
+  justify-content: center
+  color: var(--ct-menu-item)
+  padding: 30px 0
+  margin: 2.5px 0
+  transition: background-color, color ease-in-out .05s
+  border-left: 3px solid transparent
+  &[active=active]
+    border-left: 2.5px solid var(--ct-menu-item-active)
+    background-color: rgba(175, 175, 175, 0.1)
+    color: var(--ct-menu-item-active)
+    svg > path
+      fill: var(--ct-menu-item-active)
+  &:hover
+    color: var(--ct-menu-item-hover)
+    background-color: rgba(191, 191, 191, 0.1)
+    svg > path
+      fill: var(--ct-menu-item-hover)
+
+  @media only screen and (max-width: $mobile-screen-width)
+    padding: 10px 20px
+    justify-content: start
+    &[active=active]
+      color: var(--ct-menu-item-active)
+      svg > path
+        fill: var(--ct-menu-item-active)
+
+.templateSidebarLinkText
+  display: none
+  span
+    cursor: pointer
+    font-size: 16px
+  @media only screen and (max-width: $mobile-screen-width)
+    display: inline-block
+
+.templateSidebarLinkIconFrame
+  width: 35px
+  position: relative
+  svg
+    position: absolute
+    top: 50%
+    left: 0
+    transform: translateY(-50%)
+    height: 25px
+    width: 25px
+    path
+      transition: fill ease-in-out .2s
+      fill: var(--ct-menu-item)

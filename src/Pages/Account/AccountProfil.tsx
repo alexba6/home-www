@@ -2,7 +2,6 @@ import {FunctionComponent, useContext, useEffect} from 'react'
 import { toast } from 'react-toastify'
 import { unwrapResult } from '@reduxjs/toolkit'
 
-import { Template } from '../../Template/Template'
 import { useDispatch, useSelector } from 'react-redux'
 import { userActions } from '../../Store/User/UserActions'
 import { Card, CardHeader } from '../../Components/Card/Card'
@@ -11,7 +10,7 @@ import { useFormValue } from '../../Hooks/UseFormValue'
 import {ContextAuthentication} from "../../Context/ContextAuthentication";
 import {Button, Stack, TextField} from "@mui/material";
 
-export const AccountProfilePage: FunctionComponent = () => {
+export const AccountProfileTab: FunctionComponent = () => {
 	const authContext = useContext(ContextAuthentication)
 
 	const form = useFormValue({
@@ -33,7 +32,7 @@ export const AccountProfilePage: FunctionComponent = () => {
 				})
 			)
 		}
-	}, [userInfo])
+	}, [userInfo, dispatch, authContext])
 
 	const updateProfile = async () => {
 		const id = toast.loading('Modication du profil')
@@ -68,54 +67,50 @@ export const AccountProfilePage: FunctionComponent = () => {
 		}
 	}, [userInfo])
 
-	return (
-		<Template>
-			<Card>
-				<CardHeader>
-					<h3>Informations générales</h3>
-				</CardHeader>
-				{userInfo && (
-					<div>
-						<TextField
-							label="No d'utilisateur"
-							value={form.value.username}
-							onChange={form.set.username}
-							size='small'
-							variant='outlined'
-							margin='normal'
-							fullWidth/>
-						<TextField
-							label="Email"
-							value={form.value.email}
-							onChange={form.set.email}
-							size='small'
-							variant='outlined'
-							margin='normal'
-							fullWidth />
-						<TextField
-							label="Prénom"
-							value={form.value.firstName}
-							onChange={form.set.firstName}
-							size='small'
-							variant='outlined'
-							margin='normal'
-							fullWidth/>
-						<TextField
-							label="Nom"
-							value={form.value.lastName}
-							onChange={form.set.lastName}
-							size='small'
-							variant='outlined'
-							margin='normal'
-							fullWidth/>
-						<Stack direction='row' justifyContent='end' alignItems='center'>
-							<Button onClick={updateProfile} color='primary'>
-								Enregistrer
-							</Button>
-						</Stack>
-					</div>
-				)}
-			</Card>
-		</Template>
-	)
+	return <Card>
+		<CardHeader>
+			<h3>Informations générales</h3>
+		</CardHeader>
+		{userInfo && (
+			<div>
+				<TextField
+					label="No d'utilisateur"
+					value={form.value.username}
+					onChange={form.set.username}
+					size='small'
+					variant='outlined'
+					margin='normal'
+					fullWidth/>
+				<TextField
+					label="Email"
+					value={form.value.email}
+					onChange={form.set.email}
+					size='small'
+					variant='outlined'
+					margin='normal'
+					fullWidth />
+				<TextField
+					label="Prénom"
+					value={form.value.firstName}
+					onChange={form.set.firstName}
+					size='small'
+					variant='outlined'
+					margin='normal'
+					fullWidth/>
+				<TextField
+					label="Nom"
+					value={form.value.lastName}
+					onChange={form.set.lastName}
+					size='small'
+					variant='outlined'
+					margin='normal'
+					fullWidth/>
+				<Stack direction='row' justifyContent='end' alignItems='center'>
+					<Button onClick={updateProfile} color='primary'>
+						Enregistrer
+					</Button>
+				</Stack>
+			</div>
+		)}
+	</Card>
 }

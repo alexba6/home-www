@@ -1,11 +1,10 @@
-import {Fragment, FunctionComponent, useContext, useEffect, useRef} from 'react'
+import { FunctionComponent, useContext, useEffect, useRef} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import {TextField, Button, IconButton, Tooltip, Stack} from "@mui/material";
+import {TextField, Button, IconButton, Tooltip, Stack, Typography} from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 
 import { ContextAuthentication} from '../Context/ContextAuthentication'
 import {Template, TemplateTopBar} from '../Template/Template'
-import { homeSelectAll } from '../Store/Home/HomeSelector'
 import { HomeStore } from '../Store/Home/HomeReducer'
 import { homeActions } from '../Store/Home/HomeActions'
 import { HomeGrid } from '../Components/Home/HomeGrid'
@@ -14,7 +13,8 @@ import { useModalControl } from '../Hooks/UseModalControl'
 import { toast } from 'react-toastify'
 import { unwrapResult } from '@reduxjs/toolkit'
 import { useHistory } from 'react-router-dom'
-import { RoutesPath } from '../Config/Routes'
+import {Routes} from "../Config/Routes";
+import {homeSelector} from "../Store/Home/HomeSelector";
 
 type HomeAddModalContentProps = {
 	display: boolean
@@ -53,7 +53,7 @@ export const HomePage: FunctionComponent = () => {
 	const addHomeModal = useModalControl()
 	const history = useHistory()
 
-	const homes = useSelector(homeSelectAll)
+	const homes = useSelector(homeSelector.getAll)
 
 	useEffect(() => {
 		dispatch(
@@ -61,11 +61,12 @@ export const HomePage: FunctionComponent = () => {
 				authenticationKey: authContext.authenticationKey,
 			})
 		)
-	}, [dispatch])
+	}, [dispatch, authContext])
 
 	const handleOpenHome = (homeStore: HomeStore) => {
+		localStorage.setItem('homeId', homeStore.home.id)
 		history.push({
-			pathname: RoutesPath.device.target,
+			pathname: Routes.device.target,
 			search: `?homeId=${homeStore.home.id}`,
 		})
 	}
@@ -94,9 +95,9 @@ export const HomePage: FunctionComponent = () => {
 			<HomeAddModalContent onAdd={handleAddHome} onClose={addHomeModal.close} display={addHomeModal.display}/>
 			<TemplateTopBar>
 				<Stack direction='row' justifyContent='space-between' alignItems='center'>
-					<div>
-						<h3>Maisons</h3>
-					</div>
+					<Typography variant='h4'>
+						Maisons
+					</Typography>
 					<div>
 						<Tooltip title='Ajouter une maisons'>
 							<IconButton onClick={addHomeModal.show} color='primary'>

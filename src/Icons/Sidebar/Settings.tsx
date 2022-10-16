@@ -8,8 +8,8 @@ export const SettingsIcon: FunctionComponent = () => {
 			aria-hidden="true"
 			role="img"
 			className="iconify iconify--ic"
-			width="32"
-			height="32"
+			width="22"
+			height="22"
 			preserveAspectRatio="xMidYMid meet"
 			viewBox="0 0 24 24"
 		>

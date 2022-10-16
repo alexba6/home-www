@@ -1,11 +1,11 @@
-import {Home} from "../Home/HomeReducer";
+import {HomeInfo} from "../Home/HomeReducer";
 import {RootState} from "../index";
 import {Device, DeviceStore} from "./DeviceReducer";
 
 /**
  * @param homeId
  */
-export const deviceSelectFromHome = (homeId: Home['id'] | undefined) => (store: RootState): DeviceStore[] => {
+export const deviceSelectFromHome = (homeId: HomeInfo['id'] | undefined) => (store: RootState): DeviceStore[] => {
     return store.device.devices.filter(deviceStore => deviceStore.homeId === homeId)
 }
 

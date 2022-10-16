@@ -1,12 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AuthenticationKey } from "../../Context/ContextAuthentication"
-import {Home} from "../Home/HomeReducer";
+import {HomeInfo} from "../Home/HomeReducer";
 import { Device } from "./DeviceReducer";
 import {getAuthorization} from "../../Tools/Authentication";
 
 type GetAllProps = {
     authenticationKey: AuthenticationKey
-    homeId: Home['id']
+    homeId: HomeInfo['id']
 }
 
 type GetOneProps = {
@@ -20,7 +20,7 @@ type UpdateOneProps = {
     updatedDevice: {
         name?: Device['name']
         tags?: Device['tags']
-        homeId?: Home
+        homeId?: HomeInfo
     }
 }
 
@@ -32,18 +32,18 @@ type DeleteOneProps = {
 type GetAll = {
     devices: {
       device: Device
-      homeId: Home['id']
+      homeId: HomeInfo['id']
     }[]
 }
 
 type GetOne = {
     device: Device
-    homeId: Home['id']
+    homeId: HomeInfo['id']
 }
 
 type UpdateOne = {
     device: Device
-    homeId: Home['id']
+    homeId: HomeInfo['id']
 }
 
 const getAll = createAsyncThunk<GetAll, GetAllProps>(

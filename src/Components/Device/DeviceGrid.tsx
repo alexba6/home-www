@@ -21,7 +21,7 @@ const DeviceItem: FunctionComponent<DeviceItemProps> = (props) => {
 
     const onOpen = () => {
         applicationContext.set(device.id)
-        history.push(`/app/${device.type}`)
+        history.push(`/device/${device.type}`)
     }
 
     return <div className={styles.deviceItemContainer} onClick={onOpen}>

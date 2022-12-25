@@ -2,11 +2,12 @@ import { FunctionComponent} from "react";
 import {ApplicationProps} from "../../../Context/ContextApplication";
 import {SensorCard} from "../../../Components/Sensor/SensorCard";
 import {TemperatureIcon} from "../../../Icons/Sidebar/Temperature";
+import {AppProps} from "../../../Wrapper/App";
 
 
-export const PoolOutsideTemperaturePage: FunctionComponent<ApplicationProps> = (props) => {
+export const PoolOutsideTemperaturePage: FunctionComponent<AppProps> = (props) => {
     return <SensorCard
-        deviceId={props.deviceStore.device.id}
+        deviceId={props.device.device.id}
         title='Temperature extérieure'
         sensorName='outside_temp'
         unit='°C'

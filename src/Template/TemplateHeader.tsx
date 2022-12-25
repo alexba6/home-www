@@ -4,7 +4,7 @@ import Logout from '@mui/icons-material/Logout';
 
 import {HomeLogo} from "../Icons/HomeLogo";
 import {SidebarIcon} from "../Icons/Sidebar";
-import {RoutePath} from "../Config/RouteType";
+import {RouteConfig} from "../Config/RouteType";
 import {useHistory} from "react-router-dom";
 import {Routes} from "../Config/Routes";
 
@@ -32,7 +32,7 @@ export const TemplateHeader: FunctionComponent<TemplateHeaderProps> = (props) =>
         setAnchorEl(null)
     }
 
-    const handleClickAccountItem = (route: RoutePath) => () => {
+    const handleClickAccountItem = (route: RouteConfig) => () => {
         history.push(route.target)
     }
 

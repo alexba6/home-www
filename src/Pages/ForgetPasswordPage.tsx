@@ -5,7 +5,6 @@ import { Button } from '../Components/Button/Button'
 import { CardForm } from '../Components/Card/CardForm'
 import { HomeLogo } from '../Icons/HomeLogo'
 import { Input } from '../Components/Input/Input'
-import { useFormValue } from '../Hooks/UseFormValue'
 
 export const ForgetPasswordPage: FunctionComponent = () => {
 	const [login, setLogin] = useState('')

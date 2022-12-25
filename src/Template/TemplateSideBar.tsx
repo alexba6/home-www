@@ -2,12 +2,12 @@ import { FunctionComponent, MouseEvent} from "react";
 import {Tooltip} from "@mui/material";
 import {Routes} from "../Config/Routes";
 import {useHistory, useLocation} from "react-router-dom";
-import {RoutePath} from "../Config/RouteType"
+import {RouteConfig} from "../Config/RouteType"
 
 import styles from "./TemplateSideBar.module.sass"
 
 type TemplateSidebarLinkProps = {
-    routePath: RoutePath
+    routePath: RouteConfig
 }
 
 type TemplateSidebarProps = {

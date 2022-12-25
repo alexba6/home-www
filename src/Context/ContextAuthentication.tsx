@@ -17,7 +17,7 @@ type AuthenticatedRoutesWrapperProps = {
 	children: ReactNode
 }
 
-type AuthenticationContextProps = {
+export type AuthenticationContextProps = {
 	authenticationKey: AuthenticationKey
 	status: AuthenticationStatus,
 	clear: () => void
@@ -104,19 +104,4 @@ export const AuthenticationProvider: FunctionComponent<AuthenticationProviderPro
 			{props.children}
 		</ContextAuthentication.Provider>
 	)
-}
-
-export const AuthenticatedRoutesWrapper: FunctionComponent<AuthenticatedRoutesWrapperProps> = (props) => {
-	const authenticationContext = useContext(ContextAuthentication)
-	const history = useHistory()
-
-	const status = useMemo(() => authenticationContext.status, [authenticationContext])
-
-	if (status === AuthenticationStatus.DISCONNECTED) {
-		history.push(Routes.login.target)
-	}
-
-	return <Fragment>
-		{status === AuthenticationStatus.CONNECTED && props.children}
-	</Fragment>
 }

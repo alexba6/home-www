@@ -11,10 +11,11 @@ import {poolSlotSelector} from "../Store/Slot/SlotSelector";
 import {poolSlotActions} from "../Store/Slot/SlotActions";
 import {ContextAuthentication} from "../../../Context/ContextAuthentication";
 import {PoolModalSlot} from "../Components/Slots/SlotModal";
+import {AppProps} from "../../../Wrapper/App";
 
 
-export const PoolSlotPage: FunctionComponent<ApplicationProps> = (props) => {
-    const { device } = props.deviceStore
+export const PoolSlotPage: FunctionComponent<AppProps> = (props) => {
+    const { device } = props.device
 
     const authContext = useContext(ContextAuthentication)
     const dispatch = useDispatch<any>()

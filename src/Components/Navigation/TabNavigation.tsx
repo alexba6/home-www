@@ -15,7 +15,7 @@ type TabItem = {
 }
 
 type TabNavigationProps = {
-    default: number,
+    default?: number,
     tabs: TabItem[]
 }
 
@@ -36,7 +36,7 @@ const TabPanel = (props: TabPanelProps) => {
 }
 
 export const TabNavigation: FunctionComponent<TabNavigationProps> = (props) => {
-    const [tab, setTab] = useState(props.default)
+    const [tab, setTab] = useState(props.default || 0)
     const history = useHistory()
     const location = useLocation()
 

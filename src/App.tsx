@@ -1,44 +1,58 @@
-import { FunctionComponent, useContext } from 'react'
+import {FunctionComponent, useContext, useEffect} from 'react'
 import { Provider } from 'react-redux'
-import { BrowserRouter, Route } from 'react-router-dom'
+import {BrowserRouter, Route, useHistory} from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
+import 'moment/locale/fr'
+
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
+import 'react-toastify/dist/ReactToastify.css'
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
-
-import { store } from './Store'
-
-import { LoginPage } from './Pages/LoginPage'
-import { DashboardPage } from './Pages/DashboardPage'
-
-import 'moment/locale/fr'
 import './Styles/var.sass'
 import './Styles/index.module.sass'
 import './Styles/layout.sass'
-import 'react-toastify/dist/ReactToastify.css'
+
+import { store } from './Store'
 
 import { ContextTheme, ThemeWrapper } from './Context/ContextTheme'
-import {
-	AuthenticatedRoutesWrapper,
-	AuthenticationProvider,
-} from './Context/ContextAuthentication'
+import { AuthenticationProvider, AuthenticationStatus, ContextAuthentication } from './Context/ContextAuthentication'
 
-import { ForgetPasswordPage } from './Pages/ForgetPasswordPage'
-import { ResetPasswordPage } from './Pages/ResetPasswordPage'
-import { HomePage } from './Pages/HomePage'
-import { DevicePage } from './Pages/DevicePage'
-import {PoolApp} from "./Applications/Pool/App";
 import {ApplicationContextProvider} from "./Context/ContextApplication";
-import {LogoutPage} from "./Pages/LogoutPage";
 import {Routes} from "./Config/Routes";
-import { AccountPage } from './Pages/Account/AccountPage';
+import {RouteConfig} from "./Config/RouteType";
+
+type AppAuthenticatedRoutesProps = {
+	route: RouteConfig
+}
 
 const ToastContainerTheme: FunctionComponent = () => {
 	const themeContext = useContext(ContextTheme)
-
 	return <ToastContainer position="bottom-right" autoClose={2000} theme={themeContext.theme} />
+}
+
+const AppAuthenticatedRoutes: FunctionComponent<AppAuthenticatedRoutesProps> = (props) => {
+	const authContext = useContext(ContextAuthentication)
+	const history = useHistory()
+
+	const route = props.route
+
+	useEffect(() => {
+		if (authContext.status === AuthenticationStatus.DISCONNECTED && route.auth) {
+			history.push(Routes.login.target)
+		}
+	}, [authContext.status, history, route.auth])
+
+	if (route.auth && authContext.status !== AuthenticationStatus.CONNECTED) {
+		return <></>
+	}
+
+	return <Route
+		key={route.target}
+		exact
+		path={route.target}
+		component={route.component}/>
 }
 
 export const App: FunctionComponent = () => {
@@ -48,21 +62,7 @@ export const App: FunctionComponent = () => {
 				<AuthenticationProvider>
 						<BrowserRouter>
 							<ApplicationContextProvider>
-								<Route exact path={Routes.login.target} component={LoginPage} />
-								<Route exact path={Routes.forgetPassword.target} component={ForgetPasswordPage} />
-								<Route exact path={Routes.resetPassword.target} component={ResetPasswordPage} />
-
-								<Route exact path={Routes.dashboard.target} component={DashboardPage} />
-
-								<AuthenticatedRoutesWrapper>
-									<Route path={Routes.account.target} component={AccountPage} />
-									<Route path={Routes.logout.target} component={LogoutPage} />
-									<Route exact path={Routes.home.target} component={HomePage}/>
-									<Route exact path={Routes.device.target} component={DevicePage}/>
-									<Route exact path='/device/pool'>
-										<PoolApp/>
-									</Route>
-								</AuthenticatedRoutesWrapper>
+								{Object.values(Routes).map((route: RouteConfig) => <AppAuthenticatedRoutes key={route.target} route={route}/>)}
 								<ToastContainerTheme/>
 							</ApplicationContextProvider>
 						</BrowserRouter>

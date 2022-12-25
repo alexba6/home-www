@@ -8,11 +8,12 @@ import {ActionBtnGroupButtons} from "../../../Components/ActionButtonGroup/Actio
 import {actionSelector} from "../../../Store/Action/ActionSelector";
 import {actionActions} from "../../../Store/Action/ActionAction";
 import {ActionStatus} from "../../../Store/Action/ActionReducer";
+import {AppProps} from "../../../Wrapper/App";
 
 const actionKey = 'pump'
 
-export const PoolControlPage: FunctionComponent<ApplicationProps> = (props) => {
-    const { device } = props.deviceStore
+export const PoolControlPage: FunctionComponent<AppProps> = (props) => {
+    const { device } = props.device
     const authenticationContext = useContext(ContextAuthentication)
 
     const dispatch = useDispatch<any>()

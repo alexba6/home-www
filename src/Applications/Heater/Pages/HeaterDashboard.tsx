@@ -1,11 +1,11 @@
 import {FunctionComponent} from "react";
-import {Card, CardContent, CardHeader, Chip, List, ListItem, ListItemText} from "@mui/material";
-
 import {ApplicationProps} from "../../../Context/ContextApplication";
-import moment from "moment";
+import {Card, CardContent, CardHeader, Chip, List, ListItem, ListItemText} from "@mui/material";
+import moment from "moment/moment";
 import {AppProps} from "../../../Wrapper/App";
 
-export const PoolDashboardPage: FunctionComponent<AppProps> = (props) => {
+
+export const HeaterDashboard: FunctionComponent<AppProps> = (props) => {
     const { device } = props.device
 
     return <Card>

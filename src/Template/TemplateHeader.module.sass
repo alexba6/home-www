@@ -4,11 +4,12 @@
 .templateHeader
   grid-area: header
   background-color: var(--ct-bg-topbar)
-  box-shadow: var(--ct-box-shadow)
+  box-shadow: var(--ct-box-shadow-lg)
   display: grid
   grid-template-columns: 150px auto 100px
   grid-template-areas: "icon search settings"
   padding: 0 20px
+  z-index: 1
 
   @media only screen and (max-width: $mobile-screen-width)
     display: flex

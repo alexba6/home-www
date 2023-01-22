@@ -1,25 +1,11 @@
 import { createSlice, SerializedError } from '@reduxjs/toolkit'
 import { userActions } from './UserActions'
+import {StoreStatus} from "../type";
 
-export enum UserStoreStatus {
-	IDLE = 'IDLE',
-	PENDING = 'PENDING',
-	UPDATING = 'UPDATING',
-	REMOVING = 'REMOVING',
-	ERROR = 'ERROR',
-	READY = 'READY',
-}
 
 export type UserNotificationSettings = {
 	enable: boolean
 	sendByMail: boolean
-}
-
-export type UserUpdateItems = {
-	email?: User['email']
-	username?: User['username']
-	firstName?: User['firstName']
-	lastName?: User['lastName']
 }
 
 export type User = {
@@ -34,24 +20,31 @@ export type User = {
 	notificationSettings: UserNotificationSettings
 }
 
-export type UserStoreState<S = UserStoreStatus> = {
+export type UserUpdateItems = {
+	email?: User['email']
+	username?: User['username']
+	firstName?: User['firstName']
+	lastName?: User['lastName']
+}
+
+export type UserStoreState<S = StoreStatus> = {
 	status: S
-} & (S extends UserStoreStatus.IDLE
+} & (S extends StoreStatus.IDLE
 	? {
 			id?: User['id']
 	  }
 	: { id: User['id'] }) &
-	(S extends UserStoreStatus.READY
+	(S extends StoreStatus.READY
 		? {
 				user: User
 		  }
 		: { user?: User }) &
-	(S extends UserStoreStatus.UPDATING
+	(S extends StoreStatus.UPDATING
 		? {
 				updatedUser: UserUpdateItems
 		  }
 		: {}) &
-	(S extends UserStoreStatus.ERROR
+	(S extends StoreStatus.ERROR
 		? {
 				error: SerializedError
 		  }
@@ -60,39 +53,39 @@ export type UserStoreState<S = UserStoreStatus> = {
 export const userStore = createSlice<UserStoreState, any>({
 	name: 'user',
 	initialState: {
-		status: UserStoreStatus.IDLE,
+		status: StoreStatus.IDLE,
 	},
 	reducers: {},
 	extraReducers: (builder) => {
 		// Get user info
 		builder.addCase(userActions.getInfo.pending, () => ({
-			status: UserStoreStatus.PENDING,
+			status: StoreStatus.PENDING,
 		}))
 		builder.addCase(userActions.getInfo.fulfilled, (state, props) => ({
-			status: UserStoreStatus.READY,
+			status: StoreStatus.READY,
 			id: props.payload.user.id,
 			user: props.payload.user,
 		}))
 		builder.addCase(userActions.getInfo.rejected, (state, props) => ({
 			...state,
-			status: UserStoreStatus.ERROR,
+			status: StoreStatus.ERROR,
 			error: props.error,
 		}))
 
 		// Update user info
 		builder.addCase(userActions.updateInfo.pending, (state, props) => ({
 			...state,
-			status: UserStoreStatus.UPDATING,
+			status: StoreStatus.UPDATING,
 			updatedUser: props.meta.arg.user,
 		}))
 		builder.addCase(userActions.updateInfo.fulfilled, (state, props) => ({
-			status: UserStoreStatus.READY,
+			status: StoreStatus.READY,
 			id: props.payload.user.id,
 			user: props.payload.user,
 		}))
 		builder.addCase(userActions.updateInfo.rejected, (state, props) => ({
 			...state,
-			status: UserStoreStatus.ERROR,
+			status: StoreStatus.ERROR,
 			error: props.error,
 		}))
 	},

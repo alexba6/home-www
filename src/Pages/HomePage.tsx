@@ -100,7 +100,7 @@ export const HomePage: FunctionComponent = () => {
 					</Typography>
 					<div>
 						<Tooltip title='Ajouter une maisons'>
-							<IconButton onClick={addHomeModal.show} color='primary'>
+							<IconButton onClick={addHomeModal.open} color='primary'>
 								<AddIcon/>
 							</IconButton>
 						</Tooltip>

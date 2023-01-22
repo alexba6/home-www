@@ -1,26 +1,26 @@
-import { FunctionComponent, createContext, useState, useEffect, ReactNode } from 'react'
+import {FunctionComponent, createContext, useState, useEffect, ReactNode, useMemo} from 'react'
 import {createTheme, ThemeProvider} from "@mui/material";
 
 export type Theme = 'light' | 'dark'
 
+export type ThemeMode = 'light' | 'dark' | 'system'
+
 type ThemeContextProps = {
 	theme: Theme
-	toggleTheme: (theme?: Theme) => void
+	mode: ThemeMode
+	setTheme: (theme: ThemeMode) => void
 }
 
 type ThemeWrapperProps = {
 	children: ReactNode
 }
 
-const darkTheme = createTheme({
-	palette: {
-		mode: 'dark',
+const customTheme = (theme: Theme) => createTheme({
+	typography: {
+		fontFamily: 'Roboto'
 	},
-})
-
-const lightTheme = createTheme({
 	palette: {
-		mode: 'light',
+		mode: theme,
 		primary: {
 			light: '#757ce8',
 			main: '#3f50b5',
@@ -38,35 +38,46 @@ const lightTheme = createTheme({
 
 export const ContextTheme = createContext<ThemeContextProps>({
 	theme: 'light',
-	toggleTheme: () => {},
+	mode: 'light',
+	setTheme: () => {},
 })
 
 export const ThemeWrapper: FunctionComponent<ThemeWrapperProps> = (props) => {
-	const [theme, setTheme] = useState<Theme>('light')
+	const [mode, setMode] = useState<ThemeMode>('light')
+	const [systemTheme, setSystemTheme] = useState<Theme>('light')
+
+	const theme = useMemo(() => mode === 'system' ? systemTheme : mode, [mode, systemTheme])
 
 	useEffect(() => {
 		const savedTheme = localStorage.getItem('theme')
-		if (savedTheme === 'dark') {
-			toggleTheme('dark')
+		if (savedTheme) {
+			setMode(savedTheme as ThemeMode)
 		}
 	}, [])
 
-	const toggleTheme = (forceTheme?: Theme) =>
-		setTheme((oldTheme) => {
-			const newTheme =
-				forceTheme === 'light' || forceTheme === 'dark' ? forceTheme : oldTheme === 'light' ? 'dark' : 'light'
-			localStorage.setItem('theme', newTheme)
-			document.querySelector('html')?.setAttribute('theme', newTheme)
-			return newTheme
-		})
+	useEffect(() => {
+		if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+			setSystemTheme('dark')
+		}
+	}, [setSystemTheme])
+
+	useEffect(() => {
+		document.querySelector('html')?.setAttribute('theme', theme)
+	}, [theme])
+
+	const setTheme = (themeMode: ThemeMode) => {
+		localStorage.setItem('theme', themeMode)
+		setMode(themeMode)
+	}
 
 	const themeValue: ThemeContextProps = {
 		theme,
-		toggleTheme,
+		mode,
+		setTheme,
 	}
 
 	return <ContextTheme.Provider value={themeValue}>
-		<ThemeProvider theme={theme === 'dark' ? darkTheme : lightTheme}>
+		<ThemeProvider theme={customTheme(theme)}>
 			{props.children}
 		</ThemeProvider>
 	</ContextTheme.Provider>

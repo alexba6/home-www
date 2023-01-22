@@ -4,7 +4,7 @@ import {AccountProfileTab} from "./AccountProfil";
 import {AccountSecurityPasswordTab} from "./AccountSecurity";
 import {AccountAuthKeyTab} from "./AccountAuthKey";
 import {TabNavigation} from "../../Components/Navigation/TabNavigation";
-import {AccountThemeTab} from "./AccountTheme";
+import {AccountPreferencesTab} from "./AccountPreferences";
 
 
 export const AccountPage: FunctionComponent = () => {
@@ -26,9 +26,9 @@ export const AccountPage: FunctionComponent = () => {
                 component: <AccountAuthKeyTab/>
             },
             {
-                name: 'Theme',
-                anchor: 'theme',
-                component: <AccountThemeTab/>
+                name: 'Préférences',
+                anchor: 'preferences',
+                component: <AccountPreferencesTab/>
             }
         ]}/>
     </Template>

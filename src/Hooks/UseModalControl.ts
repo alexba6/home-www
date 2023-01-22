@@ -2,14 +2,14 @@ import { useState } from 'react'
 
 export type ModalControl = {
 	display: boolean
-	show: () => void
+	open: () => void
 	close: () => void
 }
 
 export const useModalControl = (): ModalControl => {
 	const [display, setDisplay] = useState<boolean>(false)
 
-	const show = () => {
+	const open = () => {
 		setDisplay(true)
 	}
 
@@ -17,5 +17,5 @@ export const useModalControl = (): ModalControl => {
 		setDisplay(false)
 	}
 
-	return { display, show, close }
+	return { display, open, close }
 }

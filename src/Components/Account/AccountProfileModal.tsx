@@ -1,7 +1,7 @@
 import {ModalControl} from "../../Hooks/UseModalControl";
-import {FunctionComponent, useState} from "react";
+import {ChangeEvent, FunctionComponent, useEffect, useState} from "react";
 import {ModalSimple} from "../Modal/SimpleModal";
-import {Stack, TextField} from "@mui/material";
+import {Avatar, Button, Input, InputProps, Stack, TextField, Typography} from "@mui/material";
 
 
 type AccountProfileUpdateNameModalProps = {
@@ -20,6 +20,12 @@ type AccountProfileUpdateEmailModalProps = {
     control: ModalControl
     onSubmit: (email: string) => void
     email: string
+}
+
+type AccountAvatarModalProps = {
+    control: ModalControl
+    avatarUrl: string
+    onSubmit: (file: File) => void
 }
 
 export const AccountProfileUpdateNameModal: FunctionComponent<AccountProfileUpdateNameModalProps> = (props) => {
@@ -137,3 +143,54 @@ export const AccountProfileUpdateEmailModal: FunctionComponent<AccountProfileUpd
     )
 }
 
+
+
+export const AccountAvatarModal: FunctionComponent<AccountAvatarModalProps> = (props) => {
+    const [file, setFile] = useState<File | null>(null)
+
+
+    const handleSearchImage = (event: ChangeEvent<HTMLInputElement>) => {
+        const files = event.target.files
+        if (files && files.length > 0) {
+            setFile(files[0])
+        }
+    }
+
+    useEffect(() => {
+        console.log(file)
+    }, [file])
+
+    return (
+        <ModalSimple control={props.control} title='Photo de profil' footerButtons={file ? [
+            {
+                name: 'Annuler',
+                color: 'error',
+                onClick: () => {
+                    setFile(null)
+                    props.control.close()
+                }
+            },
+            {
+                name: 'Enregistrer',
+                color: 'primary',
+                onClick: () => {
+                    setFile(null)
+                    props.onSubmit(file)
+                }
+            }
+        ] : []}>
+            <Typography>
+                Votre photo de profil aide les autres utilisateurs à vous reconnaître et vous permet de savoir quand vous êtes connecté à votre compte.
+            </Typography><br/>
+            {file ? <Stack justifyContent='center' alignItems='center' direction='row'>
+                <Avatar
+                    alt='Preview'
+                    src={URL.createObjectURL(file)}
+                    sx={{ width: 100, height: 100 }}
+                />
+            </Stack> : <Stack justifyContent='center' alignItems='center' direction='row'>
+                <Input type='file' onChange={handleSearchImage} />
+            </Stack>}
+        </ModalSimple>
+    )
+}

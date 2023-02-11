@@ -1,4 +1,4 @@
-import {FunctionComponent, useState, MouseEvent} from "react";
+import {FunctionComponent, useState, MouseEvent, useContext} from "react";
 import {Avatar, Divider, IconButton, ListItemIcon, Menu, MenuItem, Tooltip} from "@mui/material";
 import Logout from '@mui/icons-material/Logout';
 
@@ -10,6 +10,8 @@ import {Routes} from "../Config/Routes";
 
 import styles from "./TemplateHeader.module.sass";
 import {TemplateSearch} from "./TemplateSearch";
+import {ContextAuthentication} from "../Context/ContextAuthentication";
+import {useAvatarURL} from "../Hooks/UseAvatarURL";
 
 type TemplateHeaderProps = {
     onOpenSidebar: () => void
@@ -23,6 +25,9 @@ export const TemplateHeader: FunctionComponent<TemplateHeaderProps> = (props) =>
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const open = Boolean(anchorEl)
     const history = useHistory()
+
+    const authContext = useContext(ContextAuthentication)
+    const avatarURL = useAvatarURL(authContext.authenticationKey)
 
     const handleClickAccount = (event: MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget)
@@ -55,7 +60,7 @@ export const TemplateHeader: FunctionComponent<TemplateHeaderProps> = (props) =>
             <div className={styles.templateHeaderSettings}>
                 <IconButton onClick={handleClickAccount}>
                     <Tooltip title='Compte'>
-                        <Avatar src='https://upload.wikimedia.org/wikipedia/fr/thumb/3/3b/Raspberry_Pi_logo.svg/1200px-Raspberry_Pi_logo.svg.png' />
+                        <Avatar src={avatarURL} sx={{ width: 50, height: 50 }}/>
                     </Tooltip>
                 </IconButton>
 

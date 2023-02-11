@@ -9,17 +9,23 @@ import {SettingsCard} from "../../Components/Settings/SettingsCard";
 import {toast} from "react-toastify";
 import {useModalControl} from "../../Hooks/UseModalControl";
 import {
+	AccountAvatarModal,
 	AccountProfileUpdateEmailModal,
 	AccountProfileUpdateNameModal,
 	AccountProfileUpdateUsernameModal
 } from "../../Components/Account/AccountProfileModal";
 import {userSelector} from "../../Store/User/UserSelector";
 import {StoreStatus} from "../../Store/type";
+import {getAuthorization} from "../../Tools/Authentication";
+import {useAvatarURL} from "../../Hooks/UseAvatarURL";
+
 
 export const AccountProfileTab: FunctionComponent = () => {
 	const nameModalControl = useModalControl()
 	const usernameModalControl = useModalControl()
 	const emailModalControl = useModalControl()
+	const avatarModalControl = useModalControl()
+
 
 	const authContext = useContext(ContextAuthentication)
 
@@ -27,6 +33,8 @@ export const AccountProfileTab: FunctionComponent = () => {
 
 	const userInfo = useSelector(userSelector.info)
 	const userStatus = useSelector(userSelector.status)
+
+	const avatarURL = useAvatarURL(authContext.authenticationKey)
 
 	useEffect(() => {
 		if (userStatus === StoreStatus.IDLE) {
@@ -83,6 +91,20 @@ export const AccountProfileTab: FunctionComponent = () => {
 		}
 	}
 
+	const onUpdateAvatar = async (file: File) => {
+		const data = new FormData()
+		data.append('file', file)
+		data.append('fileName', file.name)
+		const res = await fetch('/api/user/avatar', {
+			method: 'POST',
+			headers: {
+				authorization: getAuthorization(authContext.authenticationKey),
+			},
+			body: data,
+		})
+		console.log(res)
+	}
+
 	return (
 		<Fragment>
 			{userStatus === StoreStatus.IDLE && <LinearProgress/>}
@@ -100,6 +122,10 @@ export const AccountProfileTab: FunctionComponent = () => {
 					control={emailModalControl}
 					email={userInfo.email}
 					onSubmit={onUpdateEmail}/>
+				<AccountAvatarModal
+					control={avatarModalControl}
+					avatarUrl={avatarURL}
+					onSubmit={onUpdateAvatar}/>
 				<SettingsCard
 					title='Informations générales'
 					details='Certaines de ces informations peuvent être vues par les autres utilisateurs du service Home.'>
@@ -107,10 +133,10 @@ export const AccountProfileTab: FunctionComponent = () => {
 						name='Photo'
 						value='Personnalisez votre compte en ajoutant une photo'
 						divider
-						onClick={() => {}}>
+						onClick={avatarModalControl.open}>
 						<Avatar
 							alt="Remy Sharp"
-							src="https://upload.wikimedia.org/wikipedia/fr/thumb/3/3b/Raspberry_Pi_logo.svg/1200px-Raspberry_Pi_logo.svg.png"
+							src={avatarURL}
 							sx={{ width: 50, height: 50 }}
 						/>
 					</SettingsRow>

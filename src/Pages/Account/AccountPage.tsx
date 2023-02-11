@@ -16,8 +16,8 @@ export const AccountPage: FunctionComponent = () => {
                 component: <AccountProfileTab/>
             },
             {
-                name: 'Mot de passe',
-                anchor: 'password',
+                name: 'Sécurité',
+                anchor: 'security',
                 component: <AccountSecurityPasswordTab/>
             },
             {

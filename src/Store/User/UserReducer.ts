@@ -1,5 +1,5 @@
-import { createSlice, SerializedError } from '@reduxjs/toolkit'
-import { userActions } from './UserActions'
+import {createSlice} from '@reduxjs/toolkit'
+import {userActions} from './UserActions'
 import {StoreStatus} from "../type";
 
 
@@ -28,65 +28,49 @@ export type UserUpdateItems = {
 }
 
 export type UserStoreState<S = StoreStatus> = {
-	status: S
-} & (S extends StoreStatus.IDLE
-	? {
-			id?: User['id']
-	  }
-	: { id: User['id'] }) &
-	(S extends StoreStatus.READY
-		? {
-				user: User
-		  }
-		: { user?: User }) &
-	(S extends StoreStatus.UPDATING
-		? {
-				updatedUser: UserUpdateItems
-		  }
-		: {}) &
-	(S extends StoreStatus.ERROR
-		? {
-				error: SerializedError
-		  }
-		: {})
+	status: S,
+	info: S extends (StoreStatus.READY | StoreStatus.UPDATING) ? User : User | null,
+	updatedInfo: S extends StoreStatus.UPDATING ? UserUpdateItems : UserUpdateItems | null
+}
 
 export const userStore = createSlice<UserStoreState, any>({
 	name: 'user',
 	initialState: {
 		status: StoreStatus.IDLE,
+		info: null,
+		updatedInfo: null
 	},
 	reducers: {},
 	extraReducers: (builder) => {
 		// Get user info
-		builder.addCase(userActions.getInfo.pending, () => ({
-			status: StoreStatus.PENDING,
+		builder.addCase(userActions.getInfo.pending, (state, props) => ({
+			...state,
+			status: StoreStatus.PENDING
 		}))
 		builder.addCase(userActions.getInfo.fulfilled, (state, props) => ({
+			...state,
 			status: StoreStatus.READY,
-			id: props.payload.user.id,
-			user: props.payload.user,
+			info: props.payload.user
 		}))
 		builder.addCase(userActions.getInfo.rejected, (state, props) => ({
 			...state,
-			status: StoreStatus.ERROR,
-			error: props.error,
+			status: StoreStatus.ERROR
 		}))
 
 		// Update user info
 		builder.addCase(userActions.updateInfo.pending, (state, props) => ({
 			...state,
 			status: StoreStatus.UPDATING,
-			updatedUser: props.meta.arg.user,
+			updatedInfo: props.meta.arg.user
 		}))
 		builder.addCase(userActions.updateInfo.fulfilled, (state, props) => ({
 			status: StoreStatus.READY,
-			id: props.payload.user.id,
-			user: props.payload.user,
+			info: props.payload.user,
+			updatedInfo: null
 		}))
 		builder.addCase(userActions.updateInfo.rejected, (state, props) => ({
 			...state,
-			status: StoreStatus.ERROR,
-			error: props.error,
+			status: StoreStatus.ERROR
 		}))
 	},
 })

@@ -50,6 +50,6 @@ const updateInfo = createAsyncThunk<UpdateInfo, UpdateInfoProps>('user#updateInf
 })
 
 export const userActions = {
-	getInfo,
-	updateInfo,
+	getInfo: getInfo,
+	updateInfo: updateInfo,
 }

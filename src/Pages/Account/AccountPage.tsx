@@ -1,7 +1,7 @@
 import {FunctionComponent} from "react";
 import {Template} from "../../Template/Template";
 import {AccountProfileTab} from "./AccountProfil";
-import {AccountSecurityPasswordTab} from "./AccountSecurity";
+import {AccountSecurityTab} from "./AccountSecurity";
 import {AccountAuthKeyTab} from "./AccountAuthKey";
 import {TabNavigation} from "../../Components/Navigation/TabNavigation";
 import {AccountPreferencesTab} from "./AccountPreferences";
@@ -18,7 +18,7 @@ export const AccountPage: FunctionComponent = () => {
             {
                 name: 'Sécurité',
                 anchor: 'security',
-                component: <AccountSecurityPasswordTab/>
+                component: <AccountSecurityTab/>
             },
             {
                 name: 'Connexions',

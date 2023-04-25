@@ -1,7 +1,5 @@
 import { FunctionComponent, useContext } from 'react'
 import {Button, IconButton, Stack, TextField, Tooltip} from "@mui/material";
-import GoogleIcon from '@mui/icons-material/Google';
-import FacebookIcon from '@mui/icons-material/Facebook';
 
 import { TextLink } from '../Components/Link/TextLink'
 import { CardForm, CardFormOrSeparator } from '../Components/Card/CardForm'
@@ -11,6 +9,7 @@ import { useHistory } from 'react-router-dom'
 import { useFormValue } from '../Hooks/UseFormValue'
 import {CardHeader} from "../Components/Card/Card";
 import {Routes} from "../Config/Routes";
+import {SocialGoogleButton} from "../Components/Social/SocialGoogleButton";
 
 export const LoginPage: FunctionComponent = () => {
 	const history = useHistory()
@@ -83,18 +82,7 @@ export const LoginPage: FunctionComponent = () => {
 				<CardFormOrSeparator />
 				<Stack direction='row' justifyContent='center' alignItems='center'>
 					<div>
-						<Tooltip title='Connexion avec google'>
-							<IconButton>
-								<GoogleIcon/>
-							</IconButton>
-						</Tooltip>
-					</div>
-					<div>
-						<Tooltip title='Connexion avec facebook'>
-							<IconButton>
-								<FacebookIcon/>
-							</IconButton>
-						</Tooltip>
+						<SocialGoogleButton/>
 					</div>
 				</Stack>
 			</div>

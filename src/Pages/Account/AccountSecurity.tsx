@@ -1,26 +1,38 @@
-import {Fragment, FunctionComponent, useContext, useEffect} from 'react'
-import { ContextAuthentication} from '../../Context/ContextAuthentication'
-import { toast } from 'react-toastify'
-import { getAuthorization } from '../../Tools/Authentication'
-import {Button} from "@mui/material";
-import {SettingsCard} from "../../Components/Settings/SettingsCard";
+import {Fragment, FunctionComponent, useContext, useEffect, useMemo} from 'react'
+import {ContextAuthentication} from '../../Context/ContextAuthentication'
+import {toast} from 'react-toastify'
+import {getAuthorization} from '../../Tools/Authentication'
+import {Avatar, Button} from "@mui/material";
+import {
+	SettingsCard,
+	SettingsCardContent,
+	SettingsCardHeader,
+} from "../../Components/Settings/SettingsCard";
 import {useModalControl} from "../../Hooks/UseModalControl";
-import {AccountSecurityUpdatePasswordModal} from "../../Components/Account/AccountSecurityModal";
+import {
+	AccountSecurityGoogleModal,
+	AccountSecurityUpdatePasswordModal
+} from "../../Components/Account/AccountSecurityModal";
 import {GoogleIcon} from "../../Icons/Google";
-import {SettingsRow} from "../../Components/Settings/SettingsRow";
+import {
+	SettingsRow,
+	SettingsRowContent,
+	SettingsRowLeft, SettingsRowLeftTitle, SettingsRowRight, SettingsRowRightButton
+} from "../../Components/Settings/SettingsRow";
 import {useDispatch, useSelector} from "react-redux";
 import {userSelector} from "../../Store/User/UserSelector";
 import {StoreStatus} from "../../Store/type";
 import {userActions} from "../../Store/User/UserActions";
+import {googleOAuthSelector} from "../../Store/GoogleOAuth/GoogleOAuthSelector";
+import {googleOAuthActions} from "../../Store/GoogleOAuth/GoogleOAuthAction";
+import {useGoogleLink} from "../../Hooks/UseGoogleLink";
 
-export const AccountSecurityPasswordTab: FunctionComponent = () => {
+const AccountSecurityPassword: FunctionComponent = () => {
 	const passwordModal = useModalControl()
 
 	const dispatch = useDispatch<any>()
 
-	const userInfo = useSelector(userSelector.info)
 	const userStatus = useSelector(userSelector.status)
-
 	const authContext = useContext(ContextAuthentication)
 
 	useEffect(() => {
@@ -56,20 +68,95 @@ export const AccountSecurityPasswordTab: FunctionComponent = () => {
 	}
 
 	return (
-		<Fragment>
+		<SettingsCard>
+			<SettingsCardHeader title="Mot de passe"/>
 			<AccountSecurityUpdatePasswordModal
 				control={passwordModal}
 				onSubmit={onUpdatePassword}/>
-			<SettingsCard title='Mot de passe'>
-				<Button onClick={passwordModal.open}>
-					Changer le mot de passe
-				</Button>
-			</SettingsCard>
-			<SettingsCard
-				title="Réseaux sociaux"
-				details="Ajouter un ou plusieurs réseaux sociaux afin de vous connecter plus facilement à votre compte.">
-				<SettingsRow name={<GoogleIcon/>} value="Aucun compte lié" onClick={() => {}}/>
-			</SettingsCard>
+			<SettingsCardContent>
+				<SettingsRow>
+					<SettingsRowLeftTitle title='Mot de passe'/>
+					<SettingsRowContent>
+						Changer le mot de passe
+					</SettingsRowContent>
+					<SettingsRowRightButton onClick={passwordModal.open}/>
+				</SettingsRow>
+			</SettingsCardContent>
+		</SettingsCard>
+	)
+}
+
+const AccountSecurityGoogleOAuth: FunctionComponent = () => {
+	const googleModal = useModalControl()
+
+	const dispatch = useDispatch<any>()
+
+	const googleOAthStore = useSelector(googleOAuthSelector.getStore)
+	const authContext = useContext(ContextAuthentication)
+
+	const googleLink = useGoogleLink('link')
+
+	useEffect(() => {
+		if (googleOAthStore.status === StoreStatus.IDLE) {
+			dispatch(googleOAuthActions.getInfo({
+				authenticationKey: authContext.authenticationKey,
+			}))
+		}
+	}, [googleOAthStore, dispatch, authContext, googleOAuthActions])
+
+
+	const onOpenLinkGoogle = () => {
+		if (googleLink) {
+			window.open(googleLink, '_parent')
+		}
+	}
+
+	return (
+		<SettingsCard>
+			<SettingsCardHeader title="Google" details="Ajouter votre compte Google afin de vous connecter plus facilement au service Home."/>
+			<AccountSecurityGoogleModal control={googleModal}/>
+			<SettingsCardContent>
+				{(googleOAthStore.status === StoreStatus.READY && googleOAthStore.info) && <SettingsRow>
+					<SettingsRowLeft>
+						<Avatar src={googleOAthStore.info.pictureUrl}/>
+					</SettingsRowLeft>
+					<SettingsRowContent>
+						{[googleOAthStore.info.givenName, googleOAthStore.info.familyName].join(' ')}
+					</SettingsRowContent>
+					<SettingsRowRight>
+						<Button>
+							Supprimer
+						</Button>
+						<Button onClick={onOpenLinkGoogle}>
+							Modifier
+						</Button>
+					</SettingsRowRight>
+				</SettingsRow>}
+				{(googleOAthStore.status === StoreStatus.READY && !googleOAthStore.info) && <SettingsRow>
+					<SettingsRow>
+						<SettingsRowLeft>
+							<GoogleIcon/>
+						</SettingsRowLeft>
+						<SettingsRowContent>
+							Aucun compte lié
+						</SettingsRowContent>
+						<SettingsRowRight>
+							<Button onClick={onOpenLinkGoogle}>
+								Ajouter
+							</Button>
+						</SettingsRowRight>
+					</SettingsRow>
+				</SettingsRow>}
+			</SettingsCardContent>
+		</SettingsCard>
+	)
+}
+
+export const AccountSecurityTab: FunctionComponent = () => {
+	return (
+		<Fragment>
+			<AccountSecurityPassword/>
+			<AccountSecurityGoogleOAuth/>
 		</Fragment>
 	)
 }

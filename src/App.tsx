@@ -1,6 +1,6 @@
 import {FunctionComponent, useContext, useEffect} from 'react'
 import { Provider } from 'react-redux'
-import {BrowserRouter, Route, useHistory} from 'react-router-dom'
+import {BrowserRouter, Route, useHistory, useLocation} from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import 'moment/locale/fr'
 
@@ -35,12 +35,15 @@ const ToastContainerTheme: FunctionComponent = () => {
 const AppAuthenticatedRoutes: FunctionComponent<AppAuthenticatedRoutesProps> = (props) => {
 	const authContext = useContext(ContextAuthentication)
 	const history = useHistory()
+	const location = useLocation()
 
 	const route = props.route
 
 	useEffect(() => {
 		if (authContext.status === AuthenticationStatus.DISCONNECTED && route.auth) {
-			history.push(Routes.login.target)
+			if (location.pathname === route.target) {
+				history.push(Routes.login.target)
+			}
 		}
 	}, [authContext.status, history, route.auth])
 

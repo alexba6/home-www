@@ -1,12 +1,18 @@
 import {ModalControl} from "../../Hooks/UseModalControl";
 import {FunctionComponent, useState} from "react";
 import {ModalSimple} from "../Modal/SimpleModal";
-import {Stack, TextField} from "@mui/material";
+import {Button, IconButton, Stack, TextField} from "@mui/material";
+import {useGoogleLink} from "../../Hooks/UseGoogleLink";
+import {GoogleIcon} from "../../Icons/Google";
 
 
 type AccountSecurityUpdatePasswordModalProps = {
     control: ModalControl
     onSubmit: (oldPassword: string, newPassword: string) => void
+}
+
+type AccountSecurityGoogleModalProps = {
+    control: ModalControl
 }
 
 
@@ -59,6 +65,30 @@ export const AccountSecurityUpdatePasswordModal: FunctionComponent<AccountSecuri
                     onChange={event => setNewPasswordC(event.target.value)}
                     sx={{ marginY: 1 }}
                     variant='outlined'/>
+            </Stack>
+        </ModalSimple>
+    )
+}
+
+
+
+export const AccountSecurityGoogleModal: FunctionComponent<AccountSecurityGoogleModalProps> = (props) => {
+    const googleLink = useGoogleLink('link')
+
+    const onLinkAccount = () => {
+        if (googleLink) {
+            window.open(googleLink, 'parent')
+        }
+    }
+
+    return (
+        <ModalSimple control={props.control} title='Google'>
+            <p>Vous n'avez aucun compte Google lié à Home.</p>
+            <br/>
+            <Stack justifyContent='center' alignItems='center'>
+                <Button variant='outlined' startIcon={<GoogleIcon/>} onClick={onLinkAccount}>
+                    Ajouter
+                </Button>
             </Stack>
         </ModalSimple>
     )

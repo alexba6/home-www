@@ -1,11 +1,16 @@
-import {Fragment, FunctionComponent, useContext, useEffect} from 'react'
+import {Fragment, FunctionComponent, useContext, useEffect, useMemo} from 'react'
 
 import {useDispatch, useSelector} from 'react-redux'
 import {userActions} from '../../Store/User/UserActions'
 import {ContextAuthentication} from "../../Context/ContextAuthentication";
-import {Avatar, CircularProgress, LinearProgress, Stack} from "@mui/material";
-import {SettingsRow} from "../../Components/Settings/SettingsRow";
-import {SettingsCard} from "../../Components/Settings/SettingsCard";
+import {Alert, Avatar, Divider, LinearProgress} from "@mui/material";
+import {
+	SettingsRow,
+	SettingsRowContent,
+	SettingsRowLeft,
+	SettingsRowLeftTitle,
+	SettingsRowRightButton
+} from "../../Components/Settings/SettingsRow";
 import {toast} from "react-toastify";
 import {useModalControl} from "../../Hooks/UseModalControl";
 import {
@@ -18,33 +23,37 @@ import {userSelector} from "../../Store/User/UserSelector";
 import {StoreStatus} from "../../Store/type";
 import {getAuthorization} from "../../Tools/Authentication";
 import {useAvatarURL} from "../../Hooks/UseAvatarURL";
+import {UserStoreState} from "../../Store/User/UserReducer";
+import {SettingsCard, SettingsCardContent, SettingsCardHeader} from "../../Components/Settings/SettingsCard";
 
+type UserStoreStateRP = UserStoreState<StoreStatus.READY | StoreStatus.UPDATING>
 
-export const AccountProfileTab: FunctionComponent = () => {
+type AccountProfileGeneralInformationProps = {
+	userStore: UserStoreStateRP
+	disabledEdit: boolean
+}
+
+type AccountProfileContactProps = {
+	userStore: UserStoreStateRP
+	disabledEdit: boolean
+}
+
+const AccountProfileGeneralInformation: FunctionComponent<AccountProfileGeneralInformationProps> = (props) => {
+	const userStore = props.userStore
+	const disabledEdit = props.disabledEdit
+	const userInfo = userStore.info
+
 	const nameModalControl = useModalControl()
 	const usernameModalControl = useModalControl()
-	const emailModalControl = useModalControl()
 	const avatarModalControl = useModalControl()
-
-
-	const authContext = useContext(ContextAuthentication)
 
 	const dispatch = useDispatch<any>()
 
-	const userInfo = useSelector(userSelector.info)
-	const userStatus = useSelector(userSelector.status)
+	const authContext = useContext(ContextAuthentication)
 
 	const avatarURL = useAvatarURL(authContext.authenticationKey)
 
-	useEffect(() => {
-		if (userStatus === StoreStatus.IDLE) {
-			dispatch(
-				userActions.getInfo({
-					authenticationKey: authContext.authenticationKey,
-				})
-			)
-		}
-	}, [userStatus, dispatch, authContext])
+	const fullName = useMemo(() => [userInfo?.firstName, userInfo?.lastName].join(' '), [userInfo])
 
 	const onUpdateName = async (firstName: string, lastName: string) => {
 		try {
@@ -76,6 +85,83 @@ export const AccountProfileTab: FunctionComponent = () => {
 		}
 	}
 
+	const onUpdateAvatar = async (file: File) => {
+		const data = new FormData()
+		data.append('file', file)
+		data.append('fileName', file.name)
+		const res = await fetch('/api/user/avatar', {
+			method: 'POST',
+			headers: {
+				authorization: getAuthorization(authContext.authenticationKey),
+			},
+			body: data,
+		})
+		if (res.status === 200) {
+			toast.success("Photo modifiée")
+			document.location.reload()
+		} else {
+			toast.error("Impossible de modifier la photo")
+		}
+	}
+
+	return (
+		<SettingsCard >
+			<SettingsCardHeader title='Informations générales' details='Certaines de ces informations peuvent être vues par les autres utilisateurs du service Home.'/>
+			<SettingsCardContent>
+				<AccountProfileUpdateNameModal
+					control={nameModalControl}
+					firstName={String(userInfo.firstName)}
+					lastName={String(userInfo.lastName)}
+					onSubmit={onUpdateName}/>
+				<AccountProfileUpdateUsernameModal
+					control={usernameModalControl}
+					username={userInfo.username}
+					onSubmit={onUpdateUsername}/>
+				<AccountAvatarModal
+					control={avatarModalControl}
+					avatarUrl={avatarURL}
+					onSubmit={onUpdateAvatar}/>
+				<SettingsRow>
+					<SettingsRowLeft>
+						<Avatar alt={fullName} src={avatarURL}/>
+					</SettingsRowLeft>
+					<SettingsRowContent>
+						Personnalisez votre compte en ajoutant une photo
+					</SettingsRowContent>
+					<SettingsRowRightButton onClick={avatarModalControl.open} disabled={disabledEdit}/>
+				</SettingsRow>
+				<Divider/>
+				<SettingsRow>
+					<SettingsRowLeftTitle title='Nom'/>
+					<SettingsRowContent>
+						{fullName}
+					</SettingsRowContent>
+					<SettingsRowRightButton onClick={nameModalControl.open} disabled={disabledEdit}/>
+				</SettingsRow>
+				<Divider/>
+				<SettingsRow>
+					<SettingsRowLeftTitle title="Nom d'utilisateur"/>
+					<SettingsRowContent>
+						{userInfo.username}
+					</SettingsRowContent>
+					<SettingsRowRightButton onClick={usernameModalControl.open} disabled={disabledEdit}/>
+				</SettingsRow>
+			</SettingsCardContent>
+		</SettingsCard>
+	)
+}
+
+const AccountProfileContact: FunctionComponent<AccountProfileContactProps> = (props) => {
+	const userStore = props.userStore
+	const disabledEdit = props.disabledEdit
+	const userInfo = userStore.info
+
+	const emailModalControl = useModalControl()
+
+	const authContext = useContext(ContextAuthentication)
+
+	const dispatch = useDispatch<any>()
+
 	const onUpdateEmail = async (email: string) => {
 		try {
 			await dispatch(userActions.updateInfo({
@@ -91,72 +177,54 @@ export const AccountProfileTab: FunctionComponent = () => {
 		}
 	}
 
-	const onUpdateAvatar = async (file: File) => {
-		const data = new FormData()
-		data.append('file', file)
-		data.append('fileName', file.name)
-		const res = await fetch('/api/user/avatar', {
-			method: 'POST',
-			headers: {
-				authorization: getAuthorization(authContext.authenticationKey),
-			},
-			body: data,
-		})
-		console.log(res)
-	}
-
 	return (
-		<Fragment>
-			{userStatus === StoreStatus.IDLE && <LinearProgress/>}
-			{userInfo && <Fragment>
-				<AccountProfileUpdateNameModal
-					control={nameModalControl}
-					firstName={String(userInfo.firstName)}
-					lastName={String(userInfo.lastName)}
-					onSubmit={onUpdateName}/>
-				<AccountProfileUpdateUsernameModal
-					control={usernameModalControl}
-					username={userInfo.username}
-					onSubmit={onUpdateUsername}/>
+		<SettingsCard>
+			<SettingsCardHeader title='Coordonnées'/>
+			<SettingsCardContent>
 				<AccountProfileUpdateEmailModal
 					control={emailModalControl}
 					email={userInfo.email}
 					onSubmit={onUpdateEmail}/>
-				<AccountAvatarModal
-					control={avatarModalControl}
-					avatarUrl={avatarURL}
-					onSubmit={onUpdateAvatar}/>
-				<SettingsCard
-					title='Informations générales'
-					details='Certaines de ces informations peuvent être vues par les autres utilisateurs du service Home.'>
-					<SettingsRow
-						name='Photo'
-						value='Personnalisez votre compte en ajoutant une photo'
-						divider
-						onClick={avatarModalControl.open}>
-						<Avatar
-							alt="Remy Sharp"
-							src={avatarURL}
-							sx={{ width: 50, height: 50 }}
-						/>
-					</SettingsRow>
-					<SettingsRow
-						name='Nom'
-						value={[userInfo.firstName, userInfo.lastName].join(' ')}
-						divider
-						onClick={nameModalControl.open}/>
-					<SettingsRow
-						name="Nom d'utilisateur"
-						value={userInfo.username}
-						onClick={usernameModalControl.open}/>
-				</SettingsCard>
-				<SettingsCard
-					title='Coordonnées'>
-					<SettingsRow
-						name='Email'
-						value={userInfo.email}
-						onClick={emailModalControl.open}/>
-				</SettingsCard>
+				<SettingsRow>
+					<SettingsRowLeftTitle title='Email'/>
+					<SettingsRowContent>
+						{userInfo.email}
+					</SettingsRowContent>
+					<SettingsRowRightButton onClick={emailModalControl.open} disabled={disabledEdit}/>
+				</SettingsRow>
+			</SettingsCardContent>
+		</SettingsCard>
+	)
+}
+
+export const AccountProfileTab: FunctionComponent = () => {
+	const authContext = useContext(ContextAuthentication)
+
+	const dispatch = useDispatch<any>()
+
+	const userStore = useSelector(userSelector.store)
+	const disabledEdit = useMemo(() => userStore.status !== StoreStatus.READY, [userStore])
+
+	useEffect(() => {
+		if (userStore.status === StoreStatus.IDLE) {
+			dispatch(
+				userActions.getInfo({
+					authenticationKey: authContext.authenticationKey,
+				})
+			)
+		}
+	}, [userStore, dispatch, authContext])
+
+
+	return (
+		<Fragment>
+			{userStore.status === StoreStatus.ERROR && <Alert severity='error'>
+				Impossible de récupérer le profil.
+			</Alert>}
+			{userStore.status === StoreStatus.PENDING && <LinearProgress/>}
+			{(userStore.status === StoreStatus.READY || userStore.status === StoreStatus.UPDATING) && <Fragment>
+				<AccountProfileGeneralInformation userStore={userStore as UserStoreStateRP} disabledEdit={disabledEdit}/>
+				<AccountProfileContact userStore={userStore as UserStoreStateRP} disabledEdit={disabledEdit}/>
 			</Fragment>}
 		</Fragment>
 	)

@@ -18,9 +18,13 @@ import {LogoutPage} from "../Pages/LogoutPage";
 
 import {PoolAppPage} from "../Applications/Pool/App";
 import {HeaterAppPage} from "../Applications/Heater/App";
+import {SocialLoginPage} from "../Pages/SocialLoginPage";
+import {SocialLinkPage} from "../Pages/SocialLinkPage";
 
 type RoutesNames =
 	'login' |
+	'socialLink' |
+	'socialLogin' |
 	'forgetPassword' |
 	'resetPassword' |
 	'dashboard' |
@@ -34,6 +38,17 @@ type RoutesNames =
 
 
 export const Routes: Record<RoutesNames, RouteConfig>  = {
+	socialLink: {
+		name: 'Social link',
+		target: '/social-link',
+		auth: true,
+		component: SocialLinkPage
+	},
+	socialLogin: {
+		name: 'Social',
+		target: '/social-login',
+		component: SocialLoginPage
+	},
 	login: {
 		name: 'Login',
 		target: '/login',

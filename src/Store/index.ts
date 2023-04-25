@@ -7,6 +7,7 @@ import {sensorStore} from "./Sensor/SensorReducer";
 import {actionStore} from "./Action/ActionReducer";
 import {poolSlotStore} from "../Applications/Pool/Store/Slot/SlotReducer";
 import {authKeyStore} from "./AuthKey/AuthKeyReducer";
+import {googleOAuthReducer} from "./GoogleOAuth/GoogleOAuthReducer";
 
 export const store = configureStore({
 	reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
 		home: homeStore.reducer,
 		device: deviceStore.reducer,
 		authKeys: authKeyStore.reducer,
+		googleOAth: googleOAuthReducer.reducer,
 
 		sensor: sensorStore.reducer,
 		action: actionStore.reducer,

@@ -15,7 +15,7 @@ const status =  (store: RootState): StoreStatus => store.user.status
 /**
  * @param store
  */
-const info = (store: RootState): User | undefined => store.user.user
+const info = (store: RootState): User | null => store.user.info
 
 
 export const userSelector = {

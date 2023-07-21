@@ -1,4 +1,4 @@
-import {FunctionComponent, ReactNode, useContext, useEffect} from "react";
+import {FunctionComponent, useContext, useEffect} from "react";
 import {ApplicationContextStatus, ContextApplication} from "../Context/ContextApplication";
 import {ContextAuthentication} from "../Context/ContextAuthentication";
 import {useDispatch, useSelector} from "react-redux";

@@ -1,6 +1,4 @@
-import {createContext, Fragment, FunctionComponent, ReactNode, useContext, useEffect, useMemo, useState} from 'react'
-import { useHistory} from "react-router-dom";
-import {Routes} from "../Config/Routes";
+import {createContext, FunctionComponent, ReactNode, useEffect, useState} from 'react'
 
 export enum AuthenticationStatus {
 	IDLE = 'IDLE',
@@ -11,10 +9,6 @@ export enum AuthenticationStatus {
 export type AuthenticationKey = {
 	id: string
 	key: string
-}
-
-type AuthenticatedRoutesWrapperProps = {
-	children: ReactNode
 }
 
 export type AuthenticationContextProps = {

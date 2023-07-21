@@ -1,55 +1,68 @@
 import {FunctionComponent, useContext, useEffect} from "react";
-import {Button, ButtonGroup} from "@mui/material";
+import {Alert, Button, ButtonGroup} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
-import {actionSelector} from "../../Store/Action/ActionSelector";
 import {Device} from "../../Store/Device/DeviceReducer";
-import {actionActions} from "../../Store/Action/ActionAction";
 import {ContextAuthentication} from "../../Context/ContextAuthentication";
-import {ActionStatus} from "../../Store/Action/ActionReducer";
+import {selectorActionButtonGroup} from "../../Store/Action/ButtonGroup/ActionButtonGroupSelector";
+import {actionButtonGroup} from "../../Store/Action/ButtonGroup/ActionButtonGroupAction";
+import {ActionState} from "../../Store/Action/ActionType";
 
 
 type ActionBtnGroupButtonsProps = {
-    actionKey: string
+    actionName: string
     deviceId: Device['id']
-    groupNames: string[]
+    deviceType: Device['type']
 }
 
 export const ActionBtnGroupButtons: FunctionComponent<ActionBtnGroupButtonsProps> = (props) => {
-    const { deviceId, actionKey, groupNames } = props
     const dispatch = useDispatch<any>()
-    const authContext = useContext(ContextAuthentication)
+    const authenticationContext = useContext(ContextAuthentication)
 
-    const buttonGroup = useSelector(actionSelector.buttonGroup(deviceId, actionKey))
+    const actionBtnGroup = useSelector(selectorActionButtonGroup.getActionStore(props.deviceId, props.actionName))
+
+    console.log(actionBtnGroup)
 
     useEffect(() => {
-        if (!buttonGroup) {
-            dispatch(actionActions.buttonGroupGet({
-                authenticationKey: authContext.authenticationKey,
-                deviceId,
-                actionKey,
+        if (!actionBtnGroup) {
+            dispatch(actionButtonGroup.getInfo({
+                authenticationKey: authenticationContext.authenticationKey,
+                deviceId: props.deviceId,
+                deviceType: props.deviceType,
+                actionName: props.actionName,
             }))
         }
-    }, [])
+    }, [actionBtnGroup, authenticationContext, props, dispatch])
 
-    const handleClick = (groupName: string) => {
-        dispatch(actionActions.buttonGroupPost({
-            authenticationKey: authContext.authenticationKey,
-            deviceId,
-            actionKey,
-            groupName
+    const handleClick = (groupHash: string) => {
+        dispatch(actionButtonGroup.setGroup({
+            authenticationKey: authenticationContext.authenticationKey,
+            deviceId: props.deviceId,
+            deviceType: props.deviceType,
+            actionName: props.actionName,
+            groupHash
         }))
     }
 
 
-    return <ButtonGroup fullWidth={true} variant='contained' size='large' aria-label='outlined primary button group'>
-        {groupNames.map((groupName: string, key: number) => <Button key={key}
-            onClick={() => handleClick(groupName)}
-            disabled={!buttonGroup || buttonGroup.status === ActionStatus.ERROR ||
-                (buttonGroup.status === ActionStatus.READY && (
-                    buttonGroup.action.enableGroup === groupName ||
-                    buttonGroup.action.freeze
-                ))}>
-            {groupName}
-        </Button>)}
-    </ButtonGroup>
+    return <>
+        {(actionBtnGroup && actionBtnGroup.status === ActionState.READY) && <Alert severity='info'>
+            Group <strong>{actionBtnGroup.payload.currentGroup}</strong>
+
+        </Alert>}
+        {(actionBtnGroup && actionBtnGroup.status === ActionState.FETCHING) && <Alert severity='info'>
+            ...
+        </Alert>}
+        {(actionBtnGroup && actionBtnGroup.status === ActionState.ERROR) && <Alert severity='error'>
+            Impossible d'avoir les informations
+        </Alert>}
+        <br/>
+        {(actionBtnGroup && actionBtnGroup.status === ActionState.READY) && <ButtonGroup fullWidth={true} variant='contained' size='large' aria-label='outlined primary button group'>
+            {actionBtnGroup.payload.groups.map((group, key: number) => <Button key={key}
+               onClick={() => handleClick(group.hash)}
+               disabled={actionBtnGroup.payload.currentGroup === group.hash || actionBtnGroup.payload.locked}>
+                {group.hash}
+            </Button>)}
+        </ButtonGroup>}
+    </>
+
 }

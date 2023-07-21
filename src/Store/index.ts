@@ -8,6 +8,7 @@ import {actionStore} from "./Action/ActionReducer";
 import {poolSlotStore} from "../Applications/Pool/Store/Slot/SlotReducer";
 import {authKeyStore} from "./AuthKey/AuthKeyReducer";
 import {googleOAuthReducer} from "./GoogleOAuth/GoogleOAuthReducer";
+import {actionButtonGroupStore} from "./Action/ButtonGroup/ActionButtonGroupReducer";
 
 export const store = configureStore({
 	reducer: {
@@ -20,8 +21,9 @@ export const store = configureStore({
 		sensor: sensorStore.reducer,
 		action: actionStore.reducer,
 
-		poolSlot: poolSlotStore.reducer
+		poolSlot: poolSlotStore.reducer,
 
+		actionButtonGroup: actionButtonGroupStore.reducer
 	},
 })
 

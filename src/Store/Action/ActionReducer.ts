@@ -9,6 +9,11 @@ export enum ActionStatus {
     ERROR = 'ERROR'
 }
 
+export type ActionButtonGroup = {
+    state: boolean
+    freeze?: boolean
+    enableGroup: string
+}
 
 export type ActionStoreWrapper<A> = {
     deviceId: Device['id']
@@ -21,11 +26,6 @@ export type ActionStoreWrapper<A> = {
     action: A
 }
 
-export type ActionButtonGroup = {
-    state: boolean
-    freeze?: boolean
-    enableGroup: string
-}
 
 export type ActionStoreState = {
     buttonGroups: ActionStoreWrapper<ActionButtonGroup>[]

@@ -24,9 +24,8 @@ export const SensorBufferChart: FunctionComponent<SensorBufferChartProps> = (pro
                 tickAmount: 6
             },
             yaxis: {
-                decimalsInFloat: 4,
                 labels: {
-                    formatter: (val: number) => `${val} ${props.units}`
+                    formatter: (val: number) => `${Math.round(val * 100) / 100} ${props.units}`
                 },
             },
             dataLabels: {
@@ -40,9 +39,8 @@ export const SensorBufferChart: FunctionComponent<SensorBufferChartProps> = (pro
                     opacityTo: 0.9,
                     stops: [0, 100]
                 }
-            }
+            },
         }}
-
         series={[{
             name: 'Température',
             data: props.buffers.map(buffer =>buffer[1])
